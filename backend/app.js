@@ -1,10 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const Connect = require('./Config/connect');
-
-const connect = new  Connect('localhost','root','','ivymoda');
-connect.Connected();
+require('./Config/connect');
 
 // Thiết lập body-parser
 app.use(bodyParser.urlencoded({ extended: true }));

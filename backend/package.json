@@ -4,7 +4,7 @@
   "description": "day la backend cua ivymoda",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app.js"
   },
   "author": "tt-nhom3",
   "license": "ISC",
@@ -12,6 +12,9 @@
     "body-parser": "^1.20.2",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mysql2": "^3.2.0"
+    "mysql2": "^3.2.0",
+    "npx": "^10.2.2",
+    "sequelize": "^6.29.3",
+    "serialize": "^0.1.3"
   }
 }
