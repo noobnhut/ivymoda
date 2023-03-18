@@ -10,7 +10,30 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    component: () => import('../views/admin.vue')
+    component: () => import('../views/admin.vue'),
+    children:
+        [
+         {
+          path:'user',
+          component:()=>import('../layout/admin/user.vue'),
+          name:'user'
+         },
+         {
+          path:'bill',
+          component:()=>import('../layout/admin/bill.vue'),
+          name:'bill'
+         },
+         {
+          path:'product',
+          component:()=>import('../layout/admin/product.vue'),
+          name:'product'
+         },
+         {
+          path:'category',
+          component:()=>import('../layout/admin/category.vue'),
+          name:'category'
+         },       
+        ],
   }
 ]
 
