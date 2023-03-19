@@ -8,3 +8,4 @@
 
 #front end : --force
 nhựt
+# chạy lệnh : npx sequelize-cli db:migrate để đưa database vào phpmyadmin
