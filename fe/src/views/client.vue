@@ -1,6 +1,10 @@
 <template>
-    <div>
-      <h1>Home page</h1>
-    </div>
-  </template>
-  
+<p>This is home</p>
+<router-link></router-link>
+</template>
+
+
+<script>
+
+
+</script>

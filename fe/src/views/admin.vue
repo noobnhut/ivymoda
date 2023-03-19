@@ -46,10 +46,6 @@ export default {
   }),
 }
 </script>
-<style>
-.bg {
 
-}
-</style>
 
   
