@@ -4,6 +4,7 @@ import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import axiosPlugin from './plugins/axios.js'
 import router from './router/index.js'
+import 'dotenv'
 loadFonts()
 
 createApp(App)
