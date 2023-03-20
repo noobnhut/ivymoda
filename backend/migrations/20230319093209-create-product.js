@@ -22,19 +22,11 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER
       },
-      quantity: {
-        type: Sequelize.INTEGER
-      },
+      
       discount: {
         type: Sequelize.INTEGER
       },
       detail: {
-        type: Sequelize.STRING
-      },
-      avatar: {
-        type: Sequelize.STRING
-      },
-      url: {
         type: Sequelize.STRING
       },
       createdAt: {
