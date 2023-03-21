@@ -22,12 +22,11 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER
       },
-      
-      discount: {
-        type: Sequelize.INTEGER
-      },
       detail: {
         type: Sequelize.STRING
+      },
+      discount: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
