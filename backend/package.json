@@ -18,7 +18,7 @@
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.2.0",
-    "npx": "^10.2.2",
+    "npx": "^3.0.0",
     "sequelize": "^6.29.3",
     "sequelize-cli": "^6.6.0",
     "serialize": "^0.1.3"
