@@ -1,0 +1,46 @@
+:root {
+    --hover: #373737;
+    --title: #221F20
+}
+
+.content-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-left: 1px solid rgb(194, 190, 190);
+    height: 100%;
+}
+
+.content-login h3 {
+    text-align: center;
+}
+
+.content-login p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing:1px;
+    margin: 20px 0 30px;
+    text-align: center;
+}
+
+.content-login input
+{
+    padding: 12px 30px;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.content-login .btn
+{
+    max-width: max-content;
+    padding: 5px 120px;
+    background-color: white;
+    border: 1px solid black;
+    color: var(--title)
+}
+.content-login .btn :hover
+{
+    background-color:var(--hover)
+}

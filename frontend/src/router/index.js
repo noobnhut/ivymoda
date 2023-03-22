@@ -4,7 +4,7 @@ import customer from '../views/customer.vue'
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
   },
   {
