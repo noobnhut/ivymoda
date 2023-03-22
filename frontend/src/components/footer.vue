@@ -6,7 +6,7 @@
 
                 <div class="col-md-6 col-lg-3">
                     <a class="text-uppercase text-decoration-none brand text-black" href="index.html">THÔNG TIN</a>
-                    <p class="text-black text-muted mt-3">Mua bàn phím cơ, keycap bộ, keycap lẻ, keycap resin. Bảo hành chính hãng. Ưu đãi khi mua online. Dịch vụ mods phím cơ uy tín, chất lượng.</p>
+                    <p class="text-black text-muted mt-3">Ivymoda.com là một trang web thương mại điện tử chuyên cung cấp sản phẩm thời trang và làm đẹp chất lượng cao từ các thương hiệu nổi tiếng trên thế giới và Việt Nam. <br> Với sứ mệnh trở thành một trong những trang web thương mại điện tử hàng đầu tại Việt Nam, .</p>
                 </div>
 
                 <div class="col-md-6 col-lg-3">
@@ -67,7 +67,7 @@
 
                 <div class="col-md-6 col-lg-3">
                     <a class="text-uppercase text-decoration-none brand text-black" href="index.html">THÔNG TIN</a>
-                    <p class="text-black text-muted mt-3">Mua bàn phím cơ, keycap bộ, keycap lẻ, keycap resin. Bảo hành chính hãng. Ưu đãi khi mua online. Dịch vụ mods phím cơ uy tín, chất lượng.</p>
+                    <p class="text-black text-muted mt-3">Ivymoda.com tập trung vào cung cấp các sản phẩm và dịch vụ thời trang và làm đẹp chất lượng cao từ các thương hiệu nổi tiếng. <br> Trang web liên tục cập nhật và mở rộng danh mục sản phẩm để đáp ứng nhu cầu mua sắm của khách hàng</p>
                 </div>
             </div>
         </div>

@@ -11,11 +11,14 @@
 
     height: 100%;
 }
-
+.content-register h3,
 .content-login h3 {
     text-align: center;
+    font-weight: bold;
+    margin-bottom: 30px;
 }
 
+.content-register p, 
 .content-login p {
     font-size: 14px;
     font-weight: 100;
@@ -24,12 +27,13 @@
     margin: 20px 0 30px;
     text-align: center;
 }
-
+.content-register input,
 .content-login input
 {
     padding: 12px 30px;
     margin: 8px 0;
     width: 100%;
+    line-height: 16px;
 }
 
 .content-login .btn
@@ -43,4 +47,18 @@
 .content-login .btn :hover
 {
     background-color:var(--hover)
+}
+
+.content-register
+{
+    padding:30px 20px;
+    margin: 10px;
+}
+.content-register .btn
+{
+   
+    padding: 5px 120px;
+    background-color: white;
+    border: 1px solid black;
+    color: var(--title)
 }
