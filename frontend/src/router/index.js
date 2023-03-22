@@ -51,7 +51,12 @@ const routes = [
       component: ()=> import('../layout/customer/register.vue')
     }
    ],
-  }
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: ()=> import('../views/about.vue')
+  },
 ]
 
 const router = createRouter({

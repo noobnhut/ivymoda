@@ -12,6 +12,11 @@
           <li class="nav-item">
             <router-link :to="{ name: 'home' }" class="nav-link">Trang chủ</router-link>
           </li>
+
+          <li class="nav-item">
+            <router-link :to="{ name: 'about' }" class="nav-link">Về chúng tôi</router-link>
+          </li>
+
         </ul>
 
         <form class="d-flex  ">
@@ -44,8 +49,16 @@
   </nav>
 </template>
 
+<style>
+img
+{
+  border: none;
+    max-width: 100%;
+    height: auto;
+}
+</style>
 <script>
-import '../assets/client.css'
+
 export default {
   data() {
     return {
