@@ -29,12 +29,16 @@
             </div>
           </div>
 
-          <div class="order-lg-2 nav-btns">
-            <button type="button" class="btn position-relative" >
+          <div class="btn-group order-lg-2 nav-btns user-dropdown">
+            <button class="btn" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
               <i class="fa-regular fa-user"></i>
-            </button>          
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+              <li><a class="dropdown-item" @click=" handleButtonClick">{{buttonLabel}}</a></li>
+              
+            </ul>
           </div>
-
+         
           <div class="order-lg-2 nav-btns">
             <button type="button" class="btn position-relative" >
               <i class="fa-solid fa-bag-shopping"></i>
@@ -56,7 +60,24 @@ img
     max-width: 100%;
     height: auto;
 }
+.user-dropdown :hover,
+.user-dropdown :focus
+{
+  outline: none;
+  border: none;
+}
+.user-dropdown
+{
+  padding-bottom: 0.4rem;
+  padding-left: 0.1rem;
+}
+.user-dropdown .dropdown-menu {
+  left: 50% !important;
+  transform: translateX(-70%) !important;
+  padding: 0.6rem;
+}
 </style>
+
 <script>
 
 export default {
@@ -67,9 +88,9 @@ export default {
   },
   computed: {
     buttonLabel() {
-      let user = localStorage.getItem("user-info");
+      let user = localStorage.getItem("user");
       if (user) {
-        this.buttonLabel = 'Đăng xuất'
+        this.buttonLabel = 'Đăng xuất';
 
       } else {
         this.buttonLabel = 'Đăng nhập';
@@ -81,22 +102,15 @@ export default {
   {
     handleButtonClick() {
       if (this.buttonLabel == 'Đăng nhập') {
-        this.$router.push({ name: 'login_client' })
+        this.$router.push({ name: 'login' });
       }
-      else if ((this.buttonLabel == 'Đăng xuất')) {
-        localStorage.removeItem('user-info')
-        this.$router.push({ name: 'login_client' })
+
+      if ((this.buttonLabel == 'Đăng xuất')) {
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+        this.$router.push({ name: 'login' })
       }
     },
-    checkCart() {
-      let user = localStorage.getItem("user-info")
-      if (user) {
-        this.$router.push({ name: 'cart' })
-      }
-      else {
-        alert('Hãy đăng nhập để xem giỏ hàng')
-      }
-    }
   }
 };
 </script>

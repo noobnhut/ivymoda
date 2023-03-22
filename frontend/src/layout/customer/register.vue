@@ -82,6 +82,7 @@
         </div>
 
     </div>
+    <div id="notifikation"></div>
 </template>
 
 <script>
@@ -114,8 +115,9 @@ export default
                         phone:this.phone,
                        address:this.address
                     });
-                console.warn(register)
-                if (register.status == 200) {
+                  
+                if (register.status == 200) { 
+            
                     this.$router.push({ name: 'login' })
                 }
 
