@@ -105,7 +105,7 @@ export default
         methods:
         {
             async register() {
-                const register = await axios.post(
+                const register = await this.$axios.post(
                     `register`,
                     {
                         username: this.username,
