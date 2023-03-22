@@ -3,11 +3,9 @@
         <div class="content-login">
             <h3>Bạn đã có tài khoản IVY</h3>
             <p>Nếu bạn đã có tài khoản, hãy đăng nhập để tích lũy điểm thành <br>viên và nhận được những ưu đãi tốt hơn!</p>
-            <form>
                 <div class="mb-3">
                     <input type="text" class="form-control" placeholder="Họ và tên:" v-model="username">
                 </div>
-
                 <div class="mb-3">
                     <input type="email" class="form-control" placeholder="Nhập địa chỉ email:" v-model="email">
                 </div>
@@ -23,9 +21,7 @@
                     <input type="text" class="form-control" placeholder="Số điện thoại:" v-model="phone">
                 </div>
 
-                <button class="btn" @click="register">Đăng ký</button>
-
-            </form>
+                <button class="btn" @click="registerUser">Đăng ký</button>
         </div>
 
     </div>
@@ -48,22 +44,22 @@ export default
 
         methods:
         {
-            async register() {
-                const register = await axios.post(
-                    `register`,
-                    {
+            async registerUser() {
+                try {
+                    const response = await axios.post('register', {
                         username: this.username,
-                        password: this.password,
                         email: this.email,
-                        phone:this.phone,
-                       address:this.address
+                        password: this.password,
+                        address: this.address,
+                        phone: this.phone
                     });
-                console.warn(register)
-                if (register.status == 200) {
-                    this.$router.push({ name: 'login' })
+                    console.log(response.data);
+                    alert('Đăng ký thành công!');
+                } catch (error) {
+                    console.error(error);
+                    alert('Đăng ký thất bại!'+ error);
                 }
-
-            },
+            }
         }
     }
 </script>
