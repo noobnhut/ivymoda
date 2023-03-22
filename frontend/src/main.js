@@ -4,7 +4,7 @@ import axiosPlugin from './plugins/axios.js';
 import router from './router/index.js';
 import 'dotenv';
 import './style.css';
-
+window.axios=axiosPlugin;
 createApp(App)
     .use(axiosPlugin)
     .use(router)

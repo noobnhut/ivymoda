@@ -1,52 +1,15 @@
 <template>
     <div class="containter-fluid" style="padding: 120px;">
-        <div class="content-register">
-            <h3>Đăng ký</h3> 
-            
-            <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="register-summary__overview">
-                        <h6>Thông tin khách hàng</h6>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Họ:<span style="color: red">*</span></label>
-                                <input type="text" class="form-control"  name="customer_firstname" placeholder="Họ..." style="width: 100%" v-model="firstname">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Tên:<span style="color: red">*</span></label>
-                                <input class="form-control" type="text"  name="customer_display_name" placeholder="Tên..." style="width: 100%" v-model="username">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Email:<span style="color: red">*</span></label>
-                                <input id="email" class="form-control" type="email" name="customer_email"  placeholder="Email..." style="width: 100%" v-model="email">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Điện thoại:<span style="color: red">*</span></label>
-                                <input class="form-control" type="text"  name="customer_phone" placeholder="Điện thoại..." style="width: 100%" v-model="phone">
-                            </div>
-                        </div>
-                    </div>
-                  
-              
-                   
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="form-group">
-                                <label>Địa chỉ:<span style="color: red">*</span></label>
-                                <textarea class="form-control" name="address" v-model="address"></textarea>
-                            </div>
-                        </div>
-                    </div>
+        <div class="content-login">
+            <h3>Bạn đã có tài khoản IVY</h3>
+            <p>Nếu bạn đã có tài khoản, hãy đăng nhập để tích lũy điểm thành <br>viên và nhận được những ưu đãi tốt hơn!</p>
+            <form>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="Họ và tên:" v-model="username">
+                </div>
+
+                <div class="mb-3">
+                    <input type="email" class="form-control" placeholder="Nhập địa chỉ email:" v-model="email">
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="register-summary__overview">
@@ -76,9 +39,9 @@
                     </div>
                 </div>
 
-               
+                <button class="btn" @click="register">Đăng ký</button>
 
-            </div>
+            </form>
         </div>
 
     </div>
@@ -103,22 +66,22 @@ export default
 
         methods:
         {
-            async register() {
-                const register = await axios.post(
-                    `register`,
-                    {
+            async registerUser() {
+                try {
+                    const response = await axios.post('register', {
                         username: this.username,
-                        password: this.password,
                         email: this.email,
-                        phone:this.phone,
-                       address:this.address
+                        password: this.password,
+                        address: this.address,
+                        phone: this.phone
                     });
-                console.warn(register)
-                if (register.status == 200) {
-                    this.$router.push({ name: 'login' })
+                    console.log(response.data);
+                    alert('Đăng ký thành công!');
+                } catch (error) {
+                    console.error(error);
+                    alert('Đăng ký thất bại!'+ error);
                 }
-
-            },
+            }
         }
     }
 </script>

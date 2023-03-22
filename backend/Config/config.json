@@ -5,7 +5,8 @@
     "database": "ivymoda",
     "host": "127.0.0.1",
     "dialect": "mysql",
-    "timezone":"+07:00"
+    "timezone":"+07:00",
+    "logging" : false
   },
   "test": {
     "username": "root",
