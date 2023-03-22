@@ -8,10 +8,10 @@
           <form>
 
             <div class="mb-3">
-              <input type="email" class="form-control" placeholder="Nhập địa chỉ email:" >
+              <input type="email" class="form-control" placeholder="Nhập địa chỉ email:" v-model="email">
             </div>
             <div class="mb-3">
-              <input type="password" class="form-control" placeholder="Nhập mật khẩu:">
+              <input type="password" class="form-control" placeholder="Nhập mật khẩu:" v-model="password">
             </div>
             
             <button type="submit" class="btn">Đăng nhập</button>
@@ -39,4 +39,32 @@
 
 <script>
 import '../../assets/login.css';
+export default
+{
+  data() {
+            return {
+                password: '',
+                address: '',              
+            };
+        },
+
+  methods:
+  {
+    async login()
+        {
+            const login = await this.$axios.post(
+                `login?email=${this.email}&password=${this.password}`
+            );
+            if(login.data.status==202)
+            {
+                localStorage.setItem("user-info", JSON.stringify(login.data.user));  
+                this.$router.push({ name:'home'})
+            }
+            else
+            {
+                alert('Mật khẩu hoặc email không đúng !!!');
+            }
+        }
+  }
+}
 </script>

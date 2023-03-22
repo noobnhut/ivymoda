@@ -66,6 +66,7 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
       console.log("loi" + error)
     }
 };
+
 //test api
 const getAllUser = async(req, res) => {
     try {
@@ -76,6 +77,8 @@ const getAllUser = async(req, res) => {
         console.log(error);
     }  
 };
+
+
 module.exports = { 
     registerUser,
     loginUser,
