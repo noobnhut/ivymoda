@@ -23,7 +23,7 @@
                     <input type="text" class="form-control" placeholder="Số điện thoại:" v-model="phone">
                 </div>
 
-                <button  class="btn" @click="register">Đăng ký</button>
+                <button class="btn" @click="register">Đăng ký</button>
 
             </form>
         </div>
@@ -35,23 +35,35 @@
 import '../../assets/login.css';
 
 export default
-{
-    data() {
-    return {
-      username:'',
-      password:'',
-      address:'',
-      phone:'',
-      email:''
-    };
-  },
-
-  methods:
-  {
-    register()
     {
-        alert(this.username)
+        data() {
+            return {
+                username: '',
+                password: '',
+                address: '',
+                phone: '',
+                email: ''
+            };
+        },
+
+        methods:
+        {
+            async register() {
+                const register = await axios.post(
+                    `register`,
+                    {
+                        username: this.username,
+                        password: this.password,
+                        email: this.email,
+                        phone:this.phone,
+                       address:this.address
+                    });
+                console.warn(register)
+                if (register.status == 200) {
+                    this.$router.push({ name: 'login' })
+                }
+
+            },
+        }
     }
-  }
-}
 </script>
