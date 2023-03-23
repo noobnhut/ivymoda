@@ -2,6 +2,9 @@ const bcrypt = require ( 'bcryptjs');
 const jwt = require ( 'jsonwebtoken');
 const dotenv = require ( 'dotenv');
 const db = require('../models');
+const path = require('path');
+const multer = require('multer');
+const axios = require('axios');
 const User = db.user;
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -73,14 +76,48 @@ const getAllUser = async(req, res) => {
         const user = await User.findAll();
         res.json(user);
     } catch (error) {
-        res.json("không lấy được sản phẩm"+ error);
+        res.json("không lấy được khách hàng"+ error);
         console.log(error);
     }  
+};
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './uploads/'); // Thư mục lưu trữ file upload
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); // Đổi tên file để tránh trùng lặp
+  }
+});
+
+// Khởi tạo middleware multer
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 30000000 } // Giới hạn dung lượng file upload (ở đây là 1MB)
+}).single('avatar');
+
+const addUser = async (req, res) => {
+  // Xử lý upload file
+  upload(req, res, async (err) => {
+    if (err) {
+      // Lỗi khi upload file
+      return res.status(500).json({ message: 'Lỗi khi upload file', error: err });
+    } else {
+      // Thành công khi upload file
+      const avatar = req.file.filename;  
+      const url_avatar = `https://localhost:3000/${avatar}`;     
+      return res.status(200).json({ message: 'upload file xong' });
+      
+    }
+  });
 };
 
 
 module.exports = { 
     registerUser,
     loginUser,
-    getAllUser
+    getAllUser,
+    addUser
+   
+   
 };

@@ -7,6 +7,8 @@ const app = express();
 
 //router
 const {routerUser} = require('./routes/UserRouter');
+const {routerCat} = require('./routes/CatRouter');
+
 
 
 // Thiết lập body-parser
@@ -21,8 +23,9 @@ app.use(session({
 
 app.use(cors());
 app.use(express.json());
-app.use(routerUser);
-app.use(express.static("public"));
+app.use(routerUser,routerCat);
+app.use(express.static("uploads"));
+
 
 
 
