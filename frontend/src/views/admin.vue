@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar" v-bind:class="(toggle) ? 'show' : 'hide'">
+        <nav id="sidebar" v-bind:class="(toggle) ? 'show' : 'hide'" @click="ontoggleModel">
             <div id="dismiss" @click='toggle = !toggle'>
                 <i class="fas fa-arrow-left"></i>
             </div>
@@ -83,9 +83,18 @@ import '../assets/admin.css';
 export default {
     data() {
         return {
-            toggle: true //toggle variable
+            toggle: true ,
+            
+        }
+    },
+    methods:
+    {
+        ontoggleModel()
+        {
+            this.toggle=!this.toggle
         }
     }
+    
 }
-//import component 
+
 </script>
