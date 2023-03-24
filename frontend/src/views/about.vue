@@ -19,13 +19,20 @@
 
     <footerV />
 </template>
-    
+<style>
+img
+{
+    border: none;
+    max-width: 100%;
+    height: auto;
+}
+</style>
+
 <script>
 
 import navbar from '../components/navbar.vue';
 import footerV from '../components/footer.vue';
 
-import '../assets/client.css'
 
 export default
     {

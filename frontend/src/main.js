@@ -6,10 +6,13 @@ import router from './router/index.js';
 import 'dotenv';
 import './style.css';
 
+
+
 createApp(App)
     .use(axiosPlugin)
     .use(router)
     .use(ToastPlugin)
+
     .mount('#app')
 
 import "bootstrap/dist/css/bootstrap.min.css"

@@ -1,7 +1,9 @@
 <template>
 <navbar/>
-<div class="container-lg" style="padding-top:100px;">
+<div class="container" style="padding-top:80px;">
 <banner/>
+<product/>
+<minibanner/>
 </div>
 
 <footerV/>
@@ -12,6 +14,8 @@
 import navbar from '../components/navbar.vue';
 import footerV from '../components/footer.vue';
 import banner from '../components/banner.vue';
+import minibanner from '../components/minibanner.vue';
+import product from '../components/product.vue';
 import '../assets/client.css'
 
 export default
@@ -20,7 +24,9 @@ export default
     {
         navbar,
         footerV,
-        banner
+        banner,
+        minibanner,
+        product
     }
 }
 </script>

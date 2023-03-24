@@ -1,132 +1,135 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white py-4 fixed-top ">
-    <div class="container-fluid">
-      <router-link :to="{ name: 'home' }" class="navbar-brand mx-auto"><img src="../assets/logo.png"
-          alt="Logo"></router-link>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <router-link :to="{ name: 'home' }" class="nav-link">Trang chủ</router-link>
-          </li>
+  <div class="header fixed-top bg-white d-flex">
+    <button class="btn_mobile" @click="onShowMobile">
+      <i class="fa-solid fa-bars" style="color: #232424;"></i>
+    </button>
+    <div class="container d-flex justify-content-between">
 
-          <li class="nav-item">
-            <router-link :to="{ name: 'about' }" class="nav-link">Về chúng tôi</router-link>
-          </li>
+      <div class="brand_logo d-flex ">
+        <router-link :to="{ name: 'home' }" class="nav-link"> <img src="../assets/logo.png" alt=""></router-link>
+      </div>
 
-        </ul>
-
-        <form class="d-flex  ">
-          <div class="search-box">
-            <div class="logo">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
-            <div class="input-box">
-              <input type="text" placeholder="TÌM KIẾM SẢN PHẨM" autocomplete="off" minlength="1">
-            </div>
-          </div>
-
-          <div class="btn-group order-lg-2 nav-btns user-dropdown">
-            <button class="btn" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-              <i class="fa-regular fa-user"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-              <li><a class="dropdown-item" @click=" handleButtonClick">{{buttonLabel}}</a></li>
-              
+      <nav class="navbar navbar-expand-lg">
+        <div class="container">
+          <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item"><router-link :to="{ name: 'home' }" class="nav-link">Trang chủ</router-link></li>
+              <li class="nav-item"><router-link :to="{ name: 'about' }" class="nav-link">Về chúng tôi</router-link></li>
             </ul>
           </div>
-         
-          <div class="order-lg-2 nav-btns">
-            <button type="button" class="btn position-relative" @click="onShow" >
-              <i class="fa-solid fa-bag-shopping" ></i>
-            </button>      
-          </div>
+        </div>
+      </nav>
+
+      <div class="right_nav">
+        <form class="search_form ">
+          <button  ><i class="fa-solid fa-magnifying-glass"></i></button>
+          <input type="text" placeholder="TÌM KIẾM SẢN PHẨM"  autocomplete="off" min-lenght="1">
         </form>
-        <carthome v-if="isShowModel" @cancel="onShow"></carthome> 
 
-        
+        <div class="dropdown item_action">
+          <button @click="handleButtonClick"  class="btn_custom" :data-bs-toggle="buttonLabel"  aria-expanded="false">
+            <i class="fa-solid fa-user"></i>
+          </button>
+          <ul class="dropdown-menu sub-action">
+            <div class="top-action">
+              <a class="icon" >
+                <h3>Tài khoản của tôi</h3>
+              </a>
+            </div>
+            <ul>
+              <li><a ><i class="icon-ic_avatar-1"></i>Thông tin tài khoản</a></li>
+              <li><a><i class="icon-ic_glasses"></i>Sản phẩm đã
+                  xem</a></li>
+              <li><a ><i class="icon-ic_heart"></i>Sản phẩm yêu
+                  thích</a></li>            
+              <li><a @click="outWeb"><i class="icon-logout"></i>Đăng xuất</a></li>
+            </ul>
+          </ul>
+        </div>
+  
+        <button type="button" class="btn position-relative" @click="onShow">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </button>
+
       </div>
-    </div>
-  </nav>
-</template>
 
-<style>
-img
-{
-  border: none;
-    max-width: 100%;
-    height: auto;
-}
-.user-dropdown :hover,
-.user-dropdown :focus
-{
-  outline: none;
-  border: none;
-}
-.user-dropdown
-{
-  padding-bottom: 0.4rem;
-  padding-left: 0.1rem;
-}
-.user-dropdown .dropdown-menu {
-  left: 50% !important;
-  transform: translateX(-70%) !important;
-  padding: 0.6rem;
-}
-</style>
+    </div>
+    <carthome v-if="isShowModel" @cancel="onShow"></carthome>
+    <mobile v-if="isShowMobile" @cancelmobile="onShowMobile"></mobile>
+  </div>
+
+  <!--mobile bottom-->
+  <div class="navi_nav justify-content-center ">
+
+    <div class="navi_item">
+      <button type="button" class="btn position-relative" @click="onShow">
+        <i class="fa-solid fa-bag-shopping"></i>
+      </button>
+      <p>Giỏ hàng</p>
+    </div>
+
+    <div class="navi_item">
+      <button type="button" class="btn position-relative">
+        <i class="fa-solid fa-user"></i>
+      </button>
+      <p>Thông tin cá nhân</p>
+    </div>
+
+    <div class="navi_item">
+      <router-link :to="{ name: 'about' }" class="nav-link"> <button type="button" class="btn position-relative">
+          <i class="fa-solid fa-circle-info"></i>
+        </button></router-link>
+      <p>Về chúng tôi</p>
+    </div>
+
+  </div>
+</template>
 
 <script>
 import carthome from './carthome.vue';
+import mobile from './mobile.vue';
 export default {
   components:
   {
+    mobile,
     carthome
+
   },
   data() {
     return {
-      buttonLabel: 'Đăng nhập',
-      isShowModel:false
+      buttonLabel: '',
+      isShowModel: false,
+      isShowMobile: false,
     }
-  },
-  computed: {
-
-    buttonLabel() {
-      let user = localStorage.getItem("user");
-      if (user) {
-        this.buttonLabel = 'Đăng xuất';
-
-      } else {
-        this.buttonLabel = 'Đăng nhập';
-      }
-      return this.buttonLabel
-    },
   },
   methods:
   {
     handleButtonClick() {
-      if (this.buttonLabel == 'Đăng nhập') {
+      let user = localStorage.getItem("user");
+      if(user)
+      {
+       this.buttonLabel = 'dropdown'
+      }
+      else
+      {
+        this.buttonLabel = ''
+        alert('Bạn chưa đăng nhập')   
         this.$router.push({ name: 'login' });
       }
-
-      if ((this.buttonLabel == 'Đăng xuất')) {
-        localStorage.removeItem('user')
-        localStorage.removeItem('token')
-        this.$router.push({ name: 'login' })
-      }
+      
     },
-    onShow()
+    outWeb()
     {
-      this.isShowModel=!this.isShowModel
+      this.$router.push({ name: 'login' });
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    },
+    onShow() {
+      this.isShowModel = !this.isShowModel
+    },
+    onShowMobile() {
+      this.isShowMobile = !this.isShowMobile
     }
   }
 };
 </script>
-
-<style>
-a:hover {
-  cursor: pointer;
-}
-</style>
