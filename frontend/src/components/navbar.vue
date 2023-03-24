@@ -40,12 +40,12 @@
           </div>
          
           <div class="order-lg-2 nav-btns">
-            <button type="button" class="btn position-relative" >
-              <i class="fa-solid fa-bag-shopping"></i>
-            </button>
-            
+            <button type="button" class="btn position-relative" @click="onShow" >
+              <i class="fa-solid fa-bag-shopping" ></i>
+            </button>      
           </div>
         </form>
+        <carthome v-if="isShowModel" @cancel="onShow"></carthome> 
 
         
       </div>
@@ -79,14 +79,20 @@ img
 </style>
 
 <script>
-
+import carthome from './carthome.vue';
 export default {
+  components:
+  {
+    carthome
+  },
   data() {
     return {
-      buttonLabel: 'Đăng nhập'
+      buttonLabel: 'Đăng nhập',
+      isShowModel:false
     }
   },
   computed: {
+
     buttonLabel() {
       let user = localStorage.getItem("user");
       if (user) {
@@ -111,6 +117,10 @@ export default {
         this.$router.push({ name: 'login' })
       }
     },
+    onShow()
+    {
+      this.isShowModel=!this.isShowModel
+    }
   }
 };
 </script>
