@@ -3,7 +3,7 @@
     <div class="title_product">
       Danh sách sản phẩm
     </div>
-    <swiper :spaceBetween="5" :modules="modules"  :breakpoints="{ 600:{ slidesPerView:1 }, 800:{ slidesPerView:2},  1200:{ slidesPerView:3},1400:{ slidesPerView:4},}" class="mySwiper">
+    <swiper :spaceBetween="5" :modules="modules"  :breakpoints="{ 600:{ slidesPerView:1 }, 800:{ slidesPerView:2}, 1000:{ slidesPerView:3}, 1200:{ slidesPerView:4},1400:{ slidesPerView:5},}" class="mySwiper">
       <swiper-slide>
         <div class="product">
           <div class="thumb_product"><img src="https://i.pinimg.com/736x/ac/61/6e/ac616eac8a162481a2bcf42b78c198ac.jpg"
@@ -116,7 +116,7 @@
 }
 .swiper-slide img {
   display: block;
-  width: 18rem;
+  width: 16rem;
   object-fit: cover;
   border: none;
 }
