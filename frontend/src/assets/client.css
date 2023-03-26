@@ -49,6 +49,7 @@
     .right_nav {
         display: none;
     }
+  
 }
 
 .btn_custom {
@@ -185,8 +186,7 @@
 }
 
 .navi_nav {
-
-    position: fixed;
+  position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
@@ -207,7 +207,8 @@
     top: 0;
     left: 0;
     bottom: 0;
-    right: 0;
+    width: 300px;
+    max-width: max-content;
     background-color: white;
     max-width: 100%;
     z-index: 30;
