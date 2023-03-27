@@ -26,15 +26,6 @@ app.use(express.json());
 app.use(routerUser,routerCat);
 app.use(express.static("uploads"));
 
-
-
-
-
-
-
-
-
-
 // Khởi động máy chủ
 const port = 3000;
 app.listen(port, () => {

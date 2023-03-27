@@ -4,7 +4,7 @@
   "description": "day la backend cua ivymoda",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "author": "tt-nhom3",
   "license": "ISC",

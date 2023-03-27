@@ -16,9 +16,9 @@
 <style>
 /* offers */
 #offers{
-    background: url("https://pubcdn.ivymoda.com/files/news/2023/03/24/dd163dfda9958ec728ffcdb97fa3f823.jpg") center/cover no-repeat;
+    background: rgb(55,55,55);
+    background: radial-gradient(circle, rgba(55,55,55,1) 3%, rgba(255,255,255,1) 100%);
     border-radius: 30px;
-    height: 500px;
 }
 #offers .row{
     min-height: 60vh;
