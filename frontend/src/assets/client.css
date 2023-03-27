@@ -371,6 +371,135 @@
     color: #fbb72c;
 }
 
+/* detail product */
+
+.detail
+{
+    margin: 40px 0;
+}
+.detail .detail_img
+{
+    margin: 0 -15px;
+}
+.detail_img img {
+    width: 100%;
+    height: auto;
+ }
+.detail .detail_information
+{
+    padding-left: 65px;
+    margin-top: 30px;
+}
+.detail_information h1
+{
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 32px;
+    color: #221f20;
+}
+.detail_information .detail_color,
+.detail_information .detail_size,
+.detail_information .detail_price
+{
+    margin-top: 24px;
+}
+.detail_information .detail_color b,
+.detail_information .detail_price b
+{
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: #221f20;
+}
+.detail_information .detail_size label
+{
+    padding-right: 10px;
+}
+.detail_information .detail_size label
+{
+    display: inline-flex;
+    cursor: pointer;
+}
+.detail_information .detail_size input[type=radio] {
+    display: none;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+}
+.detail_information .detail_size span
+{
+    width: 48px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #e7e8e9;
+}
+.detail .detail_checksize
+{
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 16px;
+    display: block;
+}
+
+.detail .detail_qty {
+    align-items: center; /* Canh giữa các phần tử con */
+    margin-bottom: 20px; /* Khoảng cách với phần tử phía dưới */
+    margin-top: 20px;
+  }
+  
+  .detail .detail_qty b {
+    margin-right: 10px; /* Khoảng cách với input */
+  }
+  
+  .detail .detail_qty input[type="number"] {
+    
+    border: 1px solid #ccc; /* Viền ngoài của input */
+    border-radius: 5px; /* Bo tròn viền của input */
+    outline: none; /* Bỏ đường viền khi focus */
+  }
+  .detail .detail_cart .btn
+  {
+    margin: 0;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px 0px;
+    background-color: #221f20;
+    color: #f7f8f9;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    height: 48px;
+    padding: 15px;
+    width: 100%;
+    max-width: 150px;
+    cursor: pointer;
+  }
+
+  .detail .detail_infor
+  {
+    margin-top: 24px;
+  }
+  .detail  .detail_infor
+  {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    margin-bottom: 20px;
+    
+  }
+  .detail  .detail_infor .size {
+    font-weight: bold;
+  }
+  
+  .detail  .detail_infor.note {
+    font-style: italic;
+  }
 /* footer */
 footer .brand {
     letter-spacing: 2px;
@@ -422,7 +551,7 @@ footer a:hover {
     text-transform: uppercase;
     text-decoration: none;
 }
-
+.checksize .check_close .btn_close,
 .mobile .mobile_close .btn_close,
 .cart .btn_close {
     border: 0;
