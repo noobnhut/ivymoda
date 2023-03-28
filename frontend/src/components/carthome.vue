@@ -43,7 +43,7 @@
         </div>
 
         <div class="see_cart">
-            <a>Xem giỏ hàng</a>
+            <router-link to="/cart">Xem giỏ hàng</router-link>
         </div>
     </div>
 </template>

@@ -53,7 +53,27 @@ const router = createRouter({
           path: 'register',
           name: 'register',
           component: () => import('../layout/customer/register.vue')
-        }
+        },
+        {
+          path: 'information',
+          name: 'information',
+          component: () => import('../layout/customer/information.vue')
+        },
+        {
+          path: 'productsee',
+          name: 'productsee',
+          component: () => import('../layout/customer/productsee.vue')
+        },
+        {
+          path: 'productlike',
+          name: 'productlike',
+          component: () => import('../layout/customer/productlike.vue')
+        },
+        {
+          path: 'control_order',
+          name: 'control_order',
+          component: () => import('../layout/customer/control_order.vue')
+        },
       ],
     },
     {
@@ -65,6 +85,11 @@ const router = createRouter({
       path: '/detail',
       name: 'detail',
       component:() => import('../views/detail.vue')
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component:() => import('../views/cart.vue')
     },
   ]
 })
