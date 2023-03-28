@@ -2,29 +2,28 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('useractivity', {
+    await queryInterface.createTable('CatSexes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_user: {
+      id_cat: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
-          model: 'user',
+          model: 'Categories',
           key: 'id'
         }
       },
-      id_product: {
+      id_sex: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
-          model: 'product',
+          model: 'Sexes',
           key: 'id'
         }
-      },
-      status: {
-        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +36,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('useractivity');
+    await queryInterface.dropTable('CatSexes');
   }
 };
