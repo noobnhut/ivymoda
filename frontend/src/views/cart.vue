@@ -63,9 +63,11 @@
                     <hr>
 
                     <div class="d-flex btn_cart justify-content-between">
+                      <router-link to="/order">
                         <button class="btn_user">
                             Thanh toán
                         </button>
+                      </router-link>  
                     </div>
                 </div>
             </div>
