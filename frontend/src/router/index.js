@@ -37,6 +37,16 @@ const router = createRouter({
             component: () => import('../layout/admin/category.vue'),
             name: 'category'
           },
+          {
+            path: 'sexes',
+            component: () => import('../layout/admin/sexes.vue'),
+            name: 'sexes'
+          },
+          {
+            path: 'catsex',
+            component: () => import('../layout/admin/catsex.vue'),
+            name: 'catsex'
+          },
         ],
     },
     {
