@@ -25,7 +25,8 @@
 
                 <!-- Sản phẩm -->
                 <li class="active">
-                    <router-link :to="{ name: 'product' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
+                    <router-link :to="{ name: 'product' }" href="#homeSubmenu" data-toggle="collapse"
+                        aria-expanded="false">QL
                         sản phẩm</router-link>
                 </li>
 
@@ -34,7 +35,15 @@
                     <router-link :to="{ name: 'category' }" href="#homeSubmenu" data-toggle="collapse"
                         aria-expanded="false">QL danh mục</router-link>
                 </li>
-
+                <!-- Danh mục -->
+                <li class="active">
+                    <router-link :to="{ name: 'sexes' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
+                        đối tượng</router-link>
+                </li>
+                <li class="active">
+                    <router-link :to="{ name: 'catsex' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
+                        danh mục đối tượng</router-link>
+                </li>
                 <!-- Đơn hàng -->
                 <li class="active">
                     <router-link :to="{ name: 'bill' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
@@ -83,18 +92,17 @@ import '../assets/admin.css';
 export default {
     data() {
         return {
-            toggle: true ,
-            
+            toggle: true,
+
         }
     },
     methods:
     {
-        ontoggleModel()
-        {
-            this.toggle=!this.toggle
+        ontoggleModel() {
+            this.toggle = !this.toggle
         }
     }
-    
+
 }
 
 </script>

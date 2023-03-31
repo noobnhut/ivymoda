@@ -113,7 +113,7 @@ export default
                         password: this.password,
                         email: this.email,
                         phone:this.phone,
-                       address:this.address
+                        address:this.address
                     });
                   
                 if (register.status == 200) { 
