@@ -34,7 +34,7 @@
 
     </div>
   </div>
-
+  <toast ref="toast"></toast>
   <!-- Add Modal HTML -->
 
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -84,6 +84,8 @@
 </template>
   
 <script>
+import toast from '../../components/toast.vue';
+
 export default
   {
     data() {
@@ -92,6 +94,9 @@ export default
         cat_name: '',
         id: ''
       }
+    },
+    components: {
+      toast
     },
     mounted() {
       this.getCat();
@@ -110,18 +115,8 @@ export default
             cat_name: this.cat_name
           }
         )
-        if (catadd.status == 201) {
-          alert(catadd.data.message)
-        }
-        else if (catadd.status == 202) {
-          alert(catadd.data.message)
-        }
-        else if (catadd.status == 203) {
-          alert(catadd.data.message)
-        }
-        else if (catadd.status == 401) {
-          alert(catadd.data.message)
-        }
+        this.$refs.toast.showToast(catadd.data.message)
+        
 
 
       },
@@ -145,32 +140,15 @@ export default
             cat_name: this.cat_name
           }
         )
-        if (catupdate.status == 200) {
-          alert(catupdate.data.message)
-          location.reload()
-        }
-        else if (catupdate.status == 201) {
-          alert(catupdate.data.message)
-        }
-        else if (catupdate.status == 203) {
-          alert(catupdate.data.message)
-        }
-        else if (catupdate.status == 401) {
-          alert(catupdate.data.message)
-        }
+        this.$refs.toast.showToast(catupdate.data.message)
+
       },
       async deleteCat(id) {
         const catdelete = await this.$axios.delete(
           `deletecat/` + id,
         )
-        if (catdelete.status == 200) {
-          alert(catdelete.data.message)
-          location.reload()
-        }
-        else {
-          alert(catdelete.data.message)
-          location.reload()
-        }
+        this.$refs.toast.showToast(catdelete.data.message)
+
       },
     }
   }

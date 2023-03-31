@@ -34,7 +34,7 @@
 
         </div>
     </div>
-
+    <toast ref="toast"></toast>
     <!-- Add Modal HTML -->
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -73,6 +73,7 @@
                         <label>Tên đối tượng:</label>
                         <input type="text" class="form-control" v-model="Sexes_value">
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
@@ -82,8 +83,9 @@
         </div>
     </div>
 </template>
-    
+
 <script>
+import toast from '../../components/toast.vue';
 export default
     {
         data() {
@@ -92,6 +94,9 @@ export default
                 Sexes_value: '',
                 id: ''
             }
+        },
+        components: {
+            toast
         },
         mounted() {
             this.getSex();
@@ -111,16 +116,20 @@ export default
                     }
                 )
                 if (catadd.status == 201) {
-                    alert(catadd.data.message)
+                    this.$refs.toast.showToast(catadd.data.message)
+                    location.reload()
                 }
                 else if (catadd.status == 202) {
-                    alert(catadd.data.message)
+                    this.$refs.toast.showToast(catadd.data.message)
+                    location.reload()
                 }
                 else if (catadd.status == 203) {
-                    alert(catadd.data.message)
+                    this.$refs.toast.showToast(catadd.data.message)
+                    location.reload()
                 }
                 else if (catadd.status == 401) {
-                    alert(catadd.data.message)
+                    this.$refs.toast.showToast(catadd.data.message)
+                    location.reload()
                 }
 
 
@@ -139,38 +148,45 @@ export default
             },
             async updateSex() {
 
-                const catupdate = await this.$axios.put(
+                const sexupdate = await this.$axios.put(
                     `updateSex/` + this.id,
                     {
                         Sexes_value: this.Sexes_value
                     }
                 )
-                if (catupdate.status == 200) {
-                    alert(catupdate.data.message)
+                if (sexupdate.status == 200) {
+                    alert(sexupdate.data.message)
                     location.reload()
                 }
-                else if (catupdate.status == 201) {
-                    alert(catupdate.data.message)
+                else if (sexupdate.status == 201) {
+                    alert(sexupdate.data.message)
                 }
-                else if (catupdate.status == 203) {
-                    alert(catupdate.data.message)
+                else if (sexupdate.status == 203) {
+                    alert(sexupdate.data.message)
                 }
-                else if (catupdate.status == 401) {
-                    alert(catupdate.data.message)
+                else if (sexupdate.status == 202) {
+                    alert(sexupdate.data.message)
+                }
+                else if (sexupdate.status == 401) {
+                    alert(sexupdate.data.message)
                 }
             },
             async deleteSex(id) {
-                const catdelete = await this.$axios.delete(
-                    `deleteSex/` + id,
+                const sexdelete = await this.$axios.delete(
+                    `deleteSex/` + id
                 )
-                if (catdelete.status == 200) {
-                    alert(catdelete.data.message)
+                if (sexdelete.status == 200) {
+                    alert(sexdelete.data.message)
                     location.reload()
+                }
+                else if (sexdelete.status == 202) {
+                    alert(sexdelete.data.message)
                 }
                 else {
-                    alert(catdelete.data.message)
+                    alert(sexdelete.data.message)
                     location.reload()
                 }
+
             },
         }
     }

@@ -20,6 +20,7 @@
     "vue-owl-carousel": "^2.0.3",
     "vue-router": "^4.1.6",
     "vue-toast-notification": "3.0",
+    "vue-toastification": "^1.7.14",
     "vue3-carousel": "^0.2.13"
   },
   "devDependencies": {

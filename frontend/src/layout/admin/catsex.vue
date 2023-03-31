@@ -22,11 +22,11 @@
         </thead>
         <tbody>
           <tr v-for="catsex in catsexs">
-            <td>{{catsex.cat_name}}</td>
+            <td>{{ catsex.cat_name }}</td>
             <td>{{ catsex.Sexes_value }}</td>
             <td>
               <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"><i
-                  class="fa-solid fa-spinner"></i></a>
+                  class="fa-solid fa-spinner" @click="sendata(catsex)"></i></a>
               <a class="delete" @click="deleteCatSex(catsex.id)"><i class="fa-solid fa-trash-can"></i></a>
             </td>
           </tr>
@@ -36,6 +36,7 @@
 
     </div>
   </div>
+  <toast ref="toast"></toast>
 
   <!-- Add Modal HTML -->
 
@@ -69,7 +70,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-primary">Thêm</button>
+          <button type="button" class="btn btn-primary" @click="addcatsex()">Thêm</button>
         </div>
       </div>
     </div>
@@ -86,13 +87,29 @@
         <div class="modal-body">
 
           <div class="form-group">
-            <label>Tên danh mục:</label>
-            <input type="text" class="form-control">
+            <label for="cat_id">Danh mục:</label>
+            <select id="cat_id" v-model="cat_id" required>
+              <option disabled>Chọn loại danh mục</option>
+              <option v-for="cat in cats" :key="cat.id" :value="cat.id">{{ cat.cat_name }}
+              </option>
+            </select>
+            <br>
           </div>
+
+          <div class="form-group">
+            <label for="sex_id">Đối tượng:</label>
+            <select id="sex_id" v-model="sex_id" required>
+              <option disabled>Chọn loại đối tượng:</option>
+              <option v-for="sex in sexs" :key="sex.id" :value="sex.id">{{ sex.Sexes_value }}
+              </option>
+            </select>
+            <br>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-primary">Cập nhập</button>
+          <button type="button" class="btn btn-primary" @click="updatecatsex">Cập nhập</button>
         </div>
       </div>
     </div>
@@ -101,22 +118,30 @@
 
 
 <script>
+import toast from '../../components/toast.vue';
+
 export default
   {
     data() {
       return {
         catsexs: [],
-        cats:[],
-        sexs:[],
+        cats: [],
+        sexs: [],
+        sex_id: '',
+        cat_id: '',
+        catsex_id: ''
       }
     },
-    mounted()
-    {
-       this.getcatsex();
-       this.getcat();
-       this.getsex();
+    mounted() {
+      this.getcatsex();
+      this.getcat();
+      this.getsex();
+    },
+    components: {
+      toast
     },
     methods: {
+      //get du lieu 3 bang
       async getcatsex() {
         try {
           const result = await this.$axios.get(
@@ -153,22 +178,38 @@ export default
           console.log(e);
         }
       },
+      sendata(catsex) {
+        this.catsex_id = catsex.id;
+      },
+      // crud
+      async addcatsex() {
+        const catsexadd = await this.$axios.post(
+          'addCatSex',
+          {
+            id_cat: this.cat_id,
+            id_sex: this.sex_id
+          }
+        )
+        this.$refs.toast.showToast(catsexadd.data.message)
+      },
+      async updatecatsex() {
+        const catsexupdate = await this.$axios.put(
+          `updateCatSex/` + this.catsex_id,
+          {
+            id_cat: this.cat_id,
+            id_sex: this.sex_id
+          }
+        )
+        this.$refs.toast.showToast(catsexupdate.data.message)
 
+      },
+      async deleteCatSex(id) {
+        const catsexdelete = await this.$axios.delete(
+          `deleteCatSex/` + id,
+        )
+        this.$refs.toast.showToast(catsexdelete.data.message)
 
-     async deleteCatSex(id)
-     {
-      const catsexdelete = await this.$axios.delete(
-                    `deleteCatSex/` + id,
-                )
-                if (catsexdelete.status == 200) {
-                    alert(catsexdelete.data.message)
-                    location.reload()
-                }
-                else {
-                    alert(catsexdelete.data.message)
-                    location.reload()
-                }
-     },
+      },
 
 
 
