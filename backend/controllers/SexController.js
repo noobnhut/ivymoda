@@ -1,6 +1,6 @@
 const db = require('../models');
 const Sex = db.Sexes;
-
+const CatSex = db.CatSexes;
 const getAllSex = async (req, res) => {
     try {
         const sex = await Sex.findAll();
@@ -39,14 +39,20 @@ const updateSex = async (req, res) => {
     if (!sex) return res.status(404).json({ message: "Không tìm thấy dữ liệu" });
 
     const { Sexes_value } = req.body;
-
+    const existingSex = await Sex.findOne({ where: {Sexes_value } })
+   
+    // tìm kiếm cat trong cat sex
+    const existingCatSex = await CatSex.findOne({ where: { id_sex: req.params.id } });
     try {
-        const existingSex = await Sex.findOne({ where: { Sexes_value } });
         if (Sexes_value == '') {
             res.status(201).json({ message: "Dữ liệu không thể rỗng" });
         }
-        else if (existingSex) {
-            return res.status(203).json({ message: 'đối tượng đã tồn tại trong hệ thống' });
+        else if (existingCatSex ) {
+            return res.status(202).json({ message: "đối tượng đang dùng không thể update" });
+        }
+        else if(existingSex && existingSex.id!=req.params.id)
+        {
+            res.status(20).json({ message: "Dữ liệu trùng lặp" });
         }
         else {
             await Sex.update({ Sexes_value }, { where: { id: req.params.id } });
@@ -59,6 +65,7 @@ const updateSex = async (req, res) => {
 };
 
 const deleteSex = async (req, res) => {
+    const existingCatSex = await CatSex.findOne({ where: { id_sex: req.params.id } });
     const sex = await Sex.findOne({
         where: {
             id: req.params.id
@@ -67,11 +74,17 @@ const deleteSex = async (req, res) => {
     if (!sex) return res.status(404).json({ message: "Không tìm thấy dữ liệu nào" });
 
     try {
-        await Sex.destroy({
-            where: {
-                id: req.params.id
-            }
-        });
+        if (existingCatSex) {
+            return res.status(202).json({ message: "đối tượng đang dùng không thể delete" });
+        }
+        else {
+            await Sex.destroy({
+                where: {
+                    id: req.params.id
+                }
+            });
+        }
+
         res.status(200).json({ message: "Xóa đối tượng thành công" });
     } catch (error) {
         console.log(error.message);
@@ -82,5 +95,5 @@ module.exports = {
     getAllSex,
     addSex,
     updateSex
-    ,deleteSex
+    , deleteSex
 };

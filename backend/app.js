@@ -9,9 +9,9 @@ const app = express();
 const {routerUser} = require('./routes/UserRouter');
 const {routerCat} = require('./routes/CatRouter');
 const {routerSex} = require('./routes/SexRouter');
-
 const {routerCatSex} = require('./routes/CatSexRouter');
-
+const {routerProduct} = require('./routes/ProductRouter');
+const {routerDetail} = require('./routes/DetailRouter');
 
 // Thiết lập body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,8 +25,7 @@ app.use(session({
 
 app.use(cors());
 app.use(express.json());
-app.use(routerUser);
-app.use(routerCat,routerSex,routerCatSex);
+app.use(routerUser,routerCat,routerSex,routerCatSex,routerProduct,routerDetail);
 app.use(express.static("uploads"));
 
 // Khởi động máy chủ

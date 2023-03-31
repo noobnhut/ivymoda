@@ -30,7 +30,7 @@ const addCatSex = async (req, res) => {
     try {
      const {id_cat,id_sex}=req.body;
      const existingCatSex = await CatSex.findOne({where:{id_cat,id_sex}});
-     if(id_cat == '' && id_sex =='')
+     if(id_cat == '' || id_sex =='')
      {
         res.status(202).json({ message: "Thiếu thông tin nhập vào" });
             return;
@@ -55,13 +55,10 @@ const updateCatSex = async (req, res) => {
     const { id_cat,id_sex } = req.body;
 
     try {
-        const existingCatSex = await CatSex.findOne({ where: { id_cat,id_sex } });
         if (id_cat == '' && id_sex =='') {
             res.status(201).json({ message: "Dữ liệu không thể rỗng" });
         }
-        else if (existingCatSex) {
-            return res.status(203).json({ message: 'danh mục đối tượng đã tồn tại trong hệ thống' });
-        }
+       
         else {
             await CatSex.update({ id_cat ,id_sex }, { where: { id: req.params.id } });
             res.status(200).json({ message: "Cập nhật thành công" });

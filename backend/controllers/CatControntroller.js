@@ -1,6 +1,6 @@
 const db = require('../models');
 const Cat = db.Categories;
-
+const CatSex = db.CatSexes;
 const getAllCat = async (req, res) => {
     try {
         const cat = await Cat.findAll();
@@ -35,7 +35,9 @@ const addCat = async (req, res) => {
 }
 
 const updateCat = async (req, res) => {
-    const cat = await Cat.findOne({ where: { id: req.params.id } });
+
+    const existingCatSex = await CatSex.findOne({ where: { id_cat: req.params.id } });
+
     if (!cat) return res.status(404).json({ message: "Không tìm thấy dữ liệu" });
 
     const { cat_name } = req.body;
@@ -45,8 +47,11 @@ const updateCat = async (req, res) => {
         if (cat_name == '') {
             res.status(201).json({ message: "Dữ liệu không thể rỗng" });
         }
-        else if (existingCat) {
-            return res.status(203).json({ message: 'Danh mục đã tồn tại trong hệ thống' });
+        else if (existingCat && existingCat.id != req.params.id) {
+            res.status(20).json({ message: "Dữ liệu trùng lặp" });
+        }
+        else if (existingCatSex) {
+            return res.status(202).json({ message: "danh mục đang dùng không thể update" });
         }
         else {
             await Cat.update({ cat_name }, { where: { id: req.params.id } });
@@ -59,6 +64,7 @@ const updateCat = async (req, res) => {
 };
 
 const deleteCat = async (req, res) => {
+    const existingCatSex = await CatSex.findOne({ where: { id_cat: req.params.id } });
     const cat = await Cat.findOne({
         where: {
             id: req.params.id
@@ -67,11 +73,16 @@ const deleteCat = async (req, res) => {
     if (!cat) return res.status(404).json({ message: "Không tìm thấy dữ liệu nào" });
 
     try {
-        await Cat.destroy({
-            where: {
-                id: req.params.id
-            }
-        });
+        if (existingCatSex) {
+            return res.status(202).json({ message: "danh mục đang dùng không thể delete" });
+        }
+        else {
+            await Cat.destroy({
+                where: {
+                    id: req.params.id
+                }
+            });
+        }
         res.status(200).json({ message: "Xóa danh mục thành công" });
     } catch (error) {
         console.log(error.message);
