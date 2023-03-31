@@ -17,15 +17,15 @@ const getAllCat = async(req, res) => {
 
 const addCat = async (req, res) => 
 {
+    const {cat_name} = req.body;
     try {
-        const {id,cat_name} = req.body;
         if (cat_name==null) {
             res.json({ message: "Thiếu thông tin danh mục" });
             return;
         } 
-        else
+        else    
         {
-            const cat = await Cat.create( {id,cat_name} );
+            const cat = await Cat.create( {cat_name} );
             res.json(cat);
             res.status(200).json({ msg: "Thêm loại sản phẩm thành công" });
         }
