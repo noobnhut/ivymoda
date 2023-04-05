@@ -47,6 +47,11 @@ const router = createRouter({
             component: () => import('../layout/admin/catsex.vue'),
             name: 'catsex'
           },
+          {
+            path: 'detailproduct',
+            component: () => import('../layout/admin/detailproduct.vue'),
+            name: 'detailproduct'
+          },
         ],
     },
     {

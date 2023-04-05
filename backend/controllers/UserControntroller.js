@@ -105,7 +105,7 @@ const addUser = async (req, res) => {
       // Thành công khi upload file
       const avatar = req.file.filename;  
       const url_avatar = `https://localhost:3000/${avatar}`;     
-      return res.status(200).json({ message: 'upload file xong' });
+      return res.status(200).json({url_avatar, message: 'upload file xong' });
       
     }
   });

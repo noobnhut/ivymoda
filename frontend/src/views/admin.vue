@@ -44,6 +44,10 @@
                     <router-link :to="{ name: 'catsex' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
                         danh mục đối tượng</router-link>
                 </li>
+                <li class="active">
+                    <router-link :to="{ name: 'detailproduct' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
+                       chi tiết sản phẩm</router-link>
+                </li>
                 <!-- Đơn hàng -->
                 <li class="active">
                     <router-link :to="{ name: 'bill' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL

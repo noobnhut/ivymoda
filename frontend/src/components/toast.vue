@@ -27,7 +27,7 @@ export default {
 
             setTimeout(() => {
                 this.visible = false
-            }, 4000,location.reload())
+            }, 10000)
             
         },
     },

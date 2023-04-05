@@ -7,7 +7,7 @@
             <h2>Quản lý <b>SẢN PHẨM</b></h2>
           </div>
           <div class="col-sm-6">
-            <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
+            <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setDefault"><i
                 class="fa-solid fa-circle-plus"></i> <span>Thêm sản phẩm</span></a>
           </div>
         </div>
@@ -30,7 +30,7 @@
             <td>{{ product.detail }}</td>
             <td>{{ product.discount }}%</td>
             <td>{{ product.cat_name }}</td>
-            <td>{{ product.Sexes_value }}</td>
+            <td>{{ product.sexes_value}}</td>
             <td>
               <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"><i
                   class="fa-solid fa-spinner" @click="sendata(product)"></i></a>
@@ -196,6 +196,16 @@ export default
        this.price=product.price;
        this.discount=product.discount;
        this.id_product=product.id;
+       this.id_catsex=product.id_catsex;
+      },
+      setDefault()
+      {
+        this.name='';
+       this.detail='';
+       this.price='';
+       this.discount='';
+       this.id_product='';
+       this.id_catsex='';
       },
       async addcatsex() {
         const productadd = await this.$axios.post(
@@ -240,9 +250,6 @@ export default
           location.reload()
         }
       }
-
-
-
     },
   }
 </script>

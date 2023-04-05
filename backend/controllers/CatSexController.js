@@ -9,14 +9,16 @@ const getCatSex = async (req, res) => {
         const catsexes = await CatSex.findAll({
             attributes: ['id', 'id_cat', 'id_sex'],
             include: [
-                { model: Cat, attributes: ['cat_name'] },
-                { model: Sex, attributes: ['Sexes_value'] }
+                { model: Cat, attributes: ['id','cat_name'] },
+                { model: Sex, attributes: ['id','Sexes_value'] }
             ],
             raw: true,
             nest: true
         });
         const result = catsexes.map(catsex => ({
             id: catsex.id,
+            id_cat:catsex.Category.id,
+            id_sex:catsex.Sex.id,
             cat_name: catsex.Category.cat_name,
             Sexes_value: catsex.Sex.Sexes_value
         }));

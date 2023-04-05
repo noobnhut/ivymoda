@@ -20,12 +20,13 @@ const getProduct = async (req, res) => {
                         ]
                     }
                 ],
-                // where: { id },
+               
                
             }
         );
         const result = product.map(p => ({
             id: p.id,
+            id_catsex:p.id_catsex,
             name: p.name,
             price: p.price,
             detail: p.detail,
