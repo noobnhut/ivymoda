@@ -11,22 +11,20 @@ const getAllCat = async (req, res) => {
     }
 };
 
-const addCat = async (req, res) => {
 
+const addCat = async (req, res) => 
+{
     try {
-        const { cat_name } = req.body;
-
-        const existingCat = await Cat.findOne({ where: { cat_name } });
-        if (cat_name == '') {
-            res.status(202).json({ message: "Thiếu thông tin danh mục" });
+        const {id,cat_name} = req.body;
+        if (cat_name==null) {
+            res.json({ message: "Thiếu thông tin danh mục" });
             return;
-        }
-        else if (existingCat) {
-            return res.status(203).json({ message: 'Danh mục đã tồn tại trong hệ thống' });
-        }
-        else {
-            const cat = await Cat.create({ cat_name });
-            return res.status(201).json({ message: "Thêm thông tin danh mục xong" });
+        } 
+        else
+        {
+            const cat = await Cat.create( {id,cat_name} );
+            res.json(cat);
+            res.status(200).json({ msg: "Thêm loại sản phẩm thành công" });
         }
     } catch (error) {
         return res.status(401).json({ message: "Không thể thêm danh mục" });
