@@ -7,7 +7,7 @@
             <h2>Quản lý <b>DANH MỤC ĐỐI TƯỢNG</b></h2>
           </div>
           <div class="col-sm-6">
-            <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
+            <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="setDefault"><i
                 class="fa-solid fa-circle-plus"></i> <span>Thêm danh mục đối tượng</span></a>
           </div>
         </div>
@@ -98,10 +98,9 @@
 
           <div class="form-group">
             <label for="sex_id">Đối tượng:</label>
-            <select id="sex_id" v-model="sex_id" required>
+            <select id="sex_id" v-model="sex_id"  required>
               <option disabled>Chọn loại đối tượng:</option>
-              <option v-for="sex in sexs" :key="sex.id" :value="sex.id">{{ sex.Sexes_value }}
-              </option>
+              <option v-for="sex in sexs" :key="sex.id" :value="sex.id">{{sex.Sexes_value}}</option>
             </select>
             <br>
           </div>
@@ -129,7 +128,8 @@ export default
         sexs: [],
         sex_id: '',
         cat_id: '',
-        catsex_id: ''
+        catsex_id: '',
+      
       }
     },
     mounted() {
@@ -180,6 +180,13 @@ export default
       },
       sendata(catsex) {
         this.catsex_id = catsex.id;
+        this.cat_id=catsex.id_cat;
+        this.sex_id=catsex.id_sex;
+      },
+      setDefault()
+      {
+        this.cat_id='';
+        this.sex_id='';
       },
       // crud
       async addcatsex() {
