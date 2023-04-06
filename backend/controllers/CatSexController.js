@@ -28,6 +28,10 @@ const getCatSex = async (req, res) => {
         console.log(error);
     }
 }
+// const getCatBySexId = async (req,res)=>
+// {
+
+// }
 const addCatSex = async (req, res) => {
     try {
      const {id_cat,id_sex}=req.body;

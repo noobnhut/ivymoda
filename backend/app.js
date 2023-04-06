@@ -23,8 +23,9 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-require('./passport/passport-facebook')(passport)
-require('./passport/passport-google')(passport)
+require('./passport/passport-facebook')(passport);
+require('./passport/passport-google')(passport);
+
 // Thiết lập body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); 
@@ -43,7 +44,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(routerUser,routerCat,routerSex,routerCatSex,routerProduct,routerDetail,router);
+app.use(routerUser,routerCat,routerSex,routerCatSex,routerProduct,routerDetail);
 app.use(express.static("uploads"));
 app.use(passport.initialize());
 app.use(passport.session());

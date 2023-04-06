@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   Follows.init({
     id_user: DataTypes.INTEGER,
     id_product: DataTypes.INTEGER,
-    status: DataTypes.BOOLEAN
+    status: DataTypes.BOOLEAN,
+    status_seen:DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Follows',
