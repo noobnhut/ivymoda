@@ -24,7 +24,6 @@ const addCat = async (req, res) =>
         {
             const cat = await Cat.create( {id,cat_name} );
             res.json(cat);
-            res.status(200).json({ msg: "Thêm loại sản phẩm thành công" });
         }
     } catch (error) {
         return res.status(401).json({ message: "Không thể thêm danh mục" });
@@ -36,7 +35,7 @@ const updateCat = async (req, res) => {
 
     const existingCatSex = await CatSex.findOne({ where: { id_cat: req.params.id } });
 
-    if (!cat) return res.status(404).json({ message: "Không tìm thấy dữ liệu" });
+    if (!existingCatSex) return res.status(404).json({ message: "Không tìm thấy dữ liệu" });
 
     const { cat_name } = req.body;
 

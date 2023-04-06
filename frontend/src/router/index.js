@@ -111,6 +111,23 @@ const router = createRouter({
       name: 'order',
       component:() => import('../views/order.vue')
     },
+    {
+      path: '/auth/facebook',
+      name: 'facebook-auth',
+      beforeEnter() {
+        // redirect đến trang xác thực Facebook
+        window.location.href = 'http://localhost:3000/auth/facebook'
+      }
+    },
+    
+    {
+      path: '/auth/google',
+      name: 'google-auth',
+      beforeEnter() {
+        // redirect đến trang xác thực Google
+        window.location.href = 'http://localhost:3000/auth/google'
+      }
+    },
   ]
 })
 

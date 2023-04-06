@@ -13,6 +13,13 @@
           </div>
 
           <button @click="login" class="btn">Đăng nhập</button>
+          <div class="login-container">
+          <p>Hoặc tiếp tục với</p>
+          <div class="login-buttons">
+            <button class="login-button" @click="socialLogin('google')">Đăng nhập bằng Google</button>
+            <button class="login-button" @click="socialLogin('facebook')">Đăng nhập bằng Facebook</button>
+        </div>
+        </div>
         </div>
       </div>
       <div class="col-xl-6">
@@ -37,34 +44,47 @@
 
 <script>
 import '../../assets/login.css';
-export default
-  {
-    data() {
-      return {
-        email: '',
-        password: '',
-      };
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        const login = await this.$axios.post(`login`, {
+          email: this.email,
+          password: this.password,
+        });
+        if (login.status === 200) {
+          // Lưu thông tin người dùng vào localStorage hoặc sessionStorage
+          localStorage.setItem('user', JSON.stringify(login.data));
+          localStorage.setItem('token', login.data.token);
+          // Chuyển hướng đến trang chính của ứng dụng
+          this.$router.push({ name: 'home' });
+        }
+      } catch (error) {
+        // Xử lý lỗi nếu có
+        console.log(error);
+      }
+    },
+    socialLogin(provider) {
+      // Thực hiện đăng nhập bằng cách chuyển hướng đến trang đăng nhập của nhà cung cấp
+      switch (provider) {
+        case 'google':
+          this.$router.push({ name: 'google-auth' });
+          break;
+        case 'facebook':
+          this.$router.push({ name: 'facebook-auth' });
+          break;
+        default:
+          break;
+      }
     },
 
-    methods:
-    {
-      async login() {
-        try {
-          const response = await this.$axios.post('/login', { email: this.email, password: this.password });
-          const data = response.data;
-          if (data) {
-            localStorage.setItem('user', JSON.stringify(data.user));
-            localStorage.setItem('token', response.data.token);
-            this.$router.push({ name: 'home' });
-          } else {
-            alert('Mật khẩu hoặc email không đúng !!!');
-          }
-        } catch (error) {
-          console.log(error.message);
-          alert('Đăng nhập thất bại');
-        }
-      }
-
-    }
-  }
+    
+  },
+};
 </script>
