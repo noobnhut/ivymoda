@@ -44,7 +44,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(routerUser,routerCat,routerSex,routerCatSex,routerProduct,routerDetail);
+app.use(routerUser,routerCat,routerSex,routerCatSex,routerProduct,routerDetail,router);
 app.use(express.static("uploads"));
 app.use(passport.initialize());
 app.use(passport.session());
