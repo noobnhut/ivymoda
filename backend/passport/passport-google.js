@@ -1,10 +1,9 @@
+// passport-facebook.js
 const GoogleStrategy  = require('passport-google-oauth20').Strategy;
-const config = require('../Config/configAPI.js');
+const config = require('../Config/configAPI');
 const db = require("../models");
 const User = db.users;
-
 module.exports = function(passport) {
-    // Passport Google Strategy code goes here
     passport.use(new GoogleStrategy({
         clientID: config.GOOGLE_CLIENT_ID,
         clientSecret: config.GOOGLE_CLIENT_SECRET,
@@ -30,7 +29,7 @@ module.exports = function(passport) {
                 User.create({
                     googleId: id,
                     email,
-                    password: "khong_luu_password_khi_login_google",
+                    password: "do_not_save_password_when_login_with_google",
                     displayName,
                     provider: 'google',
                     providerId: id,
@@ -47,4 +46,5 @@ module.exports = function(passport) {
             return done(err);
         });
     }));
+    
 };
