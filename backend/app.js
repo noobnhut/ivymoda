@@ -14,8 +14,7 @@ const {routerCatSex} = require('./routes/CatSexRouter');
 const {routerProduct} = require('./routes/ProductRouter');
 const {routerDetail} = require('./routes/DetailRouter');
 const router = require('./routes/UserRouterAPI');
-router.use(passport.initialize());
-router.use(passport.session());
+
 // Passport session setup. 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -31,6 +30,7 @@ require('./passport/passport-google')(passport);
 // Thiết lập body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); 
+
 //session 
 app.use(session({
   secret: 'keysaveloginuser123456', 
@@ -40,11 +40,23 @@ app.use(session({
 app.use(cookieParser()); //Parse cookie
 app.use(cors());
 
-app.use(express.json());
-app.use(routerUser,routerCat,routerSex,routerCatSex,routerProduct,routerDetail,router);
-app.use(express.static("uploads"));
+// Sử dụng passport và express.json middleware
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.json());
+
+// Định tuyến
+app.use(routerUser);
+app.use(routerCat);
+app.use(routerSex);
+app.use(routerCatSex);
+app.use(routerProduct);
+app.use(routerDetail);
+app.use(router);
+
+// Serve các tệp tĩnh trong thư mục "uploads"
+app.use(express.static("uploads"));
+
 // Khởi động máy chủ
 const port = 3000;
 app.listen(port, () => {
