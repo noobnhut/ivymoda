@@ -6,8 +6,7 @@ const passport = require('passport');
 const cors  = require("cors");
 require('./Config/connect');
 const app = express();
-//facebook
-const config = require('./Config/configAPI');
+
 const {routerUser} = require('./routes/UserRouter');
 const {routerCat} = require('./routes/CatRouter');
 const {routerSex} = require('./routes/SexRouter');
@@ -15,14 +14,17 @@ const {routerCatSex} = require('./routes/CatSexRouter');
 const {routerProduct} = require('./routes/ProductRouter');
 const {routerDetail} = require('./routes/DetailRouter');
 const router = require('./routes/UserRouterAPI');
+router.use(passport.initialize());
+router.use(passport.session());
 // Passport session setup. 
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(user, done) {
+  done(null, user);
 });
+//facebook, google
 require('./passport/passport-facebook')(passport);
 require('./passport/passport-google')(passport);
 
@@ -36,12 +38,7 @@ app.use(session({
   saveUninitialized: false
 }));
 app.use(cookieParser()); //Parse cookie
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(cors());
 
 app.use(express.json());
 app.use(routerUser,routerCat,routerSex,routerCatSex,routerProduct,routerDetail,router);
