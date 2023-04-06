@@ -30,7 +30,7 @@
             <td>{{ product.detail }}</td>
             <td>{{ product.discount }}%</td>
             <td>{{ product.cat_name }}</td>
-            <td>{{ product.Sexes_value }}</td>
+            <td>{{ product.sexes_value }}</td>
             <td>
               <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"><i
                   class="fa-solid fa-spinner" @click="sendata(product)"></i></a>

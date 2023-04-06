@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      sex_value: {
+      Sexes_value: {
         type: Sequelize.STRING
       },
       createdAt: {

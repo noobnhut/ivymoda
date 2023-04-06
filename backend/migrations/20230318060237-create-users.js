@@ -9,6 +9,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      googleId: {
+        type: Sequelize.STRING
+      },
+      facebookId: {
+        type: Sequelize.STRING
+      },
+      provider: {
+        type: Sequelize.STRING
+      },
+      providerId: {
+        type: Sequelize.STRING
+      },
       username: {
         type: Sequelize.STRING
       },
@@ -41,6 +53,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('user');
+    await queryInterface.dropTable('users');
   }
 };

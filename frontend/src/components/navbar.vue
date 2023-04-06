@@ -106,23 +106,40 @@ export default {
   {
     handleButtonClick() {
       let user = localStorage.getItem("user");
-      if(user)
-      {
-       this.buttonLabel = 'dropdown'
+      if (user) {
+  // Thông tin user đã tồn tại trong localstorage, cho phép truy cập
+      this.buttonLabel = 'dropdown'
+      } else {
+      // Kiểm tra cookies
+      let cookies = document.cookie.split(";");
+
+      let token_fb = cookies.filter((cookie) => cookie.trim().startsWith("token_fb="))[0];
+      let token_google = cookies.filter((cookie) => cookie.trim().startsWith("token_google="))[0];
+
+      if (token_fb || token_google) {
+        // Thông tin user đã tồn tại trong cookies, cho phép truy cập
+        this.buttonLabel = 'dropdown'
+      } 
+      else {
+        // Không tìm thấy thông tin user trong cả localstorage và cookies, yêu cầu đăng nhập
+        alert("Bạn chưa đăng nhập");
+        this.$router.push({ name: "login" });
       }
-      else
-      {
-        this.buttonLabel = ''
-        alert('Bạn chưa đăng nhập')   
-        this.$router.push({ name: 'login' });
-      }
+}
       
     },
     outWeb()
     {
-      this.$router.push({ name: 'login' });
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+       // Xóa cookie "thong tin user fb"
+      document.cookie = "user_info_fb=; expires=" + new Date(0).toUTCString();
+      document.cookie = "user_info_google=; expires=" + new Date(0).toUTCString();
+      // Xóa cookie "token thong token"
+      document.cookie = "token_fb=; expires=" + new Date(0).toUTCString();
+      document.cookie = "token_google=; expires=" + new Date(0).toUTCString();
+
+      this.$router.push({ name: 'login' });
     },
     onShow() {
       this.isShowModel = !this.isShowModel
