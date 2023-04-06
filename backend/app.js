@@ -13,6 +13,7 @@ const {routerSex} = require('./routes/SexRouter');
 const {routerCatSex} = require('./routes/CatSexRouter');
 const {routerProduct} = require('./routes/ProductRouter');
 const {routerDetail} = require('./routes/DetailRouter');
+const router = require('./routes/UserRouterAPI');
 
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
