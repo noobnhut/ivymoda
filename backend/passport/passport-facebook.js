@@ -1,7 +1,8 @@
 // passport-facebook.js
 const FacebookStrategy  = require('passport-facebook').Strategy;
 const config = require('../Config/configAPI');
-const {User} = require("../models");
+const db = require("../models");
+const User = db.users;
 module.exports = function(passport) {
   passport.use(new FacebookStrategy({
     clientID: config.facebook_api_key,
