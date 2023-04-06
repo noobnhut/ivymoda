@@ -26,8 +26,8 @@
                         <li class="px-2" v-for="sex in sexs">
                           <a class="dropdown-item" style="font-weight: bold;">{{ sex.Sexes_value }}</a>
                           <router-link to="/" class="dropdown-item"
-                          v-for="catsex in catsexs.filter(item => item.id_sex === sex.id)"
-                          >{{ catsex.cat_name }}</router-link >
+                            v-for="catsex in catsexs.filter(item => item.id_sex === sex.id)">{{ catsex.cat_name
+                            }}</router-link>
                         </li>
                       </div>
                     </ul>
@@ -126,30 +126,45 @@ export default {
   mounted() {
     this.getSex();
     this.getcatsex();
-   
+
   },
   methods:
   {
     handleButtonClick() {
       let user = localStorage.getItem("user");
-      if(user)
-      {
-       this.buttonLabel = 'dropdown'
+      if (user) {
+        // Thông tin user đã tồn tại trong localstorage, cho phép truy cập
+        this.buttonLabel = 'dropdown'
+      } else {
+        // Kiểm tra cookies
+        let cookies = document.cookie.split(";");
+        let token_fb = cookies.filter((cookie) => cookie.trim().startsWith("token_fb="))[0];
+        let token_google = cookies.filter((cookie) => cookie.trim().startsWith("token_google="))[0];
+        if (token_fb || token_google) {
+          // Thông tin user đã tồn tại trong cookies, cho phép truy cập
+          this.buttonLabel = 'dropdown'
+        }
+        else {
+          // Không tìm thấy thông tin user trong cả localstorage và cookies, yêu cầu đăng nhập
+          alert("Bạn chưa đăng nhập");
+          this.$router.push({ name: "login" });
+          if (user) {
+            this.buttonLabel = 'dropdown'
+          }
+          else {
+            this.buttonLabel = ''
+            alert('Bạn chưa đăng nhập')
+            this.$router.push({ name: 'login' });
+          }
+        }
+
       }
-      else
-      {
-        this.buttonLabel = ''
-        alert('Bạn chưa đăng nhập')   
-        this.$router.push({ name: 'login' });
-      }
-      
     },
-    outWeb()
-    {
+    outWeb() {
       this.$router.push({ name: 'login' });
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-       // Xóa cookie "thong tin user fb"
+      // Xóa cookie "thong tin user fb"
       document.cookie = "user_info_fb=; expires=" + new Date(0).toUTCString();
       document.cookie = "user_info_google=; expires=" + new Date(0).toUTCString();
       // Xóa cookie "token thong token"
@@ -188,7 +203,7 @@ export default {
         console.log(e);
       }
     },
-   
+
   }
 };
 </script>
