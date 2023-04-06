@@ -14,8 +14,13 @@ const getAllCat = async (req, res) => {
 
 const addCat = async (req, res) => 
 {
+    const {id,cat_name} = req.body;
     try {
-        const {id,cat_name} = req.body;
+      const existingCat = await Cat.findOne({ where: { cat_name } });
+        if(existingCat)
+        {
+            return res.json({ message: "Trùng danh mục không thể thêm "  });
+        }
         if (cat_name=='') {
             res.json({ message: "Thiếu thông tin danh mục "  });
             return;
@@ -23,7 +28,8 @@ const addCat = async (req, res) =>
         else
         {
             const cat = await Cat.create( {id,cat_name} );
-            res.json(cat);
+         res.json({ message: " Thêm thành công "  });
+
         }
     } catch (error) {
         return res.status(401).json({ message: "Không thể thêm danh mục" });
@@ -34,9 +40,6 @@ const addCat = async (req, res) =>
 const updateCat = async (req, res) => {
 
     const existingCatSex = await CatSex.findOne({ where: { id_cat: req.params.id } });
-
-    if (!existingCatSex) return res.status(404).json({ message: "Không tìm thấy dữ liệu" });
-
     const { cat_name } = req.body;
 
     try {

@@ -209,7 +209,7 @@ export default
                     this.details = result.data;
 
                 } catch (e) {
-                    this.$refs.toast.showToast(e.response.data.message);
+                    
                     this.details=[]
                 }
 
@@ -222,9 +222,7 @@ export default
                     );
                     this.products = result.data;
                     console.log(result);
-
                 } catch (e) {
-
                     console.log(e);
                 }
             },
@@ -252,7 +250,7 @@ export default
                             'Content-Type': 'multipart/form-data'
                         }
                     });
-                    // ...
+                    this.$refs.toast.showToast(response.data.message);
                 } catch (error) {
                     console.error(error);
                 }

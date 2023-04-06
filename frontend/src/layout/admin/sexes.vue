@@ -114,25 +114,8 @@ export default
                     {
                         Sexes_value: this.Sexes_value
                     }
+
                 )
-                if (catadd.status == 201) {
-                    this.$refs.toast.showToast(catadd.data.message)
-                    location.reload()
-                }
-                else if (catadd.status == 202) {
-                    this.$refs.toast.showToast(catadd.data.message)
-                    location.reload()
-                }
-                else if (catadd.status == 203) {
-                    this.$refs.toast.showToast(catadd.data.message)
-                    location.reload()
-                }
-                else if (catadd.status == 401) {
-                    this.$refs.toast.showToast(catadd.data.message)
-                    location.reload()
-                }
-
-
             },
             async getSex() {
                 try {

@@ -56,11 +56,11 @@
               </a>
             </div>
             <ul>
-              <li><a><i class="icon-ic_avatar-1"></i>Thông tin tài khoản</a></li>
-              <li><a><i class="icon-ic_glasses"></i>Sản phẩm đã
-                  xem</a></li>
-              <li><a><i class="icon-ic_heart"></i>Sản phẩm yêu
-                  thích</a></li>
+              <li><router-link :to="{ name: 'information'}"><i class="icon-ic_avatar-1"></i>Thông tin tài khoản</router-link></li>
+              <li><router-link :to="{ name: 'productsee'}"><i class="icon-ic_glasses"></i>Sản phẩm đã
+                  xem</router-link></li>
+              <li><router-link :to="{ name: 'productlike'}"><i class="icon-ic_heart"></i>Sản phẩm yêu
+                  thích</router-link></li>
               <li><a @click="outWeb"><i class="icon-logout"></i>Đăng xuất</a></li>
             </ul>
           </ul>

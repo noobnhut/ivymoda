@@ -3,7 +3,7 @@ const CatSex = db.CatSexes;
 const Product = db.Products;
 const Cat = db.Categories;
 const Sex = db.Sexes;
-
+const Detail = db.ProductDetails;
 const getProduct = async (req, res) => {
 
     try {
@@ -102,18 +102,27 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     //thực hiện kiểm tra id cần xóa
+    const existingDetail= await Detail.findOne({where:{id_product:req.params.id}})
     const product = await Product.findOne({ where: { id: req.params.id } });
     if (!product) {
         return res.status(404).json({ message: "không tìm thấy dữ liệu" });
     }
-
+   
     try {
-        await Product.destroy({
-            where: {
-                id: req.params.id
-            }
-        });
-        res.status(200).json({ message: "Xóa sản phẩm thành công" });
+        if(existingDetail)
+        {
+            return res.status(404).json({ message: "Sản phẩm đang được dùng không xóa" });
+        }
+        else
+        {
+            await Product.destroy({
+                where: {
+                    id: req.params.id
+                }
+            });
+            res.status(200).json({ message: "Xóa sản phẩm thành công" });
+        }
+        
     } catch (error) {
         console.log(error.message);
     }

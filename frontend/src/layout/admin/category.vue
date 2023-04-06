@@ -49,6 +49,9 @@
           <div class="form-group">
             <label>Tên danh mục:</label>
             <input type="text" class="form-control" v-model="cat_name">
+            <div v-if="cat_name === ''">
+              <p style="color: red;">Không được để trống</p>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
