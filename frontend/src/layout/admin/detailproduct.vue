@@ -210,7 +210,7 @@ export default
 
                 } catch (e) {
                     this.$refs.toast.showToast(e.response.data.message);
-                    location.reload()
+                    this.details=[]
                 }
 
 

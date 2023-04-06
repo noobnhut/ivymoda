@@ -16,8 +16,8 @@ const addCat = async (req, res) =>
 {
     try {
         const {id,cat_name} = req.body;
-        if (cat_name==null) {
-            res.json({ message: "Thiếu thông tin danh mục" });
+        if (cat_name=='') {
+            res.json({ message: "Thiếu thông tin danh mục "  });
             return;
         } 
         else
