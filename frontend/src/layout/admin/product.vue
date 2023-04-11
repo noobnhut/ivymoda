@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" style="padding: 50px;">
     <div class="table-wrapper">
       <div class="table-title">
         <div class="row">
@@ -17,7 +17,7 @@
           <tr>
             <th>Tên sản phẩm:</th>
             <th>Giá sản phẩm:</th>
-            <th>Mô tả sản phẩm:</th>
+            <th>Thông tin sản phẩm:</th>
             <th>Discount:</th>
             <th>Danh mục:</th>
             <th>Đối tượng:</th>
@@ -27,10 +27,10 @@
           <tr v-for="product in products">
             <td>{{ product.name }}</td>
             <td>{{ product.price }}</td>
-            <td>{{ product.detail }}</td>
+            <td>{{ product.information }}</td>
             <td>{{ product.discount }}%</td>
             <td>{{ product.cat_name }}</td>
-            <td>{{ product.Sexes_value }}</td>
+            <td>{{ product.sexes_value }}</td>
             <td>
               <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"><i
                   class="fa-solid fa-spinner" @click="sendata(product)"></i></a>
@@ -64,8 +64,8 @@
             <input type="text" class="form-control" v-model="price">
           </div>
           <div class="form-group">
-            <label>Mô tả sản phẩm:</label>
-            <input type="text" class="form-control" v-model="detail">
+            <label>Thông tin sản phẩm:</label>
+            <input type="text" class="form-control" v-model="information">
           </div>
           <div class="form-group">
             <label>Discount:</label>
@@ -109,8 +109,8 @@
             <input type="text" class="form-control" v-model="price">
           </div>
           <div class="form-group">
-            <label>Mô tả sản phẩm:</label>
-            <input type="text" class="form-control" v-model="detail">
+            <label>Thông tin sản phẩm:</label>
+            <input type="text" class="form-control" v-model="information">
           </div>
           <div class="form-group">
             <label>Discount:</label>
@@ -149,7 +149,7 @@ export default
         id_catsex: '',
         name:'',
         price:'',
-        detail:'',
+        information:'',
         discount:'',
         id_product:''
 
@@ -193,7 +193,7 @@ export default
       
       sendata(product) {
        this.name=product.name;
-       this.detail=product.detail;
+       this.information=product.information;
        this.price=product.price;
        this.discount=product.discount;
        this.id_product=product.id;
@@ -202,7 +202,7 @@ export default
       setDefault()
       {
         this.name='';
-       this.detail='';
+       this.information='';
        this.price='';
        this.discount='';
        this.id_product='';
@@ -215,7 +215,7 @@ export default
             id_catsex: this.id_catsex,
             name:this.name,
             price:this.price,
-            detail:this.detail,
+            information:this.information,
             discount:this.discount
             
           } 
@@ -231,7 +231,7 @@ export default
             id_catsex: this.id_catsex,
             name:this.name,
             price:this.price,
-            detail:this.detail,
+            information:this.information,
             discount:this.discount
           } 
         )

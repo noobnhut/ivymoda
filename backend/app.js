@@ -12,7 +12,7 @@ const {routerCat} = require('./routes/CatRouter');
 const {routerSex} = require('./routes/SexRouter');
 const {routerCatSex} = require('./routes/CatSexRouter');
 const {routerProduct} = require('./routes/ProductRouter');
-const {routerDetail} = require('./routes/DetailRouter');
+
 const router = require('./routes/UserRouterAPI');
 
 // Passport session setup. 
@@ -51,7 +51,6 @@ app.use(routerCat);
 app.use(routerSex);
 app.use(routerCatSex);
 app.use(routerProduct);
-app.use(routerDetail);
 app.use(router);
 
 // Serve các tệp tĩnh trong thư mục "uploads"

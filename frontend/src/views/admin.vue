@@ -1,25 +1,19 @@
 <template>
-    <nav v-bind:class="(toggle) ? 'open' : 'hide2'">
+    <nav v-bind:class="(toggle) ? '' : 'open'">
         <div class="logo">
             <i class="bx bx-menu menu-icon" @click='toggle = !toggle'></i>
             <span class="logo-name">IVYMODA</span>
         </div>
         <div class="sidebar">
             <div class="logo" @click="ontoggleModel">
-                <router-link to="/admin" class="text-decoration-none">
+               
                     <i class="bx bx-menu menu-icon"></i>
                     <span class="logo-name">IVYMODA</span>
-                </router-link>
+                
             </div>
 
             <div class="sidebar-content">
                 <ul class="lists">
-                    <li class="list">
-                        <router-link to="/admin" class="nav-link">
-                            <i class="bx bx-home-alt icon"></i>
-                            <span class="link">Trang chủ</span>
-                        </router-link>
-                    </li>
                     <li class="list">
                         <router-link to="/admin/user" class="nav-link">
                             <i class="bx bx-bar-chart-alt-2 icon"></i>

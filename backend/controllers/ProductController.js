@@ -3,14 +3,13 @@ const CatSex = db.CatSexes;
 const Product = db.Products;
 const Cat = db.Categories;
 const Sex = db.Sexes;
-const Detail = db.ProductDetails;
 const getProduct = async (req, res) => {
 
     try {
         const product = await Product.findAll(
             {
                 attributes: ['id', 'id_catsex', 'name',
-                    'price', 'detail', 'discount'],
+                    'price', 'information', 'discount'],
                 include: [
                     {
                         model: CatSex,
@@ -29,21 +28,21 @@ const getProduct = async (req, res) => {
             id_catsex:p.id_catsex,
             name: p.name,
             price: p.price,
-            detail: p.detail,
+            information: p.information,
             discount: p.discount,
             cat_name: p.CatSex.Category.cat_name,
             sexes_value: p.CatSex.Sex.Sexes_value
         }));
         res.json(result);
     } catch (error) {
-        res.json("không lấy được đối tượng ");
+        res.status(404).json("không lấy được sản phẩm ");
         console.log(error);
     }
 }
 
 const addProduct = async (req, res) => {
     try {
-        const { id_catsex, name, price, detail, discount } = req.body;
+        const { id_catsex, name, price, information, discount } = req.body;
         const existingProduct = await Product.findOne({ where: { name } })
         if (name == '' || price == '') {
             res.status(202).json({ message: "Giá sản phẩm hoặc tên đang để trống" });
@@ -57,7 +56,7 @@ const addProduct = async (req, res) => {
             return res.status(206).json({ message: "Giá sản phẩm không hợp lệ" });
         }
         else {
-            const product = await Product.create({ id_catsex, name, price, detail, discount });
+            const product = await Product.create({ id_catsex, name, price, information, discount });
             return res.status(201).json({ message: "Thêm sản phẩm xong" });
 
         }
@@ -69,7 +68,7 @@ const addProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     //thực hiện kiểm tra id cần xóa
-    const { id_catsex, name, price, detail, discount } = req.body;
+    const { id_catsex, name, price, information, discount } = req.body;
     const product = await Product.findOne({ where: { id: req.params.id } });
     const existingProduct = await Product.findOne({ where: { name } })
     if (!product) {
@@ -91,7 +90,7 @@ const updateProduct = async (req, res) => {
             return res.status(206).json({ message: "Discount không hợp lệ " });
         }
         else {
-                await Product.update({ id_catsex, name, price, detail, discount }, { where: { id: req.params.id } });
+                await Product.update({ id_catsex, name, price, information, discount }, { where: { id: req.params.id } });
                 res.status(201).json({ message: "Cập nhập sản phẩm xong" });            
         }
     } catch (error) {
@@ -102,32 +101,28 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     //thực hiện kiểm tra id cần xóa
-    const existingDetail= await Detail.findOne({where:{id_product:req.params.id}})
+  
     const product = await Product.findOne({ where: { id: req.params.id } });
     if (!product) {
         return res.status(404).json({ message: "không tìm thấy dữ liệu" });
     }
  
     try {
-        if(existingDetail)
-        {
-            return res.status(404).json({ message: "Sản phẩm đang được dùng không xóa" });
-        }
-        else
-        {
+    
+        
             await Product.destroy({
                 where: {
                     id: req.params.id
                 }
             });
             res.status(200).json({ message: "Xóa sản phẩm thành công" });
-        }
+
         
     } catch (error) {
         console.log(error.message);
     }
-}
 
+}
 module.exports = {
     getProduct,
     addProduct,
