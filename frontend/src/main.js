@@ -6,8 +6,7 @@ import 'dotenv';
 import './style.css';
 createApp(App)
     .use(axiosPlugin)
-    .use(router)
-   
+    .use(router)  
     .mount('#app')
     
 

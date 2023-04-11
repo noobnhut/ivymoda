@@ -1,95 +1,96 @@
 <template>
-    <div class="wrapper">
-        <!-- Sidebar  -->
-        <nav id="sidebar" v-bind:class="(toggle) ? 'show' : 'hide'" @click="ontoggleModel">
-            <div id="dismiss" @click='toggle = !toggle'>
-                <i class="fas fa-arrow-left"></i>
-            </div>
-
-            <div class="sidebar-header">
-                <h5>Trang quản lý IVYMODA</h5>
-            </div>
-
-            <ul class="list-unstyled components">
-                <!-- Trang chủ -->
-                <li class="active">
-                    <router-link :to="{ name: 'admin' }" href="#homeSubmenu" data-toggle="collapse"
-                        aria-expanded="false">Trang chủ</router-link>
-                </li>
-
-                <!-- Khách hàng -->
-                <li class="active">
-                    <router-link :to="{ name: 'user' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
-                        khách hàng</router-link>
-                </li>
-
-                <!-- Sản phẩm -->
-                <li class="active">
-                    <router-link :to="{ name: 'product' }" href="#homeSubmenu" data-toggle="collapse"
-                        aria-expanded="false">QL
-                        sản phẩm</router-link>
-                </li>
-
-                <!-- Danh mục -->
-                <li class="active">
-                    <router-link :to="{ name: 'category' }" href="#homeSubmenu" data-toggle="collapse"
-                        aria-expanded="false">QL danh mục</router-link>
-                </li>
-                <!-- Danh mục -->
-                <li class="active">
-                    <router-link :to="{ name: 'sexes' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
-                        đối tượng</router-link>
-                </li>
-                <li class="active">
-                    <router-link :to="{ name: 'catsex' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
-                        danh mục đối tượng</router-link>
-                </li>
-                <li class="active">
-                    <router-link :to="{ name: 'detailproduct' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
-                       chi tiết sản phẩm</router-link>
-                </li>
-                <!-- Đơn hàng -->
-                <li class="active">
-                    <router-link :to="{ name: 'bill' }" href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">QL
-                        đơn hàng</router-link>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Page Content  -->
-        <div id="content">
-
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-info" @click='toggle = !toggle'>
-                        <i class="fas fa-align-left"></i>
-                        <span>Menu</span>
-                    </button>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="nav navbar-nav ml-auto">
-
-                            <li class="nav-item active" style="margin-left:10px ;">
-                                <!-- Trang chủ -->
-                                <router-link :to="{ name: 'admin' }" href="#homeSubmenu" data-toggle="collapse"
-                                    aria-expanded="false">Trang chủ</router-link>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <router-view></router-view>
+    <nav v-bind:class="(toggle) ? 'open' : 'hide2'">
+        <div class="logo">
+            <i class="bx bx-menu menu-icon" @click='toggle = !toggle'></i>
+            <span class="logo-name">IVYMODA</span>
         </div>
+        <div class="sidebar">
+            <div class="logo" @click="ontoggleModel">
+                <router-link to="/admin" class="text-decoration-none">
+                    <i class="bx bx-menu menu-icon"></i>
+                    <span class="logo-name">IVYMODA</span>
+                </router-link>
+            </div>
+
+            <div class="sidebar-content">
+                <ul class="lists">
+                    <li class="list">
+                        <router-link to="/admin" class="nav-link">
+                            <i class="bx bx-home-alt icon"></i>
+                            <span class="link">Trang chủ</span>
+                        </router-link>
+                    </li>
+                    <li class="list">
+                        <router-link to="/admin/user" class="nav-link">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="link">QL người dùng</span>
+                        </router-link>
+                    </li>
+                    <li class="list">
+                        <a class="nav-link">
+                        <i class="bx bx-bell icon"></i>
+                        <span class="link" data-bs-toggle="collapse" data-bs-target="#customize-collapse" aria-expanded="false" style="cursor:pointer"> Danh mục
+                            <div class="collapse show" id="customize-collapse" style="">
+                                <ul class="list-unstyled fw-normal pb-1 small">
+                                    <li><router-link to="/admin/category" class="nav-link"><span class="link">QL danh mục</span> </router-link></li>
+                                    <li><router-link to="/admin/sexes" class="nav-link"><span class="link">QL đối tượng</span> </router-link></li>
+                                    <li><router-link to="/admin/catsex" class="nav-link"><span class="link">QL danh mục đối tượng</span> </router-link></li>
+                                </ul>
+                            </div>
+                        </span>
+                    </a>
+                    </li>
+                    <li class="list">
+                        <router-link to="/admin/product" class="nav-link">
+                            <i class="bx bx-heart icon"></i>
+                            <span class="link">QL sản phẩm</span>
+                        </router-link>
+                    </li>
+                    <li class="list">
+                        <router-link to="/admin" class="nav-link">
+                            <i class="bx bx-folder-open icon"></i>
+                            <span class="link">QL size</span>
+                        </router-link>
+                    </li>
+
+                    <li class="list">
+                        <router-link to="/admin" class="nav-link">
+                            <i class="bx bx-folder-open icon"></i>
+                            <span class="link">QL màu sắc</span>
+                        </router-link>
+                    </li>
+                    <li class="list">
+                        <router-link to="/admin/bill" class="nav-link">
+                            <i class="bx bx-folder-open icon"></i>
+                            <span class="link">QL hóa đơn</span>
+                        </router-link>
+                    </li>
+                </ul>
+                <div class="bottom-cotent" style="border-top:1px solid #ccc ;">
+                    <li class="list">
+                        <router-link to="/" class="nav-link">
+                            <i class="bx bx-log-out icon"></i>
+                            <span class="link">Đăng xuất</span>
+                        </router-link>
+                    </li>
+                </div>
+            </div>
+        </div>
+
+
+    </nav>
+   <div class="overlay" @click='toggle = !toggle'></div>
+
+    <div class="container" style="padding-top: 80px">
+        <router-view></router-view>
     </div>
-
-    <div class="overlay" v-bind:class="(toggle) ? '' : 'active'"></div>
 </template>
-
+<style>
+nav {
+    -webkit-box-shadow: 0 3px 9px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 9px 3px rgba(0, 0, 0, 0.1);
+}
+</style>
 <script>
 // import css của admin
 import '../assets/admin.css';

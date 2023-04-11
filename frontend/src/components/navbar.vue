@@ -120,13 +120,14 @@ export default {
       isShowModel: false,
       isShowMobile: false,
       sexs: [],
-      catsexs: []
+      catsexs: [],
+      
     }
   },
   mounted() {
     this.getSex();
     this.getcatsex();
-
+    
   },
   methods:
   {
