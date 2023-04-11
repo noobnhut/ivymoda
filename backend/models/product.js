@@ -19,8 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     id_catsex: DataTypes.INTEGER,
     name: DataTypes.STRING,
     price: DataTypes.DECIMAL(10, 2),
-    detail: DataTypes.STRING,
-    infomation :DataTypes.STRING,
+    information :DataTypes.STRING,
     discount: DataTypes.DECIMAL(10, 2)
   }, {
     sequelize,
