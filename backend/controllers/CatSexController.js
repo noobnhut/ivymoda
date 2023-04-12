@@ -5,6 +5,7 @@ const Sex = db.Sexes;
 
 
 const getCatSex = async (req, res) => {
+
     try {
         const catsexes = await CatSex.findAll({
             attributes: ['id', 'id_cat', 'id_sex'],
@@ -13,7 +14,7 @@ const getCatSex = async (req, res) => {
                 { model: Sex, attributes: ['id','Sexes_value'] }
             ],
             raw: true,
-            nest: true
+            nest: true,           
         });
         const result = catsexes.map(catsex => ({
             id: catsex.id,

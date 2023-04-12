@@ -12,6 +12,10 @@ const {routerCat} = require('./routes/CatRouter');
 const {routerSex} = require('./routes/SexRouter');
 const {routerCatSex} = require('./routes/CatSexRouter');
 const {routerProduct} = require('./routes/ProductRouter');
+const {routerColor} = require('./routes/ColorRouter');
+const {routerSize} = require('./routes/SizeRouter');
+const {routerImg} = require('./routes/ImgRouter');
+const {routerRender} = require('./routes/renderRouter');
 
 const router = require('./routes/UserRouterAPI');
 
@@ -51,8 +55,11 @@ app.use(routerCat);
 app.use(routerSex);
 app.use(routerCatSex);
 app.use(routerProduct);
+app.use(routerColor);
+app.use(routerSize);
 app.use(router);
-
+app.use(routerImg);
+app.use(routerRender);
 // Serve các tệp tĩnh trong thư mục "uploads"
 app.use(express.static("uploads"));
 

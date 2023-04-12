@@ -3,7 +3,8 @@ const {
     getProduct,
     addProduct,
     deleteProduct,
-    updateProduct
+    updateProduct,
+  
 } =require("../controllers/ProductController.js") ;
 const routerProduct = express.Router();
 

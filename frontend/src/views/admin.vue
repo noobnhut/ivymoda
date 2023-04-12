@@ -20,6 +20,7 @@
                             <span class="link">QL người dùng</span>
                         </router-link>
                     </li>
+                    <!--danh muc -->
                     <li class="list">
                         <a class="nav-link">
                         <i class="bx bx-bell icon"></i>
@@ -34,24 +35,21 @@
                         </span>
                     </a>
                     </li>
+                    <!--danh muc sp-->
                     <li class="list">
-                        <router-link to="/admin/product" class="nav-link">
-                            <i class="bx bx-heart icon"></i>
-                            <span class="link">QL sản phẩm</span>
-                        </router-link>
-                    </li>
-                    <li class="list">
-                        <router-link to="/admin" class="nav-link">
-                            <i class="bx bx-folder-open icon"></i>
-                            <span class="link">QL size</span>
-                        </router-link>
-                    </li>
-
-                    <li class="list">
-                        <router-link to="/admin" class="nav-link">
-                            <i class="bx bx-folder-open icon"></i>
-                            <span class="link">QL màu sắc</span>
-                        </router-link>
+                        <a class="nav-link">
+                        <i class="bx bx-bell icon"></i>
+                        <span class="link" data-bs-toggle="collapse" data-bs-target="#customize-collapse1" aria-expanded="false" style="cursor:pointer"> Danh mục sản phẩm
+                            <div class="collapse show" id="customize-collapse1" style="">
+                                <ul class="list-unstyled fw-normal pb-1 small">
+                                    <li><router-link to="/admin/product" class="nav-link"><span class="link">QL sản phẩm</span> </router-link></li>
+                                    <li><router-link to="/admin/color" class="nav-link"><span class="link">QL màu</span> </router-link></li>
+                                    <li><router-link to="/admin/img" class="nav-link"><span class="link">QL hình ảnh</span> </router-link></li>
+                                    <li><router-link to="/admin/size" class="nav-link"><span class="link">QL size</span> </router-link></li>
+                                </ul>
+                            </div>
+                        </span>
+                    </a>
                     </li>
                     <li class="list">
                         <router-link to="/admin/bill" class="nav-link">

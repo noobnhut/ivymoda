@@ -3,6 +3,8 @@ const CatSex = db.CatSexes;
 const Product = db.Products;
 const Cat = db.Categories;
 const Sex = db.Sexes;
+const Color = db.colors;
+const Img = db.Imgs;
 const getProduct = async (req, res) => {
 
     try {
@@ -19,13 +21,13 @@ const getProduct = async (req, res) => {
                         ]
                     }
                 ],
-               
-               
+
+
             }
         );
         const result = product.map(p => ({
             id: p.id,
-            id_catsex:p.id_catsex,
+            id_catsex: p.id_catsex,
             name: p.name,
             price: p.price,
             information: p.information,
@@ -79,7 +81,7 @@ const updateProduct = async (req, res) => {
             res.status(202).json({ message: " Tên đang để trống" });
             return;
         }
-        else if (existingProduct && existingProduct.id != req.params.id ) {
+        else if (existingProduct && existingProduct.id != req.params.id) {
             return res.status(203).json({ message: 'Sản phẩm tồn tại trong hệ thống' });
 
         }
@@ -90,8 +92,8 @@ const updateProduct = async (req, res) => {
             return res.status(206).json({ message: "Discount không hợp lệ " });
         }
         else {
-                await Product.update({ id_catsex, name, price, information, discount }, { where: { id: req.params.id } });
-                res.status(201).json({ message: "Cập nhập sản phẩm xong" });            
+            await Product.update({ id_catsex, name, price, information, discount }, { where: { id: req.params.id } });
+            res.status(201).json({ message: "Cập nhập sản phẩm xong" });
         }
     } catch (error) {
         return res.status(401).json({ message: "Cập nhập thất bại !" })
@@ -101,31 +103,34 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     //thực hiện kiểm tra id cần xóa
-  
+
     const product = await Product.findOne({ where: { id: req.params.id } });
     if (!product) {
         return res.status(404).json({ message: "không tìm thấy dữ liệu" });
     }
- 
-    try {
-    
-        
-            await Product.destroy({
-                where: {
-                    id: req.params.id
-                }
-            });
-            res.status(200).json({ message: "Xóa sản phẩm thành công" });
 
-        
+    try {
+
+
+        await Product.destroy({
+            where: {
+                id: req.params.id
+            }
+        });
+        res.status(200).json({ message: "Xóa sản phẩm thành công" });
+
+
     } catch (error) {
         console.log(error.message);
     }
 
 }
+
+
+
 module.exports = {
     getProduct,
     addProduct,
     deleteProduct,
-    updateProduct
+    updateProduct,
 };

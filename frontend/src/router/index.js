@@ -48,9 +48,19 @@ const router = createRouter({
             name: 'catsex'
           },
           {
-            path: 'detailproduct',
-            component: () => import('../layout/admin/detailproduct.vue'),
-            name: 'detailproduct'
+            path: 'color',
+            component: () => import('../layout/admin/color.vue'),
+            name: 'color'
+          },
+          {
+            path: 'img',
+            component: () => import('../layout/admin/img.vue'),
+            name: 'img'
+          },
+          {
+            path: 'size',
+            component: () => import('../layout/admin/size.vue'),
+            name: 'size'
           },
         ],
     },
