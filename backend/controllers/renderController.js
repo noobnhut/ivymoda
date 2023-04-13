@@ -18,80 +18,58 @@ const renderProduct = async (req, res) => {
                 {
                     model: CatSex,
                     include: [
-                        { model: Cat, attributes: ['cat_name'] },
+                        { model: Cat, attributes: ['id','cat_name']},
                         { model: Sex, attributes: ['Sexes_value'] },
                     ],
                     raw: true,
                     nest: true,
-                    required: true // loại bỏ các sản phẩm không có màu
+                    required: true
                 },
+                {
+                    model:Color,
+                    include:[
+                        {model:Img, attributes:['id','avatar','url'],required: true},
+                        {model:Size,attributes:['id','size','quantity'],required: true},
+                    ],
+                    required: true
+                }
 
             ],
 
         });
-
         const result = products.map(product => ({
             id: product.id,
             name: product.name,
             price: product.price,
             discount: product.discount,
-            id_catsex: product.CatSex.id,
-            id_sex: product.CatSex.id_sex,
-            id_cat: product.CatSex.id_cat,
+            id_catsex: product.id_catsex,
+            id_cat:product.CatSex.Category.id,
             cat_name: product.CatSex.Category.cat_name,
             sex_name: product.CatSex.Sex.Sexes_value,
+            colors: product.colors.map(color => ({
+                id: color.id,
+                color_name: color.color,
+                color_code: color.color_code,
+                images: color.Imgs.map(img => ({
+                    id: img.id,
+                    avatar: img.avatar,
+                    url: img.url,
+                })),
+                sizes: color.sizes.map(size => ({
+                    id: size.id,
+                    size_name: size.size,
+                    quantity: size.quantity,
+                }))
+            }))
         }));
+
         res.json(result);
     } catch (error) {
         res.status(404).json('Không lấy được sản phẩm');
         console.log(error);
     }
 };
-const renderColor = async (req, res) => {
-    try {
-
-        const img = await Img.findAll(
-            {
-                attributes: ['id', 'id_color', 'avatar','url'],
-                include: [
-                    {
-                        model: Color, attributes: ['id', 'color','color_code','id_product'],
-                    }
-                ],
-                raw: true,
-                nest: true
-            }
-        );
-
-        const size = await Size.findAll(
-            {
-              attributes: ['id', 'id_color', 'size', 'quantity'],
-              include: [
-                {
-                  model: Color, attributes: ['id', 'color', 'color_code','id_product'],
-                }
-              ],
-              raw: true,
-              nest: true
-            }
-          );
-                 
-        const combinedData = img.map(item => {
-            const itemSize = size.find(sizeItem => sizeItem.id_color === item.id_color);
-            return {
-                ...item,
-                size: itemSize ? itemSize.size : null,
-                quantity: itemSize ? itemSize.quantity : null
-            };
-        }).filter(item => item.size !== null && item.quantity !== null);
-
-        res.status(200).json(combinedData);
-    } catch (error) {
-        res.status(404).json("không lấy được màu ");
-    }
-}
 
 module.exports = {
     renderProduct,
-    renderColor
 };

@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Products.belongsTo(models.CatSexes, { foreignKey: 'id_catsex' });
       Products.hasMany(models.Follows, { foreignKey: 'id_product' });
+      Products.hasMany(models.colors, { foreignKey: 'id_product' });
+
     }
   }
   Products.init({
