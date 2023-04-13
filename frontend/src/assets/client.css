@@ -268,8 +268,7 @@
     position: relative;
     box-shadow: 0 2px 7px #dfdfdf;
     margin: 20px auto;
-    background: rgb(194, 194, 194);
-    background: linear-gradient(0deg, rgba(194, 194, 194, 1) 0%, rgba(247, 247, 247, 1) 100%);
+    background-color: transparent;
 }
 
 
@@ -279,8 +278,7 @@
     justify-content: center;
     height: max-content;
     padding: 10px;
-    background: rgb(214, 213, 213);
-    background: radial-gradient(circle, rgba(214, 213, 213, 1) 0%, rgba(255, 255, 255, 1) 100%);
+   
 }
 
  .product-tumb img {
@@ -341,8 +339,8 @@
     width: 50%;
 }
  .product-color
-{  width: 20px;
-    height: 20px;
+{  width: max-content;
+    height: max-content;
     border-radius: 50%;
     padding: 10px;
     margin: 5px;

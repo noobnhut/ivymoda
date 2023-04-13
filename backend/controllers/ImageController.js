@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
       fileSize: 100 * 1024 * 1024 // giới hạn dung lượng file 100MB
     },
     fileFilter: function (req, file, cb) {
-      if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+      if (!file.originalname.match(/\.(jpg|jpeg|png|gif|jfif)$/)) {
         cb(new Error('Định dạng file không hợp lệ'));
       } else {
         cb(null, true);

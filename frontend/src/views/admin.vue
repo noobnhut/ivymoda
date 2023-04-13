@@ -20,37 +20,57 @@
                             <span class="link">QL người dùng</span>
                         </router-link>
                     </li>
-                    <!--danh muc -->
+               
                     <li class="list">
-                        <a class="nav-link">
-                        <i class="bx bx-bell icon"></i>
-                        <span class="link" data-bs-toggle="collapse" data-bs-target="#customize-collapse" aria-expanded="false" style="cursor:pointer"> Danh mục
-                            <div class="collapse show" id="customize-collapse" style="">
-                                <ul class="list-unstyled fw-normal pb-1 small">
-                                    <li><router-link to="/admin/category" class="nav-link"><span class="link">QL danh mục</span> </router-link></li>
-                                    <li><router-link to="/admin/sexes" class="nav-link"><span class="link">QL đối tượng</span> </router-link></li>
-                                    <li><router-link to="/admin/catsex" class="nav-link"><span class="link">QL danh mục đối tượng</span> </router-link></li>
-                                </ul>
-                            </div>
-                        </span>
-                    </a>
+                        <router-link to="/admin/category" class="nav-link">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="link">QL danh mục</span>
+                        </router-link>
                     </li>
-                    <!--danh muc sp-->
+
                     <li class="list">
-                        <a class="nav-link">
-                        <i class="bx bx-bell icon"></i>
-                        <span class="link" data-bs-toggle="collapse" data-bs-target="#customize-collapse1" aria-expanded="false" style="cursor:pointer"> Danh mục sản phẩm
-                            <div class="collapse show" id="customize-collapse1" style="">
-                                <ul class="list-unstyled fw-normal pb-1 small">
-                                    <li><router-link to="/admin/product" class="nav-link"><span class="link">QL sản phẩm</span> </router-link></li>
-                                    <li><router-link to="/admin/color" class="nav-link"><span class="link">QL màu</span> </router-link></li>
-                                    <li><router-link to="/admin/img" class="nav-link"><span class="link">QL hình ảnh</span> </router-link></li>
-                                    <li><router-link to="/admin/size" class="nav-link"><span class="link">QL size</span> </router-link></li>
-                                </ul>
-                            </div>
-                        </span>
-                    </a>
+                        <router-link to="/admin/sexes" class="nav-link">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="link">QL đối tượng</span>
+                        </router-link>
                     </li>
+
+                    <li class="list">
+                        <router-link to="/admin/catsex" class="nav-link">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="link">QL danh mục đối tượng</span>
+                        </router-link>
+                    </li>
+
+                    <li class="list">
+                        <router-link to="/admin/product" class="nav-link">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="link">QL sản phẩm</span>
+                        </router-link>
+                    </li>
+
+
+                    <li class="list">
+                        <router-link to="/admin/color" class="nav-link">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="link">QL màu</span>
+                        </router-link>
+                    </li>
+
+                    <li class="list">
+                        <router-link to="/admin/img" class="nav-link">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="link">QL hình ảnh</span>
+                        </router-link>
+                    </li>
+
+                    <li class="list">
+                        <router-link to="/admin/size" class="nav-link">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="link">QL size</span>
+                        </router-link>
+                    </li>
+                    
                     <li class="list">
                         <router-link to="/admin/bill" class="nav-link">
                             <i class="bx bx-folder-open icon"></i>
