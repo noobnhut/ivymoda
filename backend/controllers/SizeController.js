@@ -89,10 +89,6 @@ const updateSize = async (req,res)=>
       {
         return res.status(202).json({ message: "Số lượng nhập sai" });
       }
-      if(existSize && existSize.id != req.params.id)
-      {
-        return res.status(202).json({ message: "Tồn tại size" });
-      }
       else
       {
            const sizes = await Size.update({id_color, size, quantity},{where:{id:req.params.id}});

@@ -36,10 +36,10 @@
               <div class="product-links">
                 <a class="action"><i class="fa fa-heart"></i></a>
                 <a class="dropup-center dropup action"><i class="fa fa-shopping-cart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <ul class="dropdown-menu" >
-                      <li v-for="size in product.sizes"><p class="dropdown-item text-dark d-flex justify-content-center" >{{size.size_name}}</p></li>
-                    </ul>
-                </i></a>
+                  <ul class="dropdown-menu" >
+                    <li v-for="size in product.sizes"><p class="dropdown-item text-dark d-flex justify-content-center" >{{size.size_name}}</p></li>
+                  </ul>
+              </i></a>
               </div>
             </div>
           </div>
@@ -52,7 +52,7 @@
 <script>
 
 import { Swiper, SwiperSlide } from 'swiper/vue';
-
+import Cookies from 'js-cookie';
 // Import Swiper styles
 import 'swiper/css';
 
@@ -114,7 +114,61 @@ export default {
       }
     },
 
+    addToCart(productId, productName, price, catname, sexname, colorId, code, img, url) {
+      // Kiểm tra đăng nhập
+      const user_inf_gg = Cookies.get('user_inf_gg');
+      const user_inf_fb = Cookies.get('user_inf_fb');
+      const user = localStorage.getItem("user");
+      if (!user_inf_gg && !user_inf_fb && !user) {
+        alert('Bạn cần đăng nhập trước khi đặt hàng!');
+        this.$router.push({ name: "login" });
+      }
 
+      // Đã đăng nhập 
+      // Lấy mã định danh của người dùng
+      const userId = user_inf_gg || user_inf_fb || user;
+
+      // Lấy thông tin giỏ hàng từ Cookies
+      let carts = JSON.parse(Cookies.get('carts') || '{}');
+
+      // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong Cookies hay chưa
+      let cart = carts[userId];
+      if (cart === undefined) {
+        // Nếu giỏ hàng của người dùng chưa tồn tại trong Cookies, tạo một giỏ hàng mới
+        cart = {};
+      }
+
+      // Tạo đối tượng cho sản phẩm mới
+      let product = {
+        productId: productId,
+        productName: productName,
+        price: price,
+        catname: catname,
+        sexname: sexname,
+        colorId: colorId,
+        code: code,
+        img: img,
+        url: url,
+        quantity: 1
+      };
+
+      // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng của người dùng hay chưa
+      let cartItem = cart[productId];
+      if (cartItem === undefined) {
+        // Nếu sản phẩm chưa tồn tại trong giỏ hàng của người dùng, thêm sản phẩm mới vào giỏ hàng
+        cart[productId] = product;
+      } else {
+        // Nếu sản phẩm đã tồn tại trong giỏ hàng của người dùng, tăng số lượng sản phẩm lên 1
+        cartItem.quantity++;
+      }
+
+      // Lưu thông tin giỏ hàng của người dùng vào Cookies
+      carts[userId] = cart;
+      Cookies.set('carts', JSON.stringify(carts));
+
+      // In thông tin giỏ hàng ra console để kiểm tra
+      console.log(carts);
+    }
   }
 }
 
