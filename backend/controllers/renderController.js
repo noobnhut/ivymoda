@@ -31,11 +31,11 @@ const renderProduct = async (req, res) => {
                     include: [
                         {
                             model: Img,
-                            attributes: ['id', 'avatar', 'url'],
+                            attributes: ['id', 'avatar', 'url'],required: true
                         },
                         {
                             model: Size,
-                            attributes: ['id', 'size', 'quantity'],
+                            attributes: ['id', 'size', 'quantity'],required: true
                         }
                     ]
                 }

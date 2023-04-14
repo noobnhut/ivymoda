@@ -21,24 +21,25 @@
               <span class="product-catagory">{{ product.cat_name }} - {{ product.sex_name }}</span>
               <span class="product-color" :style="{ backgroundColor: product.color_code }"></span>
             </div>
-            <h4 style="height:30px">
-              <router-link :to="{ name: 'detail', params: { id: product.id, id_color: product.color_id ,id_cat:product.id_cat} }">{{ product.name
-              }} - {{ product.color_name }}</router-link>
+            <h4 style="height:50px">
+              <router-link
+                :to="{ name: 'detail', params: { id: product.id, id_color: product.color_id, id_cat: product.id_cat } }">{{
+                  product.name 
+                }} - {{ product.color_name }}</router-link>
             </h4>
-            <div class="detail_size" style="padding-top: 10px;">
-              <label v-for="size in product.sizes">
-                  <input type="radio" name="size" value="s">
-                  <span class="text-uppercase">{{ size.size_name }}</span>
-              </label>
-
-          </div>
+          
             <div class="product-bottom-details">
               <div class="product-price" style="height:50px">
-                <small>{{ formatCurrency(product.price) }}</small>{{ formatCurrency(product.price - (product.price * (product.discount) / 100)) }}
+                <small>{{ formatCurrency(product.price) }}</small>{{ formatCurrency(product.price - (product.price *
+                  (product.discount) / 100)) }}
               </div>
               <div class="product-links">
                 <a class="action"><i class="fa fa-heart"></i></a>
-                <a class="action"><i class="fa fa-shopping-cart"></i></a>
+                <a class="dropup-center dropup action"><i class="fa fa-shopping-cart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <ul class="dropdown-menu" >
+                      <li v-for="size in product.sizes"><p class="dropdown-item text-dark d-flex justify-content-center" >{{size.size_name}}</p></li>
+                    </ul>
+                </i></a>
               </div>
             </div>
           </div>

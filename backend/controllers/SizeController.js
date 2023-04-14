@@ -26,7 +26,7 @@ const getSize = async (req, res) => {
 }
 const addSize = async (req, res) => {
   const { id_color, size, quantity } = req.body;
-  const existSize = await Size.findOne({ where: { size: size } });
+  const existSize = await Size.findOne({ where: { size: size ,id_color:id_color} });
   const existColor = await Color.findOne({ where: { id: id_color } });
 
   try {
@@ -40,12 +40,12 @@ const addSize = async (req, res) => {
       }
       if(existSize)
       {
-        return res.status(202).json({ message: "Tồn tại size" });
+        return res.status(202).json({ existSize,message: "Tồn tại size" });
       }
       else
       {
            const sizes = await Size.create({id_color, size, quantity});
-           return res.status(202).json({ message: "Thêm thành công" });
+           return res.status(202).json({message: "Thêm thành công" });
       }
     } else {
       res.status(200).json({ message: "Không tồn tại màu" });

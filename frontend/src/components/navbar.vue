@@ -25,9 +25,9 @@
                       <div class="container-fluid d-flex ">
                         <li class="px-2" v-for="sex in sexs">
                           <a class="dropdown-item" style="font-weight: bold;">{{ sex.Sexes_value }}</a>
-                          <router-link to="/" class="dropdown-item"
-                            v-for="catsex in catsexs.filter(item => item.id_sex === sex.id)">{{ catsex.cat_name
-                            }}</router-link>
+                          <div class="dropdown-item"
+                            v-for="catsex in catsexs.filter(item => item.id_sex === sex.id)"><router-link class="text-decoration-none text-dark" :to="{ name: 'productbycat', params: { id: catsex.id } }">{{ catsex.cat_name
+                            }}</router-link></div>
                         </li>
                       </div>
                     </ul>

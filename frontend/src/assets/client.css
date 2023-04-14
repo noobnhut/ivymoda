@@ -331,7 +331,7 @@
 }
 
  .product-bottom-details {
-    overflow: hidden;
+    height: 80px;
     padding-top: 20px;
 }
 
