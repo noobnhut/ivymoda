@@ -156,7 +156,6 @@ export default {
       
     },
     outWeb() {
-      this.$router.push({ name: 'login' });
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       // Xóa cookie "thong tin user fb"
@@ -165,7 +164,7 @@ export default {
       // Xóa cookie "token thong token"
       document.cookie = "token_fb=; expires=" + new Date(0).toUTCString();
       document.cookie = "token_gg=; expires=" + new Date(0).toUTCString();
-
+      document.cookie = "carts=; expires=" + new Date(0).toUTCString(); // Xóa giỏ hàng khỏi cookie
       this.$router.push({ name: 'login' });
     },
     onShow() {
