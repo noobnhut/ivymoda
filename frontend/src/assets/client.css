@@ -294,7 +294,7 @@
     opacity: 0.8;
 }
  .product-details {
-    padding: 5px;
+    padding: 20px;
 }
 
  .product-catagory {
@@ -304,6 +304,7 @@
     text-transform: uppercase;
     color: black;
     margin-bottom: 10px;
+    
 }
 
  .product-details a{
@@ -402,7 +403,7 @@
     color: #221f20;
 }
 .detail_information .detail_color,
-.detail_information .detail_size,
+.detail_size,
 .detail_information .detail_price
 {
     margin-top: 24px;
@@ -415,22 +416,22 @@
     line-height: 32px;
     color: #221f20;
 }
-.detail_information .detail_size label
+.detail_size label
 {
     padding-right: 10px;
 }
-.detail_information .detail_size label
+ .detail_size label
 {
     display: inline-flex;
     cursor: pointer;
 }
-.detail_information .detail_size input[type=radio] {
+ .detail_size input[type=radio] {
     display: none;
     margin: 0;
     box-sizing: border-box;
     padding: 0;
 }
-.detail_information .detail_size span
+ .detail_size span
 {
     width: 48px;
     height: 32px;

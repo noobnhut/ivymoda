@@ -26,42 +26,55 @@ const renderProduct = async (req, res) => {
                     required: true
                 },
                 {
-                    model:Color,
-                    include:[
-                        {model:Img, attributes:['id','avatar','url'],required: true},
-                        {model:Size,attributes:['id','size','quantity'],required: true},
-                    ],
-                    required: true
+                    model: Color,
+                    attributes: ['id', 'color', 'color_code'],
+                    include: [
+                        {
+                            model: Img,
+                            attributes: ['id', 'avatar', 'url'],
+                        },
+                        {
+                            model: Size,
+                            attributes: ['id', 'size', 'quantity'],
+                        }
+                    ]
                 }
-
             ],
 
         });
-        const result = products.map(product => ({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            discount: product.discount,
-            id_catsex: product.id_catsex,
-            id_cat:product.CatSex.Category.id,
-            cat_name: product.CatSex.Category.cat_name,
-            sex_name: product.CatSex.Sex.Sexes_value,
-            colors: product.colors.map(color => ({
-                id: color.id,
-                color_name: color.color,
-                color_code: color.color_code,
-                images: color.Imgs.map(img => ({
-                    id: img.id,
-                    avatar: img.avatar,
-                    url: img.url,
-                })),
-                sizes: color.sizes.map(size => ({
-                    id: size.id,
-                    size_name: size.size,
-                    quantity: size.quantity,
-                }))
-            }))
-        }));
+
+        const result = [];
+
+        products.forEach(product => {
+            product.colors.forEach(color => {
+                const productByColor = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    discount: product.discount,
+                    information:product.information,
+                    id_catsex: product.id_catsex,
+                    id_cat: product.CatSex.Category.id,
+                    cat_name: product.CatSex.Category.cat_name,
+                    sex_name: product.CatSex.Sex.Sexes_value,
+                    color_id: color.id,
+                    color_name: color.color,
+                    color_code: color.color_code,
+                    images: color.Imgs.map(img => ({
+                        id: img.id,
+                        avatar: img.avatar,
+                        url: img.url,
+                    })),
+                    sizes: color.sizes.map(size => ({
+                        id: size.id,
+                        size_name: size.size,
+                        quantity: size.quantity,
+                    }))
+                };
+
+                result.push(productByColor);
+            });
+        });
 
         res.json(result);
     } catch (error) {
@@ -69,6 +82,7 @@ const renderProduct = async (req, res) => {
         console.log(error);
     }
 };
+
 
 module.exports = {
     renderProduct,
