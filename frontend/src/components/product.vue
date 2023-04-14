@@ -26,7 +26,17 @@
               <div class="product-price"><small>{{formatCurrency(product.price)}}</small>{{formatCurrency(product.price-(product.price*(product.discount)/100))}}</div>
               <div class="product-links">
                 <a class="action"><i class="fa fa-heart"></i></a>
-                <a class="action"><i class="fa fa-shopping-cart"></i></a>
+                <a class="action" @click="addToCart(
+                  product.id, 
+                  product.name,
+                  product.price,
+                  product.cat_name,
+                  product.sex_name,
+                  color.id,
+                  color.color_code,
+                  color.images,
+                  color.url,
+                  )"><i class="fa fa-shopping-cart"></i></a>
               </div>
             </div>
           </div>
@@ -37,9 +47,8 @@
   </div>
 </template>
 <script>
-
 import { Swiper, SwiperSlide } from 'swiper/vue';
-
+import Cookies from 'js-cookie';
 // Import Swiper styles
 import 'swiper/css';
 
@@ -59,7 +68,6 @@ export default {
   mounted() {
       this.getCat();
       this.getproduct();
-     
       
     },
   components: {
@@ -97,12 +105,36 @@ export default {
           console.log(result);
 
         } catch (e) {
-          console.log(e);
+          console.log(e); 
         }
       },
-     
-      
-}
+      addToCart(productId, productName, price, catname, sexname, colorId, code, img, url) {
+        // Kiểm tra đăng nhập
+        const user_inf_gg = Cookies.get('user_inf_gg');
+        const user_inf_fb = Cookies.get('user_inf_fb');
+        const user = localStorage.getItem("user");
+        if (!user_inf_gg && !user_inf_fb && !user) {
+          alert('Bạn cần đăng nhập trước khi đặt hàng!');
+          this.$router.push({ name: "login" });
+        }
+
+        // Đã đăng nhập 
+        // Thêm sản phẩm vào giỏ hàng
+        const cart = this.cart || {};
+        let current = cart;
+        const keys = [productId, colorId, productName, price, catname, sexname, code, img, url];
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i];
+          current[key] = current[key] || {};
+          current = current[key];
+        }
+        current += 1;
+
+        this.cart = cart;
+        Cookies.set('cart', JSON.stringify(cart));
+        console.log(cart);
+      }
+    }
 }
 
 </script>

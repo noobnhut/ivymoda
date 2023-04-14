@@ -16,7 +16,10 @@ module.exports = {
           key: 'id'
         }
       },
-      img_url: {
+      url: {
+        type: Sequelize.STRING
+      },
+      avatar: {
         type: Sequelize.STRING
       },
       createdAt: {
