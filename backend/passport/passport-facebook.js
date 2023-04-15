@@ -10,6 +10,7 @@ module.exports = function(passport) {
     callbackURL: config.callback_urlfb,
     profileFields: ['id', 'displayName', 'email', 'photos']
   }, function(accessToken, refreshToken, profile, done) {
+    console.log(accessToken);
     process.nextTick(function () {
       User.findOne({ where: { facebookId: profile.id } }).then((user) => {
         if (user) {

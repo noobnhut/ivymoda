@@ -24,10 +24,12 @@ router.get('/auth/facebook/callback',
     // Lưu thông tin người dùng vào session
     const token = generateToken(req.user);
     const user = req.user;
-    // Lưu thông tin người dùng vào cookies
-    res.cookie('token_fb', token, { maxAge: 86400000 }); // Cookie hết hạn sau 1 ngày
-    res.cookie('user_inf_fb', JSON.stringify(user), { maxAge: 86400000 });
-    const redirectUrl = `${process.env.VITE_API_BASE_URL_API}`;
+
+    // Lưu thông tin người dùng vào local storage
+    localStorage.setItem('token_fb', token);
+    localStorage.setItem('user_inf_fb', JSON.stringify(user));
+
+    const redirectUrl = `${process.env.VITE_API_BASE_URL_API}?token_fb=${token}&user_inf_fb=${JSON.stringify(user)}`;
     res.redirect(redirectUrl);
   }
 );
@@ -41,10 +43,11 @@ router.get('/auth/google/callback',
     const token = generateToken(req.user);
     const user = req.user;
 
-    // Lưu thông tin người dùng vào cookies
-    res.cookie('token_gg', token, { maxAge: 86400000 }); // Cookie hết hạn sau 1 ngày
-    res.cookie('user_inf_gg', JSON.stringify(user), { maxAge: 86400000 });
-    const redirectUrl = `${process.env.VITE_API_BASE_URL_API}`;
+    // Lưu thông tin người dùng vào local storage
+    localStorage.setItem('token_gg', token);
+    localStorage.setItem('user_inf_gg', JSON.stringify(user));
+
+    const redirectUrl = `${process.env.VITE_API_BASE_URL_API}?token_gg=${token}&user_inf_gg=${JSON.stringify(user)}`;
     res.redirect(redirectUrl);
   }
 );
