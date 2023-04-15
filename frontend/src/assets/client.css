@@ -319,9 +319,7 @@
 
 }
 
- .product-details .action :hover {
-    color: red;
-}
+ 
 
  .product-details p {
     font-size: 15px;
@@ -372,9 +370,7 @@
     font-size: 17px;
 }
 
- .product-links a:hover {
-    color: #fbb72c;
-}
+
 
 /* detail product */
 

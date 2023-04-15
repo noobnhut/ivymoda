@@ -23,23 +23,28 @@
             </div>
             <h4 style="height:50px">
               <router-link
-                :to="{ name: 'detail', params: { id: product.id, id_color: product.color_id, id_cat: product.id_cat } }">{{
-                  product.name 
+                :to="{ name: 'detail', params: { id: product.id, id_color: product.color_id, id_cat: product.id_cat } }"
+                @click="addseen(product.id)">{{
+                  product.name
                 }} - {{ product.color_name }}</router-link>
             </h4>
-          
+
             <div class="product-bottom-details">
               <div class="product-price" style="height:50px">
                 <small>{{ formatCurrency(product.price) }}</small>{{ formatCurrency(product.price - (product.price *
                   (product.discount) / 100)) }}
               </div>
-              <div class="product-links">
-                <a class="action"><i class="fa fa-heart"></i></a>
-                <a class="dropup-center dropup action"><i class="fa fa-shopping-cart" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <ul class="dropdown-menu" >
-                    <li v-for="size in product.sizes"><p class="dropdown-item text-dark d-flex justify-content-center" >{{size.size_name}}</p></li>
-                  </ul>
-              </i></a>
+              <div class="product-links" >
+                <a class="action" v-for="like in likes.filter(item => item.id_product == product.id)" @click="updatelike(like.status,product.id)" ><i :style="{ color: like.status == true ? 'red' : '#ccc' }" class="fa fa-heart"></i></a>
+                <a class="dropup-center dropup action"><i class="fa fa-shopping-cart" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <ul class="dropdown-menu">
+                      <li v-for="size in product.sizes">
+                        <p class="dropdown-item text-dark d-flex justify-content-center"
+                          @click="addToCart(product, size.id)">{{ size.size_name }}</p>
+                      </li>
+                    </ul>
+                  </i></a>
               </div>
             </div>
           </div>
@@ -66,13 +71,14 @@ export default {
     return {
       products: [],
       cats: [],
+      likes: []
 
     }
   },
   mounted() {
     this.getCat();
     this.getproduct();
-
+    this.getlike();
 
   },
   components: {
@@ -113,62 +119,122 @@ export default {
         console.log(e);
       }
     },
-
-    addToCart(productId, productName, price, catname, sexname, colorId, code, img, url) {
-      // Kiểm tra đăng nhập
+    getUser() {
       const user_inf_gg = Cookies.get('user_inf_gg');
       const user_inf_fb = Cookies.get('user_inf_fb');
       const user = localStorage.getItem("user");
+
       if (!user_inf_gg && !user_inf_fb && !user) {
-        alert('Bạn cần đăng nhập trước khi đặt hàng!');
-        this.$router.push({ name: "login" });
+        const userId = "trans";
+        return userId;
+      }
+      else {
+        const userId = user_inf_gg || user_inf_fb || user;
+        return userId;
       }
 
-      // Đã đăng nhập 
-      // Lấy mã định danh của người dùng
-      const userId = user_inf_gg || user_inf_fb || user;
+    },
+    updateCartTotal(cart) {
+      let total = 0;
+      cart.items.forEach(item => {
+        total += item.quantity;
+      });
+      cart.total = total;
+    },
+    addToCart(product, sizeid) {
+      const userId = this.getUser();
 
-      // Lấy thông tin giỏ hàng từ Cookies
-      let carts = JSON.parse(Cookies.get('carts') || '{}');
+      // Lấy thông tin giỏ hàng từ sessionStorage
+      let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
 
-      // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong Cookies hay chưa
-      let cart = carts[userId];
-      if (cart === undefined) {
-        // Nếu giỏ hàng của người dùng chưa tồn tại trong Cookies, tạo một giỏ hàng mới
-        cart = {};
+      // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong sessionStorage hay chưa
+      let cartIndex = carts.findIndex(cart => cart.userId === userId);
+      let cart = cartIndex >= 0 ? carts[cartIndex] : null;
+      if (!cart) {
+        // Nếu giỏ hàng của người dùng chưa tồn tại trong sessionStorage, tạo một giỏ hàng mới
+        cart = {
+          userId: userId,
+          items: [],
+          total: 0
+        };
+        carts.push(cart);
       }
 
-      // Tạo đối tượng cho sản phẩm mới
-      let product = {
-        productId: productId,
-        productName: productName,
-        price: price,
-        catname: catname,
-        sexname: sexname,
-        colorId: colorId,
-        code: code,
-        img: img,
-        url: url,
-        quantity: 1
-      };
-
-      // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng của người dùng hay chưa
-      let cartItem = cart[productId];
-      if (cartItem === undefined) {
-        // Nếu sản phẩm chưa tồn tại trong giỏ hàng của người dùng, thêm sản phẩm mới vào giỏ hàng
-        cart[productId] = product;
+      // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
+      let itemIndex = cart.items.findIndex(item => item.productId === product.id && item.sizeid === sizeid);
+      let item = itemIndex >= 0 ? cart.items[itemIndex] : null;
+      if (!item) {
+        // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới
+        item = {
+          productId: product.id,
+          productName: product.name,
+          price: product.price,
+          id_catsex: product.id_catsex,
+          colorId: product.color_id,
+          img: product.images,
+          sizeid: sizeid,
+          quantity: 1
+        };
+        cart.items.push(item);
       } else {
-        // Nếu sản phẩm đã tồn tại trong giỏ hàng của người dùng, tăng số lượng sản phẩm lên 1
-        cartItem.quantity++;
+        // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
+        item.quantity += 1;
+      }
+      this.updateCartTotal(cart);
+      carts[cartIndex] = cart;
+      sessionStorage.setItem('carts', JSON.stringify(carts));
+    },
+    async addseen(id) {
+      let user = localStorage.getItem("user");
+      const a = JSON.parse(user);
+      if (user) {
+        try {
+          const response = await this.$axios.post('addseen',
+            {
+              id_product: id,
+              id_user: a['user'].id
+
+            });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
+    async getlike() {
+      let user = localStorage.getItem("user");
+      const a = JSON.parse(user);
+
+      try {
+        const result = await this.$axios.get(
+          `getlike/` + a['user'].id
+        );
+        this.likes = result.data;
+        console.log(result);
+
+      } catch (e) {
+        console.log(e);
       }
 
-      // Lưu thông tin giỏ hàng của người dùng vào Cookies
-      carts[userId] = cart;
-      Cookies.set('carts', JSON.stringify(carts));
-
-      // In thông tin giỏ hàng ra console để kiểm tra
-      console.log(carts);
+    },
+    async updatelike(status,id)
+    {
+      let user = localStorage.getItem("user");
+      const a = JSON.parse(user);
+      if (user) {
+        try {
+          const response = await this.$axios.post('addlike',
+            {
+              id_product: id,
+              id_user: a['user'].id,
+              status:status
+            });
+            alert(response)
+        } catch (error) {
+          console.error(error);
+        }
+      }
     }
+
   }
 }
 

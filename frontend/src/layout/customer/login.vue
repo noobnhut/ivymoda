@@ -14,12 +14,12 @@
 
           <button @click="login" class="btn">Đăng nhập</button>
           <div class="login-container">
-          <p>Hoặc tiếp tục với</p>
-          <div class="login-buttons">
-            <button class="login-button" @click="socialLogin('google')">Đăng nhập bằng Google</button>
-            <button class="login-button" @click="socialLogin('facebook')">Đăng nhập bằng Facebook</button>
-        </div>
-        </div>
+            <p>Hoặc tiếp tục với</p>
+            <div class="login-buttons">
+              <button class="login-button" @click="socialLogin('google')">Đăng nhập bằng Google</button>
+              <button class="login-button" @click="socialLogin('facebook')">Đăng nhập bằng Facebook</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-xl-6">
@@ -63,7 +63,8 @@ export default {
           localStorage.setItem('user', JSON.stringify(login.data));
           localStorage.setItem('token', login.data.token);
           // Chuyển hướng đến trang chính của ứng dụng
-          this.$router.push({ name: 'home' });
+          this.$router.push({ name: 'home' });    
+          this.handleCart();      
         }
       } catch (error) {
         // Xử lý lỗi nếu có
@@ -74,17 +75,30 @@ export default {
       // Thực hiện đăng nhập bằng cách chuyển hướng đến trang đăng nhập của nhà cung cấp
       switch (provider) {
         case 'google':
-          this.$router.push({ name: 'google-auth' });
+          this.$router.push({ name: 'google-auth' });  
           break;
         case 'facebook':
-          this.$router.push({ name: 'facebook-auth' });
+          this.$router.push({ name: 'facebook-auth' }); 
           break;
         default:
           break;
       }
     },
+    handleCart()
+    {
+     
+      let cart = JSON.parse(sessionStorage.getItem('carts'));
+      let user = localStorage.getItem("user");
+    const a = JSON.parse(user);
+   
+      if(cart!==null)
+      {      
+       cart[0]['userId']=a['user'].id;
+      }
+      sessionStorage.setItem('carts', JSON.stringify(cart));
+    }
 
-    
+
   },
 };
 </script>

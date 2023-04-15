@@ -14,12 +14,12 @@ const productlike= async (req,res) =>
         if(status==false)
         {
         const follow=await Follow.update({ status }, { where: { id_user: id_user ,id_product:id_product} });
-        res.status(200).json({ follow,message: "san pham het thich" })
+        res.status(200).json({ follow,message: "san pham thich" })
         }
         if(status==true )
         {
             const follow=await Follow.update({ status }, { where: { id_user: id_user ,id_product:id_product} });
-            res.status(200).json({ follow,message: "san pham thich" })
+            res.status(200).json({ follow,message: "san pham het thich" })
         }
     }
     else
@@ -57,11 +57,11 @@ const renderlike = async (req,res)=>
    {
     attributes:[ 'id_user','id','id_product', 'status','status_seen'],
     include:[
-        {model:Product,as: 'Products',attributes: ['id','name','price','detail']}
+        {model:Product,as: 'Products',attributes: ['id','name','price','information']}
     ],
     raw: true,
     nest: true,
-    where:{id_user:id_user,status:true}
+    where:{id_user:id_user}
    }
  );
  res.json(like);
@@ -79,7 +79,7 @@ const renderseen = async (req,res)=>
    {
     attributes:[ 'id_user','id','id_product', 'status','status_seen'],
     include:[
-        {model:Product,as: 'Products',attributes: ['id','name','price','detail']}
+        {model:Product,as: 'Products',attributes: ['id','name','price','information']}
     ],
     raw: true,
     nest: true,

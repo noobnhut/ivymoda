@@ -85,12 +85,12 @@ const router = createRouter({
           component: () => import('../layout/customer/information.vue')
         },
         {
-          path: 'productsee',
+          path: 'productsee/',
           name: 'productsee',
           component: () => import('../layout/customer/productsee.vue')
         },
         {
-          path: 'productlike',
+          path: 'productlike/',
           name: 'productlike',
           component: () => import('../layout/customer/productlike.vue')
         },

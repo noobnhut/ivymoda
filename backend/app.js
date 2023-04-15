@@ -16,6 +16,8 @@ const {routerColor} = require('./routes/ColorRouter');
 const {routerSize} = require('./routes/SizeRouter');
 const {routerImg} = require('./routes/ImgRouter');
 const {routerRender} = require('./routes/renderRouter');
+const {routerFollow} = require('./routes/FollowRouter');
+
 
 const router = require('./routes/UserRouterAPI');
 
@@ -60,6 +62,7 @@ app.use(routerSize);
 app.use(router);
 app.use(routerImg);
 app.use(routerRender);
+app.use(routerFollow)
 // Serve các tệp tĩnh trong thư mục "uploads"
 app.use(express.static("uploads"));
 

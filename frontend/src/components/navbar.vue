@@ -25,9 +25,10 @@
                       <div class="container-fluid d-flex ">
                         <li class="px-2" v-for="sex in sexs">
                           <a class="dropdown-item" style="font-weight: bold;">{{ sex.Sexes_value }}</a>
-                          <div class="dropdown-item"
-                            v-for="catsex in catsexs.filter(item => item.id_sex === sex.id)"><router-link class="text-decoration-none text-dark" :to="{ name: 'productbycat', params: { id: catsex.id } }">{{ catsex.cat_name
-                            }}</router-link></div>
+                          <div class="dropdown-item" v-for="catsex in catsexs.filter(item => item.id_sex === sex.id)">
+                            <router-link class="text-decoration-none text-dark"
+                              :to="{ name: 'productbycat', params: { id: catsex.id } }">{{ catsex.cat_name
+                              }}</router-link></div>
                         </li>
                       </div>
                     </ul>
@@ -56,10 +57,11 @@
               </a>
             </div>
             <ul>
-              <li><router-link :to="{ name: 'information'}"><i class="icon-ic_avatar-1"></i>Thông tin tài khoản</router-link></li>
-              <li><router-link :to="{ name: 'productsee'}"><i class="icon-ic_glasses"></i>Sản phẩm đã
+              <li><router-link :to="{ name: 'information' }"><i class="icon-ic_avatar-1"></i>Thông tin tài
+                  khoản</router-link></li>
+              <li><router-link :to="{ name: 'productsee' }"><i class="icon-ic_glasses"></i>Sản phẩm đã
                   xem</router-link></li>
-              <li><router-link :to="{ name: 'productlike'}"><i class="icon-ic_heart"></i>Sản phẩm yêu
+              <li><router-link :to="{ name: 'productlike' }"><i class="icon-ic_heart"></i>Sản phẩm yêu
                   thích</router-link></li>
               <li><a @click="outWeb"><i class="icon-logout"></i>Đăng xuất</a></li>
             </ul>
@@ -121,13 +123,12 @@ export default {
       isShowMobile: false,
       sexs: [],
       catsexs: [],
-      
+
     }
   },
   mounted() {
     this.getSex();
     this.getcatsex();
-    
   },
   methods:
   {
@@ -136,7 +137,7 @@ export default {
       if (user) {
         // Thông tin user đã tồn tại trong localstorage, cho phép truy cập
         this.buttonLabel = 'dropdown'
-        } else {
+      } else {
         // Kiểm tra cookies
         let cookies = document.cookie.split(";");
 
@@ -151,9 +152,24 @@ export default {
           alert("Bạn chưa đăng nhập");
           this.$router.push({ name: "login" });
         }
-}
+      }
 
-      
+
+    },
+    getUser() {
+      const user_inf_gg = Cookies.get('user_inf_gg');
+      const user_inf_fb = Cookies.get('user_inf_fb');
+      const user = localStorage.getItem("user");
+
+      if (!user_inf_gg && !user_inf_fb && !user) {
+        const userId = "trans";
+        return userId;
+      }
+      else {
+        const userId = user_inf_gg || user_inf_fb || user;
+        return userId;
+      }
+
     },
     outWeb() {
       localStorage.removeItem('token');
@@ -164,8 +180,16 @@ export default {
       // Xóa cookie "token thong token"
       document.cookie = "token_fb=; expires=" + new Date(0).toUTCString();
       document.cookie = "token_gg=; expires=" + new Date(0).toUTCString();
-      document.cookie = "carts=; expires=" + new Date(0).toUTCString(); // Xóa giỏ hàng khỏi cookie
-      this.$router.push({ name: 'login' });
+      let carts = JSON.parse(sessionStorage.getItem('carts')||null);
+      if (carts !== null)
+      {
+        sessionStorage.setItem('carts', '');   
+        this.$router.push({ name: 'login' });
+      }
+      else
+      {
+        this.$router.push({ name: 'login' });
+      }
     },
     onShow() {
       this.isShowModel = !this.isShowModel
@@ -197,6 +221,7 @@ export default {
         console.log(e);
       }
     },
+   
 
   }
 };
