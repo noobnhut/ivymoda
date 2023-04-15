@@ -11,16 +11,8 @@ const productlike= async (req,res) =>
     
     if(existLike)
     {
-        if(status==false)
-        {
         const follow=await Follow.update({ status }, { where: { id_user: id_user ,id_product:id_product} });
         res.status(200).json({ follow,message: "san pham thich" })
-        }
-        if(status==true )
-        {
-            const follow=await Follow.update({ status }, { where: { id_user: id_user ,id_product:id_product} });
-            res.status(200).json({ follow,message: "san pham het thich" })
-        }
     }
     else
     {
