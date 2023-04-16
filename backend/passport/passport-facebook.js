@@ -33,10 +33,10 @@ module.exports = function(passport) {
             facebookId: id,
             email,
             password: "khong_luu_password_khi_login_facebook",
-            displayName,
+            username : displayName,
             provider: 'facebook',
             providerId: id,
-            photoUrl
+            url_avatar : photoUrl,
           }).then((newUser) => {
             return done(null, newUser);
           }).catch((err) => {
