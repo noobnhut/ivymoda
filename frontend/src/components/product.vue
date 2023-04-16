@@ -1,4 +1,5 @@
 <template>
+
   <div class="product_view" v-for="cat in cats">
     <div class="title_product">
       IVY {{ cat.cat_name }}
@@ -34,14 +35,28 @@
                 <small>{{ formatCurrency(product.price) }}</small>{{ formatCurrency(product.price - (product.price *
                   (product.discount) / 100)) }}
               </div>
-              <div class="product-links" >
-                <a class="action" v-for="like in likes.filter(item => item.id_product == product.id)" @click="updatelike(like.status,product.id)" ><i :style="{ color: like.status == true ? 'red' : '#ccc' }" class="fa fa-heart"></i></a>
+              <div class="product-links">
+                <a class="action">
+                <!-- Sử dụng v-if để kiểm tra xem sản phẩm có trong danh sách thích hay không -->
+                <span  v-if="likes.some(item => item.id_product === product.id)" >
+                  <!-- Sử dụng v-for để lặp lại các sản phẩm trong danh sách thích -->
+                  <span v-for="like in likes.filter(item => item.id_product === product.id)">
+                    <!-- Kiểm tra trạng thái của sản phẩm và sử dụng màu đỏ hoặc #ccc tương ứng -->
+                    <i class="fa fa-heart" :style="{ color: like.status ? 'red' : '#ccc' }" @click="updatelike(like,product.id)"></i>
+                  </span>
+                </span>
+                <!-- Nếu không có sản phẩm nào trong danh sách thích, hiển thị chữ màu #ccc -->
+                <span v-else>
+                  <i class="fa fa-heart" style="color: #ccc" @click="addlike( product.id)"></i>
+                </span>
+                </a>
+                
                 <a class="dropup-center dropup action"><i class="fa fa-shopping-cart" type="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     <ul class="dropdown-menu">
                       <li v-for="size in product.sizes">
                         <p class="dropdown-item text-dark d-flex justify-content-center"
-                          @click="addToCart(product, size.id)">{{ size.size_name }}</p>
+                          @click="addToCart(product, size.id)">{{ size.size_name }} </p>
                       </li>
                     </ul>
                   </i></a>
@@ -53,6 +68,7 @@
 
     </swiper>
   </div>
+
 </template>
 <script>
 
@@ -65,21 +81,18 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination } from 'swiper';
-
 export default {
   data() {
     return {
       products: [],
       cats: [],
-      likes: []
-
+      likes: [],
     }
   },
   mounted() {
     this.getCat();
     this.getproduct();
     this.getlike();
-
   },
   components: {
     Swiper,
@@ -89,12 +102,14 @@ export default {
     return {
       modules: [Pagination],
     };
+
   },
   methods: {
     formatCurrency(value) {
       let val = (value / 1).toFixed(0).replace('.', ',')
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ'
     },
+
     async getCat() {
       try {
         const result = await this.$axios.get(
@@ -119,6 +134,7 @@ export default {
         console.log(e);
       }
     },
+
     getUser() {
       const user_inf_gg = Cookies.get('user_inf_gg');
       const user_inf_fb = Cookies.get('user_inf_fb');
@@ -137,9 +153,16 @@ export default {
     updateCartTotal(cart) {
       let total = 0;
       cart.items.forEach(item => {
-        total += item.quantity;
+        total += item.quantity*item.price;
       });
       cart.total = total;
+    },
+    updateCartQuality(cart) {
+      let Squantity = 0;
+      cart.items.forEach(item => {
+        Squantity += item.quantity;
+      });
+      cart.Squantity = Squantity;
     },
     addToCart(product, sizeid) {
       const userId = this.getUser();
@@ -155,7 +178,8 @@ export default {
         cart = {
           userId: userId,
           items: [],
-          total: 0
+          total: 0,
+          Squantity:0
         };
         carts.push(cart);
       }
@@ -167,12 +191,9 @@ export default {
         // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới
         item = {
           productId: product.id,
-          productName: product.name,
-          price: product.price,
-          id_catsex: product.id_catsex,
           colorId: product.color_id,
-          img: product.images,
           sizeid: sizeid,
+          price:product.price,
           quantity: 1
         };
         cart.items.push(item);
@@ -181,9 +202,11 @@ export default {
         item.quantity += 1;
       }
       this.updateCartTotal(cart);
+      this.updateCartQuality(cart);
       carts[cartIndex] = cart;
       sessionStorage.setItem('carts', JSON.stringify(carts));
     },
+
     async addseen(id) {
       let user = localStorage.getItem("user");
       const a = JSON.parse(user);
@@ -216,8 +239,7 @@ export default {
       }
 
     },
-    async updatelike(status,id)
-    {
+    async addlike(id) {
       let user = localStorage.getItem("user");
       const a = JSON.parse(user);
       if (user) {
@@ -226,14 +248,34 @@ export default {
             {
               id_product: id,
               id_user: a['user'].id,
-              status:status
+              status: true
             });
-            alert(response)
+         location.reload( )
+        } catch (error) {
+          console.error(error);
+        }
+      } 
+    },
+    async updatelike(like,id_product) {
+      let user = localStorage.getItem("user");
+      const a = JSON.parse(user);
+      
+      const statusreal= like.status ? false : true;;
+      if (user) {
+        try {
+          const response = await this.$axios.post('addlike',
+            {
+              id_product: id_product,
+              id_user: a['user'].id,
+              status: statusreal
+            });
+          like.status=!like.status
         } catch (error) {
           console.error(error);
         }
       }
-    }
+
+    },
 
   }
 }

@@ -87,13 +87,16 @@ export default {
     handleCart()
     {
      
-      let cart = JSON.parse(sessionStorage.getItem('carts'));
+      let cart = JSON.parse(sessionStorage.getItem('carts')|| []);
       let user = localStorage.getItem("user");
-    const a = JSON.parse(user);
-   
+      const a = JSON.parse(user);
       if(cart!==null)
       {      
        cart[0]['userId']=a['user'].id;
+      }
+      if(cart==null)
+      {
+        sessionStorage.setItem('carts', '');
       }
       sessionStorage.setItem('carts', JSON.stringify(cart));
     }

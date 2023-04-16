@@ -28,7 +28,8 @@
                           <div class="dropdown-item" v-for="catsex in catsexs.filter(item => item.id_sex === sex.id)">
                             <router-link class="text-decoration-none text-dark"
                               :to="{ name: 'productbycat', params: { id: catsex.id } }">{{ catsex.cat_name
-                              }}</router-link></div>
+                              }}</router-link>
+                          </div>
                         </li>
                       </div>
                     </ul>
@@ -47,7 +48,7 @@
         </form>
 
         <div class="dropdown item_action">
-          <button @click="handleButtonClick" class="btn_custom" :data-bs-toggle="buttonLabel" aria-expanded="false">
+          <button @click="handleButtonClick" class="btn_custom" data-bs-toggle="dropdown" :aria-expanded="buttonLabel">
             <i class="fa-solid fa-user"></i>
           </button>
           <ul class="dropdown-menu sub-action">
@@ -57,18 +58,21 @@
               </a>
             </div>
             <ul>
-              <li><router-link :to="{ name: 'information' }"><i class="icon-ic_avatar-1"></i>Thông tin tài
+              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'information' }"><i
+                    class="icon-ic_avatar-1"></i>Thông tin tài
                   khoản</router-link></li>
-              <li><router-link :to="{ name: 'productsee' }"><i class="icon-ic_glasses"></i>Sản phẩm đã
+              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'productsee' }"><i
+                    class="icon-ic_glasses"></i>Sản phẩm đã
                   xem</router-link></li>
-              <li><router-link :to="{ name: 'productlike' }"><i class="icon-ic_heart"></i>Sản phẩm yêu
+              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'productlike' }"><i
+                    class="icon-ic_heart"></i>Sản phẩm yêu
                   thích</router-link></li>
               <li><a @click="outWeb"><i class="icon-logout"></i>Đăng xuất</a></li>
             </ul>
           </ul>
         </div>
 
-        <button type="button" class="btn position-relative" @click="onShow">
+        <button class=" btn_custom position-relative" @click="onShow">
           <i class="fa-solid fa-bag-shopping"></i>
         </button>
 
@@ -105,8 +109,10 @@
 
   </div>
 </template>
-<style></style>
+
+
 <script>
+
 import carthome from './carthome.vue';
 import mobile from './mobile.vue';
 export default {
@@ -118,7 +124,7 @@ export default {
   },
   data() {
     return {
-      buttonLabel: '',
+      buttonLabel: false,
       isShowModel: false,
       isShowMobile: false,
       sexs: [],
@@ -127,17 +133,15 @@ export default {
     }
   },
   mounted() {
-    this.luuVaoLocalStorageFB();
-    this.luuVaoLocalStorageGG();
     this.getSex();
     this.getcatsex();
-    
+    this.luuVaoLocalStorage();
   },
   methods:
   {
     handleButtonClick() {
   let user = JSON.parse(localStorage.getItem("user"));
-  if (user ) {
+  if (user) {
     // Thông tin user đã tồn tại trong local storage, cho phép truy cập
     this.buttonLabel = 'dropdown'
   } else {
@@ -146,6 +150,21 @@ export default {
     this.$router.push({ name: "login" });
   }
 },
+    getUser() {
+      const user_inf_gg = Cookies.get('user_inf_gg');
+      const user_inf_fb = Cookies.get('user_inf_fb');
+      const user = localStorage.getItem("user");
+
+      if (!user_inf_gg && !user_inf_fb && !user) {
+        const userId = "trans";
+        return userId;
+      }
+      else {
+        const userId = user_inf_gg || user_inf_fb || user;
+        return userId;
+      }
+
+    },
     outWeb() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -154,15 +173,14 @@ export default {
       document.cookie = "user_inf_gg=; expires=" + new Date(0).toUTCString();
       // Xóa cookie "token thong token"
       document.cookie = "token_fb=; expires=" + new Date(0).toUTCString();
-      document.cookie = "token_fb=; expires=" + new Date(0).toUTCString();
+      document.cookie = "token_gg=; expires=" + new Date(0).toUTCString();
       let carts = JSON.parse(sessionStorage.getItem('carts')||null);
       if (carts !== null)
       {
         sessionStorage.setItem('carts', '');   
         this.$router.push({ name: 'login' });
       }
-      else
-      {
+      else {
         this.$router.push({ name: 'login' });
       }
     },
@@ -197,9 +215,9 @@ export default {
       }
     },
    
-  luuVaoLocalStorageGG() {
-    // Lấy query string từ URL hiện tại
-    const queryString = window.location.search;
+    luuVaoLocalStorage() {
+      // Lấy query string từ URL hiện tại
+      const queryString = window.location.search;
 
     // Tạo một đối tượng URLSearchParams từ query string
     const urlParams = new URLSearchParams(queryString);
@@ -221,35 +239,6 @@ export default {
       localStorage.setItem('user', JSON.stringify(user));
   }
   },
-  luuVaoLocalStorageFB() {
-    // Lấy query string từ URL hiện tại
-    const queryString = window.location.search;
-
-    // Tạo một đối tượng URLSearchParams từ query string
-    const urlParams = new URLSearchParams(queryString);
-
-    // Lấy giá trị của tham số token_fb từ URL params
-    const token_fb = urlParams.get('token_fb');
-
-    // Lấy giá trị của tham số user_inf_fb từ URL params
-    const user_inf_fb = urlParams.get('user_inf_fb');
-
-    // Kiểm tra xem đã có giá trị token_fb và user_inf_fb hay chưa
-    if (token_fb && user_inf_fb) {
-      // Lưu thông tin token vào localStorage
-      localStorage.setItem('token_fb', token_fb);
-
-      try {
-        // Giải mã chuỗi JSON trong tham số user_inf_fb
-        const decodedUser = JSON.parse(decodeURIComponent(user_inf_fb));
-
-        // Lưu thông tin user vào localStorage
-        localStorage.setItem('user_fb', JSON.stringify(decodedUser));
-      } catch (error) {
-        console.error("Lỗi phân tích cú pháp chuỗi JSON: ", error);
-      }
-    }
-  }
 }
 };
 </script>

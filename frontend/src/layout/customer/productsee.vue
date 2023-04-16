@@ -42,7 +42,20 @@
                                                         (product.discount) / 100)) }}
                                         </div>
                                         <div class="product-links">
-                                            <a class="action"><i class="fa fa-heart"></i></a>
+                                            <a class="action">
+                                                <!-- Sử dụng v-if để kiểm tra xem sản phẩm có trong danh sách thích hay không -->
+                                                <span  v-if="likes.some(item => item.id_product === product.id)" >
+                                                  <!-- Sử dụng v-for để lặp lại các sản phẩm trong danh sách thích -->
+                                                  <span v-for="like in likes.filter(item => item.id_product === product.id)">
+                                                    <!-- Kiểm tra trạng thái của sản phẩm và sử dụng màu đỏ hoặc #ccc tương ứng -->
+                                                    <i class="fa fa-heart" :style="{ color: like.status ? 'red' : '#ccc' }" @click="updatelike(like,product.id)"></i>
+                                                  </span>
+                                                </span>
+                                                <!-- Nếu không có sản phẩm nào trong danh sách thích, hiển thị chữ màu #ccc -->
+                                                <span v-else>
+                                                  <i class="fa fa-heart" style="color: #ccc" @click="addlike( product.id)"></i>
+                                                </span>
+                                                </a>
                                             <a class="dropup-center dropup action"><i class="fa fa-shopping-cart"
                                                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <ul class="dropdown-menu">
@@ -93,6 +106,7 @@ export default
 
                 sees: [],
                 products: [],
+                likes:[]
 
 
             }
@@ -106,23 +120,24 @@ export default
             this.getsee();
             this.getproduct();
             this.filteredProducts()
+            this.getlike()
         },
         methods: {
             async getsee() {
                 let user = localStorage.getItem("user");
                 const a = JSON.parse(user);
-               
-                    try {
-                        const result = await this.$axios.get(
-                            `getseen/` + a['user'].id
-                        );
-                        this.sees = result.data;
-                        console.log(result);
 
-                    } catch (e) {
-                        console.log(e);
-                    }
-                
+                try {
+                    const result = await this.$axios.get(
+                        `getseen/` + a['user'].id
+                    );
+                    this.sees = result.data;
+                    console.log(result);
+
+                } catch (e) {
+                    console.log(e);
+                }
+
             },
             async getproduct() {
                 try {
@@ -142,8 +157,61 @@ export default
             },
             filteredProducts() {
                 return this.products.filter((product) => {
-                    return this.sees.some((see) => see.id_product === product.id);
+                    return this.sees.some((see) => see.id_product === product.id && see.status_seen === 1);
                 });
+            },
+            async getlike() {
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+
+                try {
+                    const result = await this.$axios.get(
+                        `getlike/` + a['user'].id
+                    );
+                    this.likes = result.data;
+                    console.log(result);
+
+                } catch (e) {
+                    console.log(e);
+                }
+
+            },
+            async addlike(id) {
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+                if (user) {
+                    try {
+                        const response = await this.$axios.post('addlike',
+                            {
+                                id_product: id,
+                                id_user: a['user'].id,
+                                status: true
+                            });
+                        location.reload()
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            },
+            async updatelike(like, id_product) {
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+
+                const statusreal = like.status ? false : true;;
+                if (user) {
+                    try {
+                        const response = await this.$axios.post('addlike',
+                            {
+                                id_product: id_product,
+                                id_user: a['user'].id,
+                                status: statusreal
+                            });
+                        like.status = !like.status
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+
             },
         }
     }
