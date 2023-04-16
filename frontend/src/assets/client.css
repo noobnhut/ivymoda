@@ -532,6 +532,11 @@ footer a:hover {
     border: 1px solid #E7E8E9;
     border-radius: 4px;
 }
+.cart_item
+{
+    max-height: calc( 100vh - 75px - 240px );
+    overflow: auto;
+}
 
 .see_cart {
     padding: 0 24px;

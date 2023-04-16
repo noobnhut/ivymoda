@@ -1,4 +1,5 @@
 <template>
+
   <div class="product_view" v-for="cat in cats">
     <div class="title_product">
       IVY {{ cat.cat_name }}
@@ -55,7 +56,7 @@
                     <ul class="dropdown-menu">
                       <li v-for="size in product.sizes">
                         <p class="dropdown-item text-dark d-flex justify-content-center"
-                          @click="addToCart(product, size.id)">{{ size.size_name }}</p>
+                          @click="addToCart(product, size.id)">{{ size.size_name }} </p>
                       </li>
                     </ul>
                   </i></a>
@@ -67,6 +68,7 @@
 
     </swiper>
   </div>
+
 </template>
 <script>
 
@@ -79,15 +81,12 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination } from 'swiper';
-
-
 export default {
   data() {
     return {
       products: [],
       cats: [],
-      likes: []
-
+      likes: [],
     }
   },
   mounted() {
@@ -110,6 +109,7 @@ export default {
       let val = (value / 1).toFixed(0).replace('.', ',')
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ'
     },
+
     async getCat() {
       try {
         const result = await this.$axios.get(
@@ -134,6 +134,7 @@ export default {
         console.log(e);
       }
     },
+
     getUser() {
       const user_inf_gg = Cookies.get('user_inf_gg');
       const user_inf_fb = Cookies.get('user_inf_fb');
@@ -152,9 +153,16 @@ export default {
     updateCartTotal(cart) {
       let total = 0;
       cart.items.forEach(item => {
-        total += item.quantity;
+        total += item.quantity*item.price;
       });
       cart.total = total;
+    },
+    updateCartQuality(cart) {
+      let Squantity = 0;
+      cart.items.forEach(item => {
+        Squantity += item.quantity;
+      });
+      cart.Squantity = Squantity;
     },
     addToCart(product, sizeid) {
       const userId = this.getUser();
@@ -170,7 +178,8 @@ export default {
         cart = {
           userId: userId,
           items: [],
-          total: 0
+          total: 0,
+          Squantity:0
         };
         carts.push(cart);
       }
@@ -182,12 +191,9 @@ export default {
         // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới
         item = {
           productId: product.id,
-          productName: product.name,
-          price: product.price,
-          id_catsex: product.id_catsex,
           colorId: product.color_id,
-          img: product.images,
           sizeid: sizeid,
+          price:product.price,
           quantity: 1
         };
         cart.items.push(item);
@@ -196,9 +202,11 @@ export default {
         item.quantity += 1;
       }
       this.updateCartTotal(cart);
+      this.updateCartQuality(cart);
       carts[cartIndex] = cart;
       sessionStorage.setItem('carts', JSON.stringify(carts));
     },
+
     async addseen(id) {
       let user = localStorage.getItem("user");
       const a = JSON.parse(user);

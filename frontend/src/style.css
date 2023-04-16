@@ -8,4 +8,18 @@
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
 }
+/* Set the style for the scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* width of the scrollbar */
+}
 
+/* Set the style for the thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1; /* color of the thumb */
+  border-radius: 5px; /* roundness of the thumb */
+}
+
+/* Set the style for the track */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* color of the track */
+}
