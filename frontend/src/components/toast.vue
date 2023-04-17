@@ -11,7 +11,7 @@
               {{ message }}  
             </div>
             <div class="d-flex justify-content-center py-2">
-            <button class="btn btn-light"  @click="reload">Chạy lại</button>
+            <button class="btn btn-light"  @click="reload">Đồng ý</button>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default {
         },
         reload()
         {
-            location.reload()
+          this.visible = false
         }
     },
 }

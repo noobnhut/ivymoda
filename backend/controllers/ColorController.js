@@ -39,7 +39,7 @@ const addColor = async (req, res) => {
     try {
 
         if (existProduct) {
-            if (color_code == '', color == '', detail_product == '') {
+            if (color_code == ''|| color == ''|| detail_product == '') {
                 res.status(202).json({ message: "Thiếu thông tin nhập vào" });
                 return;
             }
@@ -67,18 +67,18 @@ const updateColor = async (req,res)=>
     const colors = await Color.findOne({ where: {id: req.params.id} });
     const existProduct = await Products.findOne({ where: { id: id_product } });
     const exitsColor = await Color.findOne({ where: { color_code: color_code, color: color } })
-    
+    if (!colors) return res.status(404).json({ message: "Không tìm thấy dữ liệu nào" });
     try {
-        if (!colors) return res.status(404).json({ message: "Không tìm thấy dữ liệu nào" });
-        else if(existProduct)
+        
+       if(existProduct)
         {
-            if (color_code == '', color == '', detail_product == '') {
-                res.status(202).json({ message: "Thiếu thông tin nhập vào" });
-                return;
+            if (color_code == ''|| color == ''|| detail_product == '') {
+               return res.status(202).json({ message: "Thiếu thông tin nhập vào" });
+                
             }
             else if (exitsColor && exitsColor.id != req.params.id) {
-                res.status(202).json({ message: "Tồn tại màu trong hệ thống" });
-                return;
+              return  res.status(202).json({ message: "Tồn tại màu trong hệ thống" });
+                
             }
             else
             {

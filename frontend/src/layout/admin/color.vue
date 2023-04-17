@@ -33,12 +33,14 @@
                     <tr>
                         <th>Màu sắc:</th>
                         <th>Mã màu:</th>
+                        <th>Ý nghĩa màu sắc:</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="color in colors">
                         <td>{{ color.color }}</td>
                         <td :style="{ backgroundColor: color.color_code }"> {{ color.color_code }}</td>
+                        <td>{{ color.detail_product }}</td>
                         <td>
                             <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"><i
                                     class="fa-solid fa-spinner" @click="sendata(color)"></i></a>
@@ -60,7 +62,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm màu sản phẩm</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -73,10 +75,14 @@
                             <label>Mã màu:</label>
                             <input type="color" class="form-control" v-model="color_code" @input="updateColor">
                         </div>
+                        <div class="form-group">
+                            <label>Ý nghĩa màu</label>
+                            <input type="text" class="form-control" v-model="detail_product">
+                        </div>
                         <br>
-                        
+
                         <br>
-      
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-primary">Thêm</button>
@@ -91,7 +97,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cập nhập màu</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -105,11 +111,14 @@
                             <input type="color" class="form-control" v-model="color_code" @input="updateColor">
                         </div>
                         <br>
-                       
+                        <div class="form-group">
+                            <label>Ý nghĩa màu:</label>
+                            <input type="text" class="form-control" v-model="detail_product">
+                        </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary">Cập nhập</button>
+                            <button type="submit" class="btn btn-primary" >Cập nhập</button>
                         </div>
                     </form>
                 </div>
@@ -128,10 +137,12 @@ export default
                 colors: [],
                 color: '',
                 color_code: "#000000",
+                detail_product: '',
                 size_id: '',
                 product_id: null,
                 products: [],
-                id:''
+                id: '',
+
             }
         },
 
@@ -149,6 +160,7 @@ export default
                 this.color_code = event.target.value;
             },
             async getcolor() {
+
                 try {
                     const result = await this.$axios.get(
                         `getColor/` + this.product_id
@@ -156,8 +168,8 @@ export default
                     this.colors = result.data;
 
                 } catch (e) {
-                    
-                    this.colors=[]
+
+                    this.colors = []
                 }
 
 
@@ -175,20 +187,27 @@ export default
             },
             sendata(color) {
                 this.color = color.color;
-                this.color_code = color.color_code;             
-                this.id=color.id;             
+                this.color_code = color.color_code;
+                this.id = color.id;
+                this.detail_product=color.detail_product;
             },
             async addcolor() {
                 try {
                     const response = await this.$axios.post('addColor', {
-                        id_product:this.product_id,
-                        color:this.color,
-                        color_code: this.color_code
+                        id_product: this.product_id,
+                        color: this.color,
+                        color_code: this.color_code,
+                        detail_product: this.detail_product
                     });
-                    this.$refs.toast.showToast(response.data.message);
+                    this.$refs.toast.showToast(response.data.message)
                 } catch (error) {
                     console.error(error);
                 }
+                this.product_id = this.product_id
+                this.color= ''
+                this.color_code=  "#000000"
+                this.detail_product=''
+                this.getcolor()
             },
             async deletecolor(id) {
                 const colordelete = await this.$axios.delete(
@@ -196,28 +215,28 @@ export default
                 )
                 if (colordelete.status == 200) {
                     this.$refs.toast.showToast(colordelete.data.message)
-                    location.reload()
+                    this.getcolor()
+
                 }
                 else {
                     this.$refs.toast.showToast(colordelete.data.message)
-                    location.reload()
+                    this.getcolor()
+
                 }
             },
-            async updatecolor()
-            {
+            async updatecolor() {
                 try {
                     const response = await this.$axios.put('updateColor/' + this.id, {
-                        id_product:this.product_id,
-                        color:this.color,
+                        id_product: this.product_id,
+                        color: this.color,
                         color_code: this.color_code,
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
+                        detail_product:this.detail_product
                     });
-                    // ...
+                    this.$refs.toast.showToast(response.data.message)
                 } catch (error) {
                     console.error(error);
                 }
+                this.getcolor()
             }
         },
     }
