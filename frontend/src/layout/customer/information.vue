@@ -14,7 +14,7 @@
                                 <label>Họ và tên:</label>
                             </div>
                             <div class="col col-input">
-                                <input class="form-control" :value=user.username type="text">
+                                <input class="form-control" v-model="user.username" type="text">
                             </div>
                         </div>
                         <div class="row form-group" style="padding-top: 10px;">
@@ -30,8 +30,8 @@
                                 <label>Địa chỉ:</label>
                             </div>
                             <div class="col col-input">
-                                <input class="form-control" :value="user.address ? user.address : ''"
-                                    placeholder="Cập nhật địa chỉ" type="text" @focus="hidePlaceholder">
+                                <input class="form-control" v-model="user.address" placeholder="Cập nhật địa chỉ"
+                                    type="text" @focus="hidePlaceholder">
                             </div>
                         </div>
                         <div class="row form-group" style="padding-top: 10px;">
@@ -39,12 +39,12 @@
                                 <label>Số điện thoại:</label>
                             </div>
                             <div class="col col-input">
-                                <input class="form-control" :value="user.phone ? user.phone : ''"
-                                    placeholder="Cập nhật số điện thoại" type="text" @focus="hidePlaceholder">
+                                <input class="form-control" v-model="user.phone" placeholder="Cập nhật số điện thoại"
+                                    type="number" @focus="hidePlaceholder">
                             </div>
                         </div>
                         <hr>
-                        <button class="btn_user" v-on:click="updateUserById">
+                        <button class="btn_user" @click="updateUser()">
                             Cập nhập thông tin
                         </button>
 
@@ -85,11 +85,20 @@ export default {
         this.getUserById();
     },
     methods: {
+        getID() {
+            const userJSON = localStorage.getItem('user'); // Lấy chuỗi JSON từ localStorage
+            let userId;
+            const data = JSON.parse(userJSON); // Chuyển chuỗi JSON thành đối tượng JavaScript
+            if (data.id) {
+                userId = data.id; // Lấy giá trị của thuộc tính "id" trong đối tượng "user"
+            } else {
+                userId = data.user.id; // Lấy giá trị của thuộc tính "id" trong đối tượng "user" trong chuỗi JSON
+            }
+            return userId;
+        },
         async getUserById() {
-            const userJSON = localStorage.getItem('user')
-            const user = JSON.parse(userJSON);
-            const userId = user.id;
-            console.log(userId);
+            const userId = this.getID();
+            console.log(userId); // In ra giá trị của "id"
             try {
                 const response = await this.$axios.get(`getUserById/${userId}`);
                 this.user = response.data;
@@ -97,22 +106,26 @@ export default {
                 console.log(error);
             }
         },
-        async updateUserById() {
-            const userJSON = localStorage.getItem('user')
-            const user = JSON.parse(userJSON);
-            const userId = user.id;
-            const { username, address, phone } = this.user;
-            console.log( this.user);
+        async updateUser() {
+            const userId = this.getID();
+            const newUsername = this.user.username; // Giá trị mới của username
+            const newAddress = this.user.address; // Giá trị mới của address
+            const newPhone = this.user.phone; // Giá trị mới của phone
+
             try {
                 const response = await this.$axios.put(`updateUserById/${userId}`, {
-                    username,
-                    address,
-                    phone
+                    username: newUsername,
+                    address: newAddress,
+                    phone: newPhone
                 });
-
-                console.log(response.data);
+                if (response.status === 200) {
+                    alert('Cập nhật thông tin thành công!');
+                } else {
+                    throw new Error('Có lỗi xảy ra khi cập nhật thông tin!');
+                }
             } catch (error) {
-                console.log(error);
+                console.error(error);
+                alert(error.message);
             }
         }
     },
