@@ -28,7 +28,7 @@
                                         <span class="product-color" :style="{ backgroundColor: product.color_code }"></span>
                                     </div>
                                     <h4 style="height:50px">
-                                        <router-link
+                                        <router-link @click="addseen(product.id)"
                                             :to="{ name: 'detail', params: { id: product.id, id_color: product.color_id, id_cat: product.id_cat } }">{{
                                                 product.name
                                             }} - {{ product.color_name }}</router-link>
@@ -44,18 +44,22 @@
                                         <div class="product-links">
                                             <a class="action">
                                                 <!-- Sử dụng v-if để kiểm tra xem sản phẩm có trong danh sách thích hay không -->
-                                                <span  v-if="likes.some(item => item.id_product === product.id)" >
-                                                  <!-- Sử dụng v-for để lặp lại các sản phẩm trong danh sách thích -->
-                                                  <span v-for="like in likes.filter(item => item.id_product === product.id)">
-                                                    <!-- Kiểm tra trạng thái của sản phẩm và sử dụng màu đỏ hoặc #ccc tương ứng -->
-                                                    <i class="fa fa-heart" :style="{ color: like.status ? 'red' : '#ccc' }" @click="updatelike(like,product.id)"></i>
-                                                  </span>
+                                                <span v-if="likes.some(item => item.id_product === product.id)">
+                                                    <!-- Sử dụng v-for để lặp lại các sản phẩm trong danh sách thích -->
+                                                    <span
+                                                        v-for="like in likes.filter(item => item.id_product === product.id)">
+                                                        <!-- Kiểm tra trạng thái của sản phẩm và sử dụng màu đỏ hoặc #ccc tương ứng -->
+                                                        <i class="fa fa-heart"
+                                                            :style="{ color: like.status ? 'red' : '#ccc' }"
+                                                            @click="updatelike(like, product.id)"></i>
+                                                    </span>
                                                 </span>
                                                 <!-- Nếu không có sản phẩm nào trong danh sách thích, hiển thị chữ màu #ccc -->
                                                 <span v-else>
-                                                  <i class="fa fa-heart" style="color: #ccc" @click="addlike( product.id)"></i>
+                                                    <i class="fa fa-heart" style="color: #ccc"
+                                                        @click="addlike(product.id)"></i>
                                                 </span>
-                                                </a>
+                                            </a>
                                             <a class="dropup-center dropup action"><i class="fa fa-shopping-cart"
                                                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <ul class="dropdown-menu">
@@ -106,7 +110,7 @@ export default
 
                 sees: [],
                 products: [],
-                likes:[]
+                likes: []
 
 
             }
@@ -212,6 +216,22 @@ export default
                     }
                 }
 
+            },
+            async addseen(id) {
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+                if (user) {
+                    try {
+                        const response = await this.$axios.post('addseen',
+                            {
+                                id_product: id,
+                                id_user: a['user'].id
+
+                            });
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
             },
         }
     }

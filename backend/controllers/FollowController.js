@@ -75,7 +75,7 @@ const renderseen = async (req,res)=>
     ],
     raw: true,
     nest: true,
-    where:{id_user:id_user,status_seen:true}
+    where:{id_user:id_user}
    }
  );
  res.json(seen);
