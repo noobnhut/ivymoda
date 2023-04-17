@@ -224,7 +224,7 @@ export default {
       sessionStorage.setItem('carts', JSON.stringify(carts));
  
     },
-
+ 
     async addseen(id) {
       let user = localStorage.getItem("user");
       const a = JSON.parse(user);
