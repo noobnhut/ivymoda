@@ -36,7 +36,7 @@ module.exports = function(passport) {
             username : displayName,
             provider: 'facebook',
             providerId: id,
-            url_avatar : photoUrl,
+            googleId : 'NO'
           }).then((newUser) => {
             return done(null, newUser);
           }).catch((err) => {

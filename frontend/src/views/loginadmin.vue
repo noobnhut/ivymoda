@@ -1,85 +1,72 @@
 <template>
     <div class="content">
-        <div class="container" id="container">
-
-            <div class="form-container sign-in-container">
-                <div class="form">
-                    <h1>Đăng nhập</h1>
-                    <div class="social-container">
-                        <a class="social">AD</a>
-                        <a class="social">M</a>
-                        <a class="social">IN</a>
-                    </div>
-                    <input type="email" placeholder="Email" v-model="email" />
-                    <span v-if="!isValidEmail">Email không hợp lệ</span>
-                    <br />
-                    <input type="password" placeholder="Password" v-model="password" />
-                    <span v-if="!isValidPassword">Mật khẩu không hợp lệ</span>
-                    <button @click="login()">Đăng nhập</button>
-                </div>
-
-
+      <div class="container" id="container">
+        <div class="form-container sign-in-container">
+          <div class="form">
+            <h1>Đăng nhập</h1>
+            <div class="social-container">
+              <a class="social">AD</a>
+              <a class="social">M</a>
+              <a class="social">IN</a>
             </div>
-
-            <div class="overlay-container">
-                <div class="overlay">
-
-                    <div class="overlay-panel overlay-right">
-                        <h3>TRANG QUẢN LÝ!</h3>
-                    </div>
-                </div>
-            </div>
+            <input type="email" placeholder="Email" v-model="email" />
+            <span v-if="!isValidEmail">Email không hợp lệ</span>
+            <br />
+            <input type="password" placeholder="Password" v-model="password" />
+            <span v-if="!isValidPassword">Mật khẩu không hợp lệ</span>
+            <button @click="login()">Đăng nhập</button>
+          </div>
         </div>
+        <div class="overlay-container">
+          <div class="overlay">
+            <div class="overlay-panel overlay-right">
+              <h3>TRANG QUẢN LÝ!</h3>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</template>
-<script>
-
-export default {
+  </template>
+  
+  <script>
+  import axios from "axios";
+  
+  export default {
     data() {
-        return {
-            email: "",
-            password: ""
-        }
-    },
-    mounted()
-    {
-     let admin=localStorage.getItem("admin-info");
-     if(admin)
-     {
-        this.$router.push({ name:'user'})       
-     }
+      return {
+        email: "",
+        password: "",
+      };
     },
     computed: {
-        isValidEmail() {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(this.email);
-        },
-        isValidPassword() {
-            return this.password.length >= 8;
-        },
+      isValidEmail() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(this.email);
+      },
+      isValidPassword() {
+        return this.password.length >= 8;
+      },
     },
-    methods:
-    {
-        async login() {
-
-            axios.post(`${import.meta.env.VITE_API_BASE_URL}admin/login?email=${this.email}&password=${this.password}`)
-                .then((response) => {
-                  
-                    if (response.data.status == 202) {
-                       localStorage.setItem("admin-info", JSON.stringify(response.data.admin));  
-                        this.$router.push({ name: 'user' })
-                    }
-                    else
-            {
-                alert('Mật khẩu hoặc email không đúng !!!');
-            }
-                });
-
+    methods: {
+      async login() {
+        try {
+          const response = await this.$axios.post("admin/login", {
+            email: this.email,
+            password: this.password,
+          });
+  
+          const user = response.data;
+          localStorage.setItem("admin", JSON.stringify(user));
+          // Chuyển hướng đến trang dashboard.
+          this.$router.push("admin/user");
+        } catch (error) {
+            console.log(error)
+          alert("Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập.");
         }
-
-    }
-}
-</script>
+      },
+    },
+  };
+  </script>
 
 <style scoped>
 .content {

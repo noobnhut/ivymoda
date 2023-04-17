@@ -14,20 +14,37 @@
                                 <label>Họ và tên:</label>
                             </div>
                             <div class="col col-input">
-                                <input class="form-control" value="Nguyễn Minh Nhựt" type="text" disabled="disabled">
+                                <input class="form-control" :value=user.username type="text">
                             </div>
                         </div>
                         <div class="row form-group" style="padding-top: 10px;">
                             <div class="col col-label">
-                                <label>Họ và tên:</label>
+                                <label>Email:</label>
                             </div>
                             <div class="col col-input">
-                                <input class="form-control" value="Nguyễn Minh Nhựt" type="text" disabled="disabled">
+                                <input class="form-control" :value=user.email type="text" disabled="disabled">
                             </div>
                         </div>
-
+                        <div class="row form-group" style="padding-top: 10px;">
+                            <div class="col col-label">
+                                <label>Địa chỉ:</label>
+                            </div>
+                            <div class="col col-input">
+                                <input class="form-control" :value="user.address ? user.address : ''"
+                                    placeholder="Cập nhật địa chỉ" type="text" @focus="hidePlaceholder">
+                            </div>
+                        </div>
+                        <div class="row form-group" style="padding-top: 10px;">
+                            <div class="col col-label">
+                                <label>Số điện thoại:</label>
+                            </div>
+                            <div class="col col-input">
+                                <input class="form-control" :value="user.phone ? user.phone : ''"
+                                    placeholder="Cập nhật số điện thoại" type="text" @focus="hidePlaceholder">
+                            </div>
+                        </div>
                         <hr>
-                        <button class="btn_user">
+                        <button class="btn_user" v-on:click="updateUserById">
                             Cập nhập thông tin
                         </button>
 
@@ -55,13 +72,50 @@
 
 <script>
 import user_nav from '../../components/customer/user_nav.vue';
-export default
-    {
-
-        components:
-        {
-            user_nav
+export default {
+    components: {
+        user_nav
+    },
+    data() {
+        return {
+            user: {}
+        };
+    },
+    mounted() {
+        this.getUserById();
+    },
+    methods: {
+        async getUserById() {
+            const userJSON = localStorage.getItem('user')
+            const user = JSON.parse(userJSON);
+            const userId = user.id;
+            console.log(userId);
+            try {
+                const response = await this.$axios.get(`getUserById/${userId}`);
+                this.user = response.data;
+            } catch (error) {
+                console.log(error);
+            }
         },
-    }
-    
+        async updateUserById() {
+            const userJSON = localStorage.getItem('user')
+            const user = JSON.parse(userJSON);
+            const userId = user.id;
+            const { username, address, phone } = this.user;
+            console.log( this.user);
+            try {
+                const response = await this.$axios.put(`updateUserById/${userId}`, {
+                    username,
+                    address,
+                    phone
+                });
+
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    },
+
+};
 </script>

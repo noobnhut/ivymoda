@@ -37,8 +37,6 @@ module.exports = function(passport) {
             username : displayName,
             provider: 'google',
             providerId: id,
-            url_avatar : photoUrl,
-            address // Add this line to save user's address
           }).then((newUser) => {
             return done(null, newUser);
           }).catch((err) => {

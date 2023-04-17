@@ -19,6 +19,8 @@ const {routerRender} = require('./routes/renderRouter');
 const {routerFollow} = require('./routes/FollowRouter');
 const routerMomo = require('./routes/MomoRouter');
 const routerCheckout = require('./routes/CheckoutRouter');
+const routerAmin = require('./routes/AdminRouter');
+
 
 const router = require('./routes/UserRouterAPI');
 
@@ -66,9 +68,20 @@ app.use(routerRender);
 app.use(routerFollow);
 app.use(routerMomo);
 app.use(routerCheckout);
+app.use(routerAmin);
 // Serve các tệp tĩnh trong thư mục "uploads"
 app.use(express.static("uploads"));
 
+
+
+const CryptoJS = require('crypto-js') 
+
+// ...
+
+// const password = 'admin'
+// const hash = CryptoJS.SHA256(password).toString()
+// console.log(hash)
+// 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
 // Khởi động máy chủ
 const port = 3000;
 app.listen(port, () => {
