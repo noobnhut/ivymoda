@@ -36,29 +36,31 @@
                         </div>
 
                         <div class="detail_size">
-                            <label v-for="size in product.sizes">
-                                <input type="radio" name="size" value="s">
-                                <span class="text-uppercase">{{ size.size_name }}</span>
-                            </label>
+                            <label for="cat_id">Danh mục:</label>
+                            <select id="cat_id" v-model="size_id" required>
+                                <option disabled>Chọn loại danh mục</option>
+                                <option v-for="size in product.sizes" :key="size.id" :value="size.id">{{ size.size_name }}
+                                </option>
+                            </select>
 
+
+
+                            <div class="detail_checksize">
+                                <a @click="showSize">Kiểm tra size của bạn</a>
+
+                            </div>
+
+                            <div class="detail_qty d-flex ">
+                                <b>SỐ LƯỢNG:</b>
+                                <input type="number" v-model="number">
+                            </div>
+
+                            <div class="detail_cart d-flex">
+                                <button class="btn" @click="addToCart2(product)">
+                                    Thêm vào giỏ
+                                </button>
+                            </div>
                         </div>
-
-                        <div class="detail_checksize">
-                            <a @click="showSize">Kiểm tra size của bạn</a>
-
-                        </div>
-
-                        <div class="detail_qty d-flex ">
-                            <b>SỐ LƯỢNG:</b>
-                            <input type="number">
-                        </div>
-
-                        <div class="detail_cart d-flex">
-                            <button class="btn">
-                                Thêm vào giỏ
-                            </button>
-                        </div>
-
                         <div class="detail_infor">
                             <h3>Chi tiết sản phẩm</h3>
                             <p>{{ product.information }}</p>
@@ -84,7 +86,8 @@
                     :breakpoints="{ 600: { slidesPerView: 1 }, 800: { slidesPerView: 2 }, 1000: { slidesPerView: 3 }, 1200: { slidesPerView: 4 }, 1400: { slidesPerView: 5 }, }"
                     class="mySwiper">
 
-                    <swiper-slide v-for="product in products.filter(item => item.id_cat == this.$route.params.id_cat && item.id !=this.$route.params.id)  ">
+                    <swiper-slide
+                        v-for="product in products.filter(item => item.id_cat == this.$route.params.id_cat && item.id != this.$route.params.id)  ">
                         <div class="product-card">
                             <div class="product-tumb">
                                 <swiper :modules="modules" class="mySwiper">
@@ -110,8 +113,31 @@
                                             (product.price * (product.discount) / 100)) }}
                                     </div>
                                     <div class="product-links">
-                                        <a class="action"><i class="fa fa-heart"></i></a>
-                                        <a class="action"><i class="fa fa-shopping-cart"></i></a>
+                                        <a class="action">
+                                            <!-- Sử dụng v-if để kiểm tra xem sản phẩm có trong danh sách thích hay không -->
+                                            <span v-if="likes.some(item => item.id_product === product.id)">
+                                                <!-- Sử dụng v-for để lặp lại các sản phẩm trong danh sách thích -->
+                                                <span v-for="like in likes.filter(item => item.id_product === product.id)">
+                                                    <!-- Kiểm tra trạng thái của sản phẩm và sử dụng màu đỏ hoặc #ccc tương ứng -->
+                                                    <i class="fa fa-heart" :style="{ color: like.status ? 'red' : '#ccc' }"
+                                                        @click="updatelike(like, product.id)"></i>
+                                                </span>
+                                            </span>
+                                            <!-- Nếu không có sản phẩm nào trong danh sách thích, hiển thị chữ màu #ccc -->
+                                            <span v-else>
+                                                <i class="fa fa-heart" style="color: #ccc" @click="addlike(product.id)"></i>
+                                            </span>
+                                        </a>
+
+                                        <a class="dropup-center dropup action"><i class="fa fa-shopping-cart" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <ul class="dropdown-menu">
+                                                    <li v-for="size in product.sizes">
+                                                        <p class="dropdown-item text-dark d-flex justify-content-center"
+                                                            @click="addToCart(product, size.id)">{{ size.size_name }} </p>
+                                                    </li>
+                                                </ul>
+                                            </i></a>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +153,11 @@
     <footerV />
 </template>
 
-
+<style>
+.selected {
+    color: red;
+}
+</style>
 <script>
 
 import navbar from '../components/navbar.vue';
@@ -137,7 +167,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 
 // Import Swiper styles
 import 'swiper/css';
-
+import Cookies from 'js-cookie';
 import 'swiper/css/pagination';
 
 // import required modules
@@ -165,15 +195,22 @@ export default
                 activeTab: 'tab1',
                 products: [],
                 cats: [],
+                likes: [],
+                size_id: '',
+                number: ''
             }
         },
         mounted() {
             console.log(this.$route.params.id);
             this.getCat();
             this.getproduct();
+            this.getlike();
         },
         methods:
         {
+            selectSize(size) {
+                this.selectedSize = size.id;
+            },
             showSize() {
                 this.isShowSize = !this.isShowSize
             },
@@ -204,6 +241,220 @@ export default
                     console.log(e);
                 }
             },
+
+            getSizeQuantity(productId, sizeid, colorId) {
+                const product = this.products.find(product => product.id === productId && product.color_id === colorId);
+                if (product) {
+                    const size = product.sizes.find(size => size.id === sizeid);
+                    if (size) {
+                        return size.quantity;
+                    }
+                }
+                return null;
+            },
+            getUser() {
+                const user_inf_gg = Cookies.get('user_inf_gg');
+                const user_inf_fb = Cookies.get('user_inf_fb');
+                const user = localStorage.getItem("user");
+
+                if (!user_inf_gg && !user_inf_fb && !user) {
+                    const userId = "trans";
+                    return userId;
+                }
+                else {
+                    const userId = user_inf_gg || user_inf_fb || user;
+                    return userId;
+                }
+
+            },
+            updateCartTotal(cart) {
+                let total = 0;
+                cart.items.forEach(item => {
+                    total += item.quantity * item.price;
+                });
+                cart.total = total;
+            },
+            updateCartQuality(cart) {
+                let Squantity = 0;
+                cart.items.forEach(item => {
+                    Squantity += item.quantity;
+                });
+                cart.Squantity = Squantity;
+            },
+            addToCart(product, sizeid) {
+                const userId = this.getUser();
+
+                // Lấy thông tin giỏ hàng từ sessionStorage
+                let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+
+                // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong sessionStorage hay chưa
+                let cartIndex = carts.findIndex(cart => cart.userId === userId);
+                let cart = cartIndex >= 0 ? carts[cartIndex] : null;
+                if (!cart) {
+                    // Nếu giỏ hàng của người dùng chưa tồn tại trong sessionStorage, tạo một giỏ hàng mới
+                    cart = {
+                        userId: userId,
+                        items: [],
+                        total: 0,
+                        Squantity: 0
+                    };
+                    carts.push(cart);
+                }
+
+                // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
+                let itemIndex = cart.items.findIndex(item => item.productId === product.id && item.sizeid === sizeid);
+                let item = itemIndex >= 0 ? cart.items[itemIndex] : null;
+                if (!item) {
+                    // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới
+                    item = {
+                        productId: product.id,
+                        colorId: product.color_id,
+                        sizeid: sizeid,
+                        price: product.price,
+                        quantity: 1
+                    };
+                    cart.items.push(item);
+                } else {
+                    // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
+                    if (this.getSizeQuantity(item.productId, item.sizeid, item.colorId) > item.quantity) {
+                        item.quantity += 1;
+                    }
+                    else {
+                        alert('Số lượng max')
+                    }
+
+                }
+                this.updateCartTotal(cart);
+                this.updateCartQuality(cart);
+                carts[cartIndex] = cart;
+                sessionStorage.setItem('carts', JSON.stringify(carts));
+
+            },
+
+            async addseen(id) {
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+                if (user) {
+                    try {
+                        const response = await this.$axios.post('addseen',
+                            {
+                                id_product: id,
+                                id_user: a['user'].id
+
+                            });
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            },
+            async getlike() {
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+
+                try {
+                    const result = await this.$axios.get(
+                        `getlike/` + a['user'].id
+                    );
+                    this.likes = result.data;
+                    console.log(result);
+
+                } catch (e) {
+                    console.log(e);
+                }
+
+            },
+            async addlike(id) {
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+                if (user) {
+                    try {
+                        const response = await this.$axios.post('addlike',
+                            {
+                                id_product: id,
+                                id_user: a['user'].id,
+                                status: true
+                            });
+                        location.reload()
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            },
+            async updatelike(like, id_product) {
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+
+                const statusreal = like.status ? false : true;;
+                if (user) {
+                    try {
+                        const response = await this.$axios.post('addlike',
+                            {
+                                id_product: id_product,
+                                id_user: a['user'].id,
+                                status: statusreal
+                            });
+                        like.status = !like.status
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+
+            },
+
+            addToCart2(product) {
+
+                const userId = this.getUser();
+
+                // Lấy thông tin giỏ hàng từ sessionStorage
+                let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+
+                // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong sessionStorage hay chưa
+                let cartIndex = carts.findIndex(cart => cart.userId === userId);
+                let cart = cartIndex >= 0 ? carts[cartIndex] : null;
+                if (!cart) {
+                    // Nếu giỏ hàng của người dùng chưa tồn tại trong sessionStorage, tạo một giỏ hàng mới
+                    cart = {
+                        userId: userId,
+                        items: [],
+                        total: 0,
+                        Squantity: 0
+                    };
+                    carts.push(cart);
+                }
+
+                // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
+                let itemIndex = cart.items.findIndex(item => item.productId === product.id && item.sizeid === this.size_id);
+                let item = itemIndex >= 0 ? cart.items[itemIndex] : null;
+                if (!item) {
+                    // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới
+                    item = {
+                        productId: product.id,
+                        colorId: product.color_id,
+                        sizeid: this.size_id,
+                        price: product.price,
+                        quantity: 1
+                    };
+                    cart.items.push(item);
+                } else {
+                    // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
+                    if (this.getSizeQuantity(item.productId, item.sizeid, item.colorId) > item.quantity) {
+                        item.quantity = this.number;
+                       
+                    }
+                    else {
+                        alert('Số lượng max')
+                    }
+
+                }
+                this.updateCartTotal(cart);
+                this.updateCartQuality(cart);
+                carts[cartIndex] = cart;
+                sessionStorage.setItem('carts', JSON.stringify(carts));
+                
+                
+            },
+
+
         }
 
     }
