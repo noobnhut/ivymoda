@@ -1,13 +1,17 @@
 <template>
     <div class="cart">
         <div class="cart_close">
-            <h5 class="title">Giỏ hàng</h5>
+
+            <h5 class="title">Giỏ hàng <span style="font-size: 14px;color:#ccc">{{ Squantity }} sản phẩm</span></h5>
+
+
             <button class="btn_close" @click="onclose"><i class="fa-solid fa-x"></i></button>
         </div>
         <div class="cart_item">
-            <div class="cart_list" v-for="cart in cartItems">
+            <div class="cart_list" v-for="(cart, index) in cartItems">
                 <div>
-                    <div class="cart_item d-flex" v-for="product in products.filter(item => item.id === cart.productId && item.color_id==cart.colorId)">
+                    <div class="cart_item d-flex"
+                        v-for="product in products.filter(item => item.id === cart.productId && item.color_id == cart.colorId)">
                         <div class="item_img">
                             <swiper :modules="modules" class="mySwiper">
                                 <swiper-slide v-for="img in product.images">
@@ -26,7 +30,8 @@
                             </div>
                             <div class="item_info_price">
                                 <p class="detail">Giá:{{ formatCurrency(product.price) }}</p>
-                                <input type="number" :value=cart.quantity>
+                                <input type="number" min="1" @input="updateCart($event, cart,index)" :value="cart.quantity">
+
                             </div>
                         </div>
                     </div>
@@ -37,14 +42,10 @@
 
 
         <div class="see_cart">
-            <span>Tổng tiền: <span class="fw-bold">{{formatCurrency(total)}}</span></span>
-
+            <span>Tổng tiền: <span class="fw-bold">{{ formatCurrency(total) }}</span></span>
             <router-link to="/cart">Xem giỏ hàng</router-link>
         </div>
     </div>
-
-    
-
 </template>
 
 <script>
@@ -63,26 +64,28 @@ export default
             return {
                 cartItems: null,
                 products: [],
-                total: 0
+                total: 0,
+                Squantity: 0
             }
         },
         components: {
-          
+
             Swiper,
             SwiperSlide,
-           
+
         },
         mounted() {
             let a = JSON.parse(sessionStorage.getItem('carts') || null);
             for (let b in a) {
                 this.cartItems = a[b].items
                 this.total = a[b].total
+                this.Squantity = a[b].Squantity;
             }
             this.getproduct()
 
         },
-      
-        
+
+
         methods:
         {
             onclose() {
@@ -104,6 +107,51 @@ export default
                     console.log(e);
                 }
             },
+            getUser() {
+                const user_inf_gg = Cookies.get('user_inf_gg');
+                const user_inf_fb = Cookies.get('user_inf_fb');
+                const user = localStorage.getItem("user");
+
+                if (!user_inf_gg && !user_inf_fb && !user) {
+                    const userId = "trans";
+                    return userId;
+                }
+                else {
+                    const userId = user_inf_gg || user_inf_fb || user;
+                    return userId;
+                }
+
+            },
+            getSizeQuantity(productId, sizeid, colorId) {
+                const product = this.products.find(product => product.id === productId && product.color_id === colorId);
+                if (product) {
+                    const size = product.sizes.find(size => size.id === sizeid);
+                    if (size) {
+                        return size.quantity;
+                    }
+                }
+                return null;
+            },
+            updateCart(event, cartS,index) {
+                let cart = JSON.parse(sessionStorage.getItem('carts') || []);
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+                if (cart !== null) {
+                    if (event.target.value > this.getSizeQuantity(cartS.productId, cartS.sizeid, cartS.colorId))
+                    {
+                    event.target.value = this.getSizeQuantity(cartS.productId, cartS.sizeid, cartS.colorId)
+                    cart[0]['items'][index].quantity = this.getSizeQuantity(cartS.productId, cartS.sizeid, cartS.colorId)
+                    sessionStorage.setItem('carts', JSON.stringify(cart));
+                    }
+                    else
+                    {
+                    cart[0]['items'][index].quantity = event.target.value
+                    sessionStorage.setItem('carts', JSON.stringify(cart));
+                    }
+                }
+                
+
+            }
         },
     }
 </script>
