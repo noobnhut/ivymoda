@@ -25,10 +25,6 @@ router.get('/auth/facebook/callback',
     const token = generateToken(req.user);
     const user = req.user;
 
-    // Lưu thông tin người dùng vào local storage
-    localStorage.setItem('token_fb', token);
-    localStorage.setItem('user_inf_fb', JSON.stringify(user));
-
     const redirectUrl = `${process.env.VITE_API_BASE_URL_API}?token_fb=${token}&user_inf_fb=${JSON.stringify(user)}`;
     res.redirect(redirectUrl);
   }
@@ -42,10 +38,6 @@ router.get('/auth/google/callback',
     // Lưu thông tin người dùng vào session
     const token = generateToken(req.user);
     const user = req.user;
-
-    // Lưu thông tin người dùng vào local storage
-    localStorage.setItem('token_gg', token);
-    localStorage.setItem('user_inf_gg', JSON.stringify(user));
 
     const redirectUrl = `${process.env.VITE_API_BASE_URL_API}?token_gg=${token}&user_inf_gg=${JSON.stringify(user)}`;
     res.redirect(redirectUrl);

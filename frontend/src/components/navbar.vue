@@ -136,21 +136,20 @@ export default {
     this.getSex();
     this.getcatsex();
     this.luuVaoLocalStorage();
-
   },
   methods:
   {
     handleButtonClick() {
-      let user = JSON.parse(localStorage.getItem("user"));
-      if (user) {
-        // Thông tin user đã tồn tại trong local storage, cho phép truy cập
-        this.buttonLabel = true
-      } else {
-        // Không tìm thấy thông tin user trong local storage, yêu cầu đăng nhập
-        alert("Bạn chưa đăng nhập");
-        this.$router.push({ name: "login" });
-      }
-    },
+  let user = JSON.parse(localStorage.getItem("user"));
+  if (user) {
+    // Thông tin user đã tồn tại trong local storage, cho phép truy cập
+    this.buttonLabel = 'dropdown'
+  } else {
+    // Không tìm thấy thông tin user trong local storage, yêu cầu đăng nhập
+    alert("Bạn chưa đăng nhập");
+    this.$router.push({ name: "login" });
+  }
+},
     getUser() {
       const user_inf_gg = Cookies.get('user_inf_gg');
       const user_inf_fb = Cookies.get('user_inf_fb');
@@ -175,9 +174,10 @@ export default {
       // Xóa cookie "token thong token"
       document.cookie = "token_fb=; expires=" + new Date(0).toUTCString();
       document.cookie = "token_gg=; expires=" + new Date(0).toUTCString();
-      let carts = JSON.parse(sessionStorage.getItem('carts') || null);
-      if (carts !== null) {
-        sessionStorage.setItem('carts', '');
+      let carts = JSON.parse(sessionStorage.getItem('carts')||null);
+      if (carts !== null)
+      {
+        sessionStorage.setItem('carts', '');   
         this.$router.push({ name: 'login' });
       }
       else {
@@ -214,46 +214,31 @@ export default {
         console.log(e);
       }
     },
-
+   
     luuVaoLocalStorage() {
       // Lấy query string từ URL hiện tại
       const queryString = window.location.search;
 
-      // Tạo một đối tượng URLSearchParams từ query string
-      const urlParams = new URLSearchParams(queryString);
+    // Tạo một đối tượng URLSearchParams từ query string
+    const urlParams = new URLSearchParams(queryString);
 
-      // Lấy giá trị của tham số token_gg từ URL params
-      const token_gg = urlParams.get('token_gg');
+    // Lấy giá trị của tham số token_gg từ URL params
+    const token_gg = urlParams.get('token_gg');
 
-      // Lấy giá trị của tham số user_inf_gg từ URL params
-      const user_inf_gg = urlParams.get('user_inf_gg');
+    // Lấy giá trị của tham số user_inf_gg từ URL params
+    const user_inf_gg = urlParams.get('user_inf_gg');
+    // Kiểm tra xem đã có giá trị token_gg và user_inf_gg hay chưa
+    if (token_gg && user_inf_gg) {
+      // Lưu thông tin token vào localStorage
+      localStorage.setItem('token', token_gg);
 
-      // Lấy giá trị của tham số token_fb từ URL params
-      const token_fb = urlParams.get('token_fb');
+      // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
+      const user = JSON.parse(decodeURIComponent(user_inf_gg));
 
-      // Lấy giá trị của tham số user_inf_fb từ URL params
-      const user_inf_fb = urlParams.get('user_inf_fb');
-
-      // Kiểm tra xem đã có giá trị token_gg và user_inf_gg hay chưa
-      if (token_gg && user_inf_gg) {
-        // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
-        const user = JSON.parse(decodeURIComponent(user_inf_gg));
-
-        // Lưu thông tin token và user vào localStorage
-        localStorage.setItem('token', token_gg);
-        localStorage.setItem('user', JSON.stringify(user));
-      }
-
-      // Kiểm tra xem đã có giá trị token_fb và user_inf_fb hay chưa
-      if (token_fb && user_inf_fb) {
-        // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
-        const user = JSON.parse(decodeURIComponent(user_inf_fb));
-
-        // Lưu thông tin token và user vào localStorage
-        localStorage.setItem('token', token_fb);
-        localStorage.setItem('user', JSON.stringify(user));
-      }
-    }
+      // Lưu thông tin user vào localStorage
+      localStorage.setItem('user', JSON.stringify(user));
   }
+  },
+}
 };
 </script>

@@ -1,1 +1,9 @@
+<<<<<<< HEAD
 {"id":2,"googleId":"113371430441273977426","facebookId":null,"provider":"google","providerId":"113371430441273977426","username":null,"email":"nguyen.nhut.99.2017@gmail.com","password":"do_not_save_password_when_login_with_google","address":"","phone":null,"avatar":null,"url_avatar":null,"createdAt":"2023-04-15T02:01:26.000Z","updatedAt":"2023-04-15T06:07:29.000Z"}
+=======
+<<<<<<< HEAD
+{"id":9,"googleId":"108811573649365577065","facebookId":"NO","provider":"google","providerId":"108811573649365577065","username":"Vân","email":"nguyenthevann6@gmail.com","password":"do_not_save_password_when_login_with_google","address":"","phone":null,"avatar":null,"url_avatar":"https://lh3.googleusercontent.com/a/AGNmyxZ81A-tlV7nAu3y7X8hvnKUAdlZNxU3aI_yw1TtnA=s96-c","createdAt":"2023-04-15T06:20:53.000Z","updatedAt":"2023-04-15T06:20:53.000Z"}
+=======
+{"id":2,"googleId":"113371430441273977426","facebookId":null,"provider":"google","providerId":"113371430441273977426","username":null,"email":"nguyen.nhut.99.2017@gmail.com","password":"do_not_save_password_when_login_with_google","address":"","phone":null,"avatar":null,"url_avatar":null,"createdAt":"2023-04-15T02:01:26.000Z","updatedAt":"2023-04-15T06:07:29.351Z"}
+>>>>>>> 392b30f29184b155cdc6063a6fd6dd1cf60ec55a
+>>>>>>> aecba52124fa62a540af8c85d8a0c8a89e4a92ae
