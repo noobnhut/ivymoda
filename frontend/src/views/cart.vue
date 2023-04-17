@@ -17,7 +17,7 @@
                                 <th scope="col">Xóa</th>
                             </tr>
                         </thead>
-                        <tbody v-for="cart in cartItems">
+                        <tbody v-for="(cart, index) in cartItems">
                             <tr v-for="product in products.filter(item => item.id === cart.productId && item.color_id == cart.colorId)"
                                 class="tr_order">
                                 <td>
@@ -43,16 +43,14 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td><input type="number" :value=cart.quantity></td>
+                                <td><input type="number" min="1" @input="updateCart($event, cart, index)"
+                                        :value="cart.quantity">
+                                </td>
                                 <td class="fw-bold ">{{ formatCurrency(product.price) }}</td>
                                 <td>
                                     <div>
                                         <div class="d-flex btn_cart justify-content-between">
-                                            <a class="text-decoration-none">
-                                                <button class="btn_user" @click="removeItem(index)">
-                                                    Xóa
-                                                </button>
-                                            </a>
+                                            <button class="btn_user" @click="removeItem(index)">X</button>
                                         </div>
                                     </div>
                                 </td>
@@ -104,7 +102,6 @@
 import navbar from '../components/navbar.vue';
 import footerV from '../components/footer.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { mapGetters, mapMutations } from 'vuex'
 // Import Swiper styles
 import 'swiper/css';
 
@@ -225,6 +222,37 @@ export default
                 this.cartItems = a[0].items; // Cập nhật lại mảng giỏ hàng trên giao diện
                 this.total = a[0].total; // Cập nhật lại tổng giá trị trên giao diện
                 this.Squantity = a[0].Squantity; // Cập nhật lại tổng số lượng trên giao diện
+            },
+            getSizeQuantity(productId, sizeid, colorId) {
+                const product = this.products.find(product => product.id === productId && product.color_id === colorId);
+                if (product) {
+                    const size = product.sizes.find(size => size.id === sizeid);
+                    if (size) {
+                        return size.quantity;
+                    }
+                }
+                return null;
+            },
+            updateCart(event, cartS, index) {
+                let cart = JSON.parse(sessionStorage.getItem('carts') || []);
+                let user = localStorage.getItem("user");
+                const a = JSON.parse(user);
+                if (cart !== null) {
+                    if (event.target.value > this.getSizeQuantity(cartS.productId, cartS.sizeid, cartS.colorId)) {
+                        event.target.value = this.getSizeQuantity(cartS.productId, cartS.sizeid, cartS.colorId)
+                        cart[0]['items'][index].quantity = this.getSizeQuantity(cartS.productId, cartS.sizeid, cartS.colorId)
+                        cart[0].total = cart[0].items.reduce((total, item) => total + item.price * item.quantity, 0); // Tính lại tổng giá trị của các sản phẩm trong giỏ hàng
+                        cart[0].Squantity = cart[0].items.reduce((total, item) => total + item.quantity, 0); // Tính lại tổng số lượng của các sản phẩm trong giỏ hàng
+                        sessionStorage.setItem('carts', JSON.stringify(cart));
+                    }
+                    else {
+                        cart[0]['items'][index].quantity = event.target.value;
+                        cart[0].total = cart[0].items.reduce((total, item) => total + item.price * item.quantity, 0); // Tính lại tổng giá trị của các sản phẩm trong giỏ hàng
+                        cart[0].Squantity = cart[0].items.reduce((total, item) => total + item.quantity, 0); // Tính lại tổng số lượng của các sản phẩm trong giỏ hàng
+                        sessionStorage.setItem('carts', JSON.stringify(cart));
+                    }
+                }
+
             }
         },
     }

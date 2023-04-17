@@ -134,6 +134,16 @@ export default {
       }
     },
 
+    getSizeQuantity(productId, sizeid,colorId) {
+      const product = this.products.find(product => product.id === productId && product.color_id===colorId);
+      if (product) {
+        const size = product.sizes.find(size => size.id === sizeid);
+        if (size) {
+          return size.quantity;
+        }
+      }
+      return null;
+    },
     getUser() {
       const user_inf_gg = Cookies.get('user_inf_gg');
       const user_inf_fb = Cookies.get('user_inf_fb');
@@ -198,15 +208,23 @@ export default {
         cart.items.push(item);
       } else {
         // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
-        item.quantity += 1;
+        if(this.getSizeQuantity(item.productId,item.sizeid,item.colorId)>item.quantity)
+        {
+          item.quantity += 1;
+        }
+        else
+        {
+          alert('Số lượng max')
+        }
 
       }
       this.updateCartTotal(cart);
       this.updateCartQuality(cart);
       carts[cartIndex] = cart;
       sessionStorage.setItem('carts', JSON.stringify(carts));
+ 
     },
-
+ 
     async addseen(id) {
       let user = localStorage.getItem("user");
       const a = JSON.parse(user);
