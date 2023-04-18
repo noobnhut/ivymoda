@@ -60,7 +60,6 @@ const registerUser = async (req, res) => {
     });
   }
 };
-
 //login user
 const loginUser = async (req, res) => {
   const {
@@ -106,47 +105,6 @@ const loginUser = async (req, res) => {
     });
     console.log("loi" + error)
   }
-};
-
-
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads/'); // Thư mục lưu trữ file upload
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); // Đổi tên file để tránh trùng lặp
-  }
-});
-
-// Khởi tạo middleware multer
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 30000000
-  } // Giới hạn dung lượng file upload (ở đây là 1MB)
-}).single('avatar');
-
-const addUser = async (req, res) => {
-  // Xử lý upload file
-  upload(req, res, async (err) => {
-    if (err) {
-      // Lỗi khi upload file
-      return res.status(500).json({
-        message: 'Lỗi khi upload file',
-        error: err
-      });
-    } else {
-      // Thành công khi upload file
-      const avatar = req.file.filename;
-      const url_avatar = `https://localhost:3000/${avatar}`;
-      return res.status(200).json({
-        url_avatar,
-        message: 'upload file xong'
-      });
-
-    }
-  });
 };
 //test api
 const getAllUser = async (req, res) => {
@@ -207,11 +165,11 @@ const updateUserById = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   registerUser,
   loginUser,
   getAllUser,
-  addUser,
   getUserById,
   updateUserById,
 

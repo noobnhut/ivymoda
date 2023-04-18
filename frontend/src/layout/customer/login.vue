@@ -63,7 +63,7 @@ export default {
           localStorage.setItem('user', JSON.stringify(login.data));
           localStorage.setItem('token', login.data.token);
           // Chuyển hướng đến trang chính của ứng dụng
-          this.$router.push({ name: 'home' });    
+          this.$router.push({ name: 'information' });    
           this.handleCart();      
         }
       } catch (error) {

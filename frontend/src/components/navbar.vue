@@ -100,17 +100,17 @@
     </div>
 
     <div class="navi_item">
-      <button type="button" class="btn position-relative">
+      <router-link :to="{ name: 'information' }" class="nav-link"> <button type="button" class="btn position-relative">
         <i class="fa-solid fa-user"></i>
-      </button>
-      <p>Thông tin cá nhân</p>
+      </button></router-link>
+      <p>Thông tin</p>
     </div>
 
     <div class="navi_item">
       <router-link :to="{ name: 'about' }" class="nav-link"> <button type="button" class="btn position-relative">
           <i class="fa-solid fa-circle-info"></i>
         </button></router-link>
-      <p>Về chúng tôi</p>
+      <p>Chúng tôi</p>
     </div>
 
   </div>
