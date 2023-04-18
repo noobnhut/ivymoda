@@ -41,6 +41,7 @@
         </div>
       </nav>
 
+      <!--search gio hang information-->
       <div class="right_nav">
         <div>
           <form class="search_form" @submit.prevent="showProductList">
@@ -85,6 +86,7 @@
           <i class="fa-solid fa-bag-shopping"></i>
         </button>
       </div>
+
     </div>
     <carthome v-if="isShowModel" @cancel="onShow"></carthome>
     <mobile v-if="isShowMobile" @cancelmobile="onShowMobile"></mobile>

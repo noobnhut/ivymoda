@@ -80,15 +80,9 @@ import footerV from '../components/footer.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import Cookies from 'js-cookie';
 import toast from '../components/toastclient.vue';
-
-
 // Import Swiper styles
 import 'swiper/css';
-
 import 'swiper/css/pagination';
-
-// import required modules
-import { Pagination } from 'swiper';
 export default
     {
         components:

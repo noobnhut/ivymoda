@@ -1,31 +1,59 @@
-# ivymoda
+<template>
+    <div>
+        <navbar />
+        <div class="container" style="padding-top: 100px;">
+            <h1>Kết quả tìm kiếm theo '{{ this.searchQuery }}'</h1>
+            <ul>
+                <li v-for="product in searchResults" :key="product.id">
+                    <img :src="product.image" alt="" style="width: 100px;">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                </li>
+            </ul>
+        </div>
+        <footerV />
+    </div>
+</template>
+  
+<script>
+import navbar from '../components/navbar.vue';
+import footerV from '../components/footer.vue';
 
-# khởi chạy phía backend
-# tạo mới thư mục backend
-# npm init 
-# npm install express mysql2 body-parser
-#node app.js
-
-# front end : --force
-# chạy lệnh : npx sequelize-cli db:migrate để đưa database vào phpmyadmin
-
-# đường dẫn website
-
-# client:
-- home: http://localhost:5173/
-- about: http://localhost:5173/about
-- detail-product: http://localhost:5173/detail
-- cart (giỏ hàng): http://localhost:5173/cart
-- thanh toán (order) : http://localhost:5173/order
-- login :http://localhost:5173/customer/login
-- register :http://localhost:5173/customer/register
-- thông tin khách hàng : http://localhost:5173/customer/information
-- sản phẩm đã xem : http://localhost:5173/customer/productsee
-- sản phẩm yêu thích: http://localhost:5173/customer/productlike
-
-# admin: chưa update nhiều
-- home: http://localhost:5173/admin
-
-8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-admin
-
+export default {
+    components: {
+        navbar,
+        footerV
+    },
+    data() {
+        return {
+            searchQuery: '',
+            searchResults: []
+        };
+    },
+    mounted() {
+        this.searchQuery = this.$route.query.q;
+        this.searchProducts();
+    },
+    methods: {
+        async searchProducts() {
+            if (this.searchQuery.length > 0) {
+                const response = await this.$axios.get(`search?q=${this.searchQuery}`);
+                const results = response.data;
+                const filteredResults = results.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                this.searchResults = filteredResults.map(result => ({
+                    id: result.id,
+                    name: result.name,
+                    url: result.url,
+                    images: result.images,
+                    id_cat: result.id_cat,
+                    color_id: result.color_id
+                }));
+                this.showResults = true;
+            } else {
+                this.searchResults = [];
+                this.showResults = false;
+            }
+        },
+    }
+};
+</script>

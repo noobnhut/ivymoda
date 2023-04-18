@@ -5,6 +5,8 @@ const Cat = db.Categories;
 const Sex = db.Sexes;
 const Color = db.colors;
 const Img = db.Imgs;
+const Size=  db.size;
+
 const sequelize = require('sequelize');
 const Op = sequelize.Op;
 const unidecode = require('unidecode');
@@ -219,27 +221,30 @@ const searchProduct = async (req, res) => {
           "discount",
         ],
         include: [
-          {
-            model: CatSex,
-            include: [
-              { model: Cat, attributes: ["id", "cat_name"] },
-              { model: Sex, attributes: ["Sexes_value"] },
-            ],
-            raw: true,
-            nest: true,
-            required: true,
-          },
-          {
-            model: Color,
-            attributes: ["id", "color", "color_code"],
-            include: [
-              {
-                model: Img,
-                attributes: ["id", "avatar", "url"],
-                required: true,
-              },
-            ],
-          },
+            {
+                model: CatSex,
+                include: [
+                    { model: Cat, attributes: ['id','cat_name']},
+                    { model: Sex, attributes: ['Sexes_value'] },
+                ],
+                raw: true,
+                nest: true,
+                required: true
+            },
+            {
+                model: Color,
+                attributes: ['id', 'color', 'color_code'],
+                include: [
+                    {
+                        model: Img,
+                        attributes: ['id', 'avatar', 'url'],required: true
+                    },
+                    {
+                        model: Size,
+                        attributes: ['id', 'size', 'quantity'],required: true
+                    }
+                ]
+            }
         ],
       });
   
@@ -265,6 +270,11 @@ const searchProduct = async (req, res) => {
               avatar: img.avatar,
               url: img.url,
             })),
+            sizes: color.sizes.map(size => ({
+                id: size.id,
+                size_name: size.size,
+                quantity: size.quantity,
+            }))
           };
   
           result.push(productByColor);
