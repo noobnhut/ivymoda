@@ -26,6 +26,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Products',
+    indexes: [{
+      name: 'name_index',
+      type: 'FULLTEXT',
+      fields: ['name'],
+    }]
   });
   return Products;
 };

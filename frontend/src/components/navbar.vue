@@ -42,11 +42,21 @@
       </nav>
 
       <div class="right_nav">
-        <form class="search_form ">
-          <button><i class="fa-solid fa-magnifying-glass"></i></button>
-          <input type="text" placeholder="TÌM KIẾM SẢN PHẨM" autocomplete="off" min-lenght="1">
-        </form>
-
+        <div>
+          <form class="search_form" @submit.prevent="showProductList">
+            <input type="text" name="search_query" placeholder="TÌM KIẾM SẢN PHẨM" autocomplete="off" minlength="1"
+              v-model="searchQuery" @input="searchProducts">
+            <ul class="show" v-show="showResults && searchResults.length > 0">
+              <li v-for="product in searchResults" :key="product.id"
+                @click="goToProductDetail(product.id, product.color_id, product.id_cat)">
+                <img :src="product.images && product.images.length > 0 ? product.images[0].url : ''" alt=""
+                  class="search-image">
+                {{ product.name }}
+              </li>
+            </ul>
+            <button class="search_button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </form>
+        </div>
         <div class="dropdown item_action">
           <button @click="handleButtonClick" class="btn_custom" data-bs-toggle="dropdown" :aria-expanded="buttonLabel">
             <i class="fa-solid fa-user"></i>
@@ -71,18 +81,14 @@
             </ul>
           </ul>
         </div>
-
         <button class=" btn_custom position-relative" @click="onShow">
           <i class="fa-solid fa-bag-shopping"></i>
         </button>
-
       </div>
-
     </div>
     <carthome v-if="isShowModel" @cancel="onShow"></carthome>
     <mobile v-if="isShowMobile" @cancelmobile="onShowMobile"></mobile>
   </div>
-
   <!--mobile bottom-->
   <div class="navi_nav justify-content-center ">
 
@@ -109,8 +115,6 @@
 
   </div>
 </template>
-
-
 <script>
 
 import carthome from './carthome.vue';
@@ -129,7 +133,9 @@ export default {
       isShowMobile: false,
       sexs: [],
       catsexs: [],
-
+      searchQuery: '',
+      searchResults: [],
+      showResults: false,
     }
   },
   mounted() {
@@ -140,16 +146,16 @@ export default {
   methods:
   {
     handleButtonClick() {
-  let user = JSON.parse(localStorage.getItem("user"));
-  if (user) {
-    // Thông tin user đã tồn tại trong local storage, cho phép truy cập
-    this.buttonLabel = 'dropdown'
-  } else {
-    // Không tìm thấy thông tin user trong local storage, yêu cầu đăng nhập
-    alert("Bạn chưa đăng nhập");
-    this.$router.push({ name: "login" });
-  }
-},
+      let user = JSON.parse(localStorage.getItem("user"));
+      if (user) {
+        // Thông tin user đã tồn tại trong local storage, cho phép truy cập
+        this.buttonLabel = 'dropdown'
+      } else {
+        // Không tìm thấy thông tin user trong local storage, yêu cầu đăng nhập
+        alert("Bạn chưa đăng nhập");
+        this.$router.push({ name: "login" });
+      }
+    },
     getUser() {
       const user_inf_gg = Cookies.get('user_inf_gg');
       const user_inf_fb = Cookies.get('user_inf_fb');
@@ -174,10 +180,9 @@ export default {
       // Xóa cookie "token thong token"
       document.cookie = "token_fb=; expires=" + new Date(0).toUTCString();
       document.cookie = "token_gg=; expires=" + new Date(0).toUTCString();
-      let carts = JSON.parse(sessionStorage.getItem('carts')||null);
-      if (carts !== null)
-      {
-        sessionStorage.setItem('carts', '');   
+      let carts = JSON.parse(sessionStorage.getItem('carts') || null);
+      if (carts !== null) {
+        sessionStorage.setItem('carts', '');
         this.$router.push({ name: 'login' });
       }
       else {
@@ -214,31 +219,165 @@ export default {
         console.log(e);
       }
     },
-   
+
     luuVaoLocalStorage() {
       // Lấy query string từ URL hiện tại
       const queryString = window.location.search;
 
-    // Tạo một đối tượng URLSearchParams từ query string
-    const urlParams = new URLSearchParams(queryString);
+      // Tạo một đối tượng URLSearchParams từ query string
+      const urlParams = new URLSearchParams(queryString);
 
-    // Lấy giá trị của tham số token_gg từ URL params
-    const token_gg = urlParams.get('token_gg');
+      // Lấy giá trị của tham số token_gg từ URL params
+      const token_gg = urlParams.get('token_gg');
 
-    // Lấy giá trị của tham số user_inf_gg từ URL params
-    const user_inf_gg = urlParams.get('user_inf_gg');
-    // Kiểm tra xem đã có giá trị token_gg và user_inf_gg hay chưa
-    if (token_gg && user_inf_gg) {
-      // Lưu thông tin token vào localStorage
-      localStorage.setItem('token', token_gg);
+      // Lấy giá trị của tham số user_inf_gg từ URL params
+      const user_inf_gg = urlParams.get('user_inf_gg');
+      // Kiểm tra xem đã có giá trị token_gg và user_inf_gg hay chưa
+      if (token_gg && user_inf_gg) {
+        // Lưu thông tin token vào localStorage
+        localStorage.setItem('token', token_gg);
 
-      // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
-      const user = JSON.parse(decodeURIComponent(user_inf_gg));
+        // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
+        const user = JSON.parse(decodeURIComponent(user_inf_gg));
 
-      // Lưu thông tin user vào localStorage
-      localStorage.setItem('user', JSON.stringify(user));
+        // Lưu thông tin user vào localStorage
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+    },
+    async searchProducts() {
+      if (this.searchQuery.length > 0) {
+        const response = await this.$axios.get(`search?q=${this.searchQuery}`);
+        const results = response.data;
+        const filteredResults = results.filter(result => result.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        this.searchResults = filteredResults.map(result => ({
+          id: result.id,
+          name: result.name,
+          url: result.url,
+          images: result.images,
+          id_cat: result.id_cat,
+          color_id: result.color_id
+        }));
+        this.showResults = true;
+      } else {
+        this.searchResults = [];
+        this.showResults = false;
+      }
+    },
+    goToProductDetail(productId, colorId, categoryId) {
+      // Chuyển hướng đến trang chi tiết sản phẩm tương ứng với giá trị "id" được truyền vào
+      this.$router.push({ name: 'detail', params: { id: productId, id_color: colorId, id_cat: categoryId } });
+    },
+    showProductList() {
+      if (this.searchQuery.trim().length > 0) {
+        this.$router.push({ name: 'search-product-list', query: { q: this.searchQuery } });
+        this.searchProducts();
+      }
+    },
+    submitSearch() {
+      this.showProductList();
+    },
   }
-  },
-}
 };
 </script>
+<style scoped>
+.search_form {
+  position: relative;
+}
+
+.search_form input {
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search_form ul {
+  position: absolute;
+  top: 100%;
+  /* tính từ input */
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  z-index: 999;
+  list-style-type: none;
+  /* loại bỏ dấu chấm đầu dòng */
+  margin: 0;
+  /* đặt margin về 0 */
+  padding: 0;
+  /* đặt padding về 0 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.search_form ul.show {
+  opacity: 1;
+}
+
+.search_form li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.search_form li:last-child {
+  border-bottom: none;
+}
+
+.search_form li:hover {
+  background-color: #f5f5f5;
+}
+
+.search_form button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 50px;
+  border: none;
+  background-color: #ccc;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.search_form button:hover {
+  background-color: #aaa;
+}
+
+.search_form i {
+  font-size: 16px;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  width: 20px;
+}
+
+.search_form i {
+  font-size: 16px;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  width: 20px;
+  color: #666;
+  /* màu sắc mặc định */
+  transition: color 0.2s ease-in-out;
+  /* hiệu ứng hover */
+}
+
+.search_form button:hover i {
+  color: #333;
+  /* màu sắc đậm hơn khi hover */
+}
+
+.search-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+</style>

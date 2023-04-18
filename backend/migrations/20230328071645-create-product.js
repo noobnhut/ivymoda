@@ -38,6 +38,11 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
+    await queryInterface.addIndex('Products', {
+      name: 'name_index',
+      type: 'FULLTEXT',
+      fields: ['name'],
+    });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Products');

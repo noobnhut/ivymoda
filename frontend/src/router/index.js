@@ -112,6 +112,7 @@ const router = createRouter({
           name: 'control_order',
           component: () => import('../layout/customer/control_order.vue')
         },
+        
       ],
     },
     {
@@ -133,6 +134,11 @@ const router = createRouter({
       path: '/cart',
       name: 'cart',
       component: () => import('../views/cart.vue')
+    },
+    {
+      path: '/search-product-list',
+      name: 'search-product-list',
+      component: () => import('../views/search-product-list.vue')
     },
     {
       path: '/order',

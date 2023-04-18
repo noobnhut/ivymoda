@@ -6,10 +6,10 @@
         </div>
         <div class="sidebar">
             <div class="logo" @click="ontoggleModel">
-               
-                    <i class="bx bx-menu menu-icon"></i>
-                    <span class="logo-name">IVYMODA</span>
-                
+
+                <i class="bx bx-menu menu-icon"></i>
+                <span class="logo-name">IVYMODA</span>
+
             </div>
 
             <div class="sidebar-content">
@@ -20,7 +20,7 @@
                             <span class="link">QL người dùng</span>
                         </router-link>
                     </li>
-               
+
                     <li class="list">
                         <router-link to="/admin/category" class="nav-link">
                             <i class="bx bx-bar-chart-alt-2 icon"></i>
@@ -70,7 +70,7 @@
                             <span class="link">QL size</span>
                         </router-link>
                     </li>
-                    
+
                     <li class="list">
                         <router-link to="/admin/bill" class="nav-link">
                             <i class="bx bx-folder-open icon"></i>
@@ -80,10 +80,10 @@
                 </ul>
                 <div class="bottom-cotent" style="border-top:1px solid #ccc ;">
                     <li class="list">
-                        <router-link to="/" class="nav-link">
+                        <a href="#" class="nav-link" @click="logout">
                             <i class="bx bx-log-out icon"></i>
                             <span class="link">Đăng xuất</span>
-                        </router-link>
+                        </a>
                     </li>
                 </div>
             </div>
@@ -91,7 +91,7 @@
 
 
     </nav>
-   <div class="overlay" @click='toggle = !toggle'></div>
+    <div class="overlay" @click='toggle = !toggle'></div>
 
     <div class="container" style="padding-top: 80px">
         <router-view></router-view>
@@ -117,6 +117,12 @@ export default {
     {
         ontoggleModel() {
             this.toggle = !this.toggle
+        },
+        logout() {
+            localStorage.removeItem('admin');
+            // Nếu bạn muốn chuyển hướng trang sau khi đăng xuất, 
+            // bạn có thể sử dụng phương thức router.push() của Vue Router
+            this.$router.push('/admin_login');
         }
     }
 
