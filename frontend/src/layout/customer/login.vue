@@ -8,6 +8,10 @@
             <p class="auth__description">
               Nếu bạn đã có tài khoản, hãy đăng nhập để tích lũy điểm thành viên và nhận được những ưu đãi tốt hơn!
             </p>
+            <div class="social-container">
+              <a @click="socialLogin('facebook')" class="social"><i class="fab fa-facebook-f"></i></a>
+              <a  @click="socialLogin('google')" class="social"><i class="fab fa-google-plus-g" style="color: red;"></i></a>  
+            </div>
             <div class="auth__form" role="login" name="frm_customer_account_email" >
               <div class="form-group">
                 <input class="form-control" name="customer_account" type="text" placeholder="Email" v-model="email">
@@ -40,7 +44,25 @@
     </div>
   </div>
 </template>
+<style>
+.social-container {
+	margin: 20px 0;
+  display: flex;
+    justify-content: center;
+}
 
+.social-container .social {
+	border: 1px solid #DDDDDD;
+	border-radius: 50%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 5px;
+	height: 40px;
+  text-decoration: none;
+	width: 40px;
+}
+</style>
 <script>
 import '../../assets/login.css';
 export default {

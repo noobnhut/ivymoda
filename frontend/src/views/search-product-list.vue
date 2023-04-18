@@ -66,7 +66,6 @@
 
         </div>
     <toast ref="toast"></toast>
-
         <footerV />
     </div>
 </template>
