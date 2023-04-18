@@ -197,7 +197,7 @@ export default
                 cats: [],
                 likes: [],
                 size_id: '',
-                number: ''
+                number: 1
             }
         },
         mounted() {
@@ -208,9 +208,7 @@ export default
         },
         methods:
         {
-            selectSize(size) {
-                this.selectedSize = size.id;
-            },
+           
             showSize() {
                 this.isShowSize = !this.isShowSize
             },

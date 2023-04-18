@@ -131,22 +131,7 @@ export default
                 }
                 return null;
             },
-            updateCartTotal(cart) {
-                let total = 0;
-                cart.items.forEach(item => {
-                    total += item.quantity * item.price;
-                });
-                cart.total = total;
-               
-            },
-            updateCartQuality(cart) {
-                let Squantity = 0;
-                cart.items.forEach(item => {
-                    Squantity += item.quantity;
-                });
-                cart.Squantity = Squantity;
-                
-            },
+            
             updateCart(event, cartS, index) {
                 let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
                 const userId = this.getUser();

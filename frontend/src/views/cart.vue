@@ -69,12 +69,12 @@
 
                     <div class="d-flex sum_cart justify-content-between">
                         <span>Tổng tiền tạm tính</span>
-                        <span>{{ total }}</span>
+                        <span>{{ formatCurrency(total) }}</span>
                     </div>
 
                     <div class="d-flex final_cart justify-content-between">
                         <span>Thành tiền</span>
-                        <span>{{ total }}</span>
+                        <span>{{ formatCurrency(total) }}</span>
                     </div>
 
                     <hr>
@@ -82,16 +82,20 @@
 
                     <div>
                         <div class="d-flex btn_cart justify-content-between">
-                            <a class="text-decoration-none">
-                                <button class="btn_user" @click="checkout()">
-                                    Thanh toán
+                            <div class=" d-flex justify-content-between">
+                                <button @click="gotoOrder" class="btn_user text-decoration-none">
+                                    Đặt hàng
                                 </button>
-                            </a>
+                                <button class="btn_user" @click="refresh()" style="margin-left:10px ;">
+                                    Cập nhập đơn hàng
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
     <footerV />
 </template>
@@ -104,6 +108,7 @@ import footerV from '../components/footer.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 // Import Swiper styles
 import 'swiper/css';
+import Cookies from 'js-cookie';
 
 import 'swiper/css/pagination';
 export default
@@ -233,25 +238,99 @@ export default
                 }
                 return null;
             },
+            getUser() {
+                const user_inf_gg = Cookies.get('user_inf_gg');
+                const user_inf_fb = Cookies.get('user_inf_fb');
+                const user = localStorage.getItem("user");
+
+                if (!user_inf_gg && !user_inf_fb && !user) {
+                    const userId = "trans";
+                    return userId;
+                }
+                else {
+                    const userId = user_inf_gg || user_inf_fb || user;
+                    return userId;
+                }
+
+            },
+            updateCartTotal(cart) {
+                let total = 0;
+                cart.items.forEach(item => {
+                    total += item.quantity * item.price;
+                });
+                cart.total = total;
+
+            },
+            updateCartQuality(cart) {
+                let Squantity = 0;
+                cart.items.forEach(item => {
+                    Squantity += item.quantity;
+                });
+                cart.Squantity = Squantity;
+
+            },
             updateCart(event, cartS, index) {
-                let cart = JSON.parse(sessionStorage.getItem('carts') || []);
-                let user = localStorage.getItem("user");
-                const a = JSON.parse(user);
+                let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+                const userId = this.getUser();
+
+                // Tìm kiếm giỏ hàng của người dùng hiện tại
+                let cartIndex = carts.findIndex(cart => cart.userId === userId);
+                let cart = cartIndex >= 0 ? carts[cartIndex] : null;
+
                 if (cart !== null) {
-                    if (event.target.value > this.getSizeQuantity(cartS.productId, cartS.sizeid, cartS.colorId)) {
-                        event.target.value = this.getSizeQuantity(cartS.productId, cartS.sizeid, cartS.colorId)
-                        cart[0]['items'][index].quantity = this.getSizeQuantity(cartS.productId, cartS.sizeid, cartS.colorId)
-                        cart[0].total = cart[0].items.reduce((total, item) => total + item.price * item.quantity, 0); // Tính lại tổng giá trị của các sản phẩm trong giỏ hàng
-                        cart[0].Squantity = cart[0].items.reduce((total, item) => total + item.quantity, 0); // Tính lại tổng số lượng của các sản phẩm trong giỏ hàng
-                        sessionStorage.setItem('carts', JSON.stringify(cart));
+                    // Lấy sản phẩm cần thay đổi số lượng
+                    let item = cart.items[index];
+
+                    // Kiểm tra số lượng mới có hợp lệ hay không
+                    let newQuantity = parseInt(event.target.value);
+                    if (newQuantity <= 0) {
+                        newQuantity = 1;
+                        event.target.value = newQuantity;
                     }
-                    else {
-                        cart[0]['items'][index].quantity = event.target.value;
-                        cart[0].total = cart[0].items.reduce((total, item) => total + item.price * item.quantity, 0); // Tính lại tổng giá trị của các sản phẩm trong giỏ hàng
-                        cart[0].Squantity = cart[0].items.reduce((total, item) => total + item.quantity, 0); // Tính lại tổng số lượng của các sản phẩm trong giỏ hàng
-                        sessionStorage.setItem('carts', JSON.stringify(cart));
+                    if (newQuantity > this.getSizeQuantity(item.productId, item.sizeid, item.colorId)) {
+                        newQuantity = this.getSizeQuantity(item.productId, item.sizeid, item.colorId);
+                        event.target.value = newQuantity;
+                        alert('Số lượng sản phẩm đã đạt tối đa.');
+                    }
+
+                    // Cập nhật số lượng sản phẩm và tổng giá trị trong giỏ hàng
+                    item.quantity = newQuantity;
+
+                    this.updateCartTotal(cart);
+                    this.updateCartQuality(cart);
+                    // Cập nhật giỏ hàng trong sessionStorage
+                    carts[cartIndex] = cart;
+                    sessionStorage.setItem('carts', JSON.stringify(carts));
+                }
+            },
+            refresh() {
+                let a = JSON.parse(sessionStorage.getItem('carts') || null);
+                for (let b in a) {
+                    this.cartItems = a[b].items
+                    this.total = a[b].total
+                    this.Squantity = a[b].Squantity;
+                }
+            },
+            gotoOrder() {
+                let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+                const userId = this.getUser();
+
+                // Tìm kiếm giỏ hàng của người dùng hiện tại
+                let cartIndex = carts.findIndex(cart => cart.userId === userId);
+                let cart = cartIndex >= 0 ? carts[cartIndex] : null;
+                if (cart !== null) {
+                    if (cart.items.length > 0) {
+                        this.$router.push({ name: 'order' });
+                    }
+                    else if (cart.items.length == 0) {
+                        alert('có cc gì đòi mua hàng')
                     }
                 }
+                else
+                {
+                    alert('có cc gì đòi mua hàng')
+                }
+
 
             }
         },

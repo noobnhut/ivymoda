@@ -65,7 +65,7 @@
                                                     <ul class="dropdown-menu">
                                                         <li v-for="size in product.sizes">
                                                             <p
-                                                                class="dropdown-item text-dark d-flex justify-content-center">
+                                                                class="dropdown-item text-dark d-flex justify-content-center" @click="addToCart(product, size.id)">
                                                                 {{ size.size_name }}</p>
                                                         </li>
                                                     </ul>
@@ -87,7 +87,7 @@
 
 <script>
 import { Swiper, SwiperSlide } from 'swiper/vue';
-
+import Cookies from 'js-cookie';
 // Import Swiper styles
 import 'swiper/css';
 
@@ -233,6 +233,97 @@ export default
                     }
                 }
             },
+            
+    getSizeQuantity(productId, sizeid,colorId) {
+      const product = this.products.find(product => product.id === productId && product.color_id===colorId);
+      if (product) {
+        const size = product.sizes.find(size => size.id === sizeid);
+        if (size) {
+          return size.quantity;
+        }
+      }
+      return null;
+    },
+    getUser() {
+      const user_inf_gg = Cookies.get('user_inf_gg');
+      const user_inf_fb = Cookies.get('user_inf_fb');
+      const user = localStorage.getItem("user");
+
+      if (!user_inf_gg && !user_inf_fb && !user) {
+        const userId = "trans";
+        return userId;
+      }
+      else {
+        const userId = user_inf_gg || user_inf_fb || user;
+        return userId;
+      }
+
+    },
+    updateCartTotal(cart) {
+      let total = 0;
+      cart.items.forEach(item => {
+        total += item.quantity * item.price;
+      });
+      cart.total = total;
+    },
+    updateCartQuality(cart) {
+      let Squantity = 0;
+      cart.items.forEach(item => {
+        Squantity += item.quantity;
+      });
+      cart.Squantity = Squantity;
+    },
+    addToCart(product, sizeid) {
+      const userId = this.getUser();
+
+      // Lấy thông tin giỏ hàng từ sessionStorage
+      let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+
+      // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong sessionStorage hay chưa
+      let cartIndex = carts.findIndex(cart => cart.userId === userId);
+      let cart = cartIndex >= 0 ? carts[cartIndex] : null;
+      if (!cart) {
+        // Nếu giỏ hàng của người dùng chưa tồn tại trong sessionStorage, tạo một giỏ hàng mới
+        cart = {
+          userId: userId,
+          items: [],
+          total: 0,
+          Squantity: 0
+        };
+        carts.push(cart);
+      }
+
+      // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
+      let itemIndex = cart.items.findIndex(item => item.productId === product.id && item.sizeid === sizeid);
+      let item = itemIndex >= 0 ? cart.items[itemIndex] : null;
+      if (!item) {
+        // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới
+        item = {
+          productId: product.id,
+          colorId: product.color_id,
+          sizeid: sizeid,
+          price: product.price,
+          quantity: 1
+        };
+        cart.items.push(item);
+      } else {
+        // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
+        if(this.getSizeQuantity(item.productId,item.sizeid,item.colorId)>item.quantity)
+        {
+          item.quantity += 1;
+        }
+        else
+        {
+          alert('Số lượng max')
+        }
+
+      }
+      this.updateCartTotal(cart);
+      this.updateCartQuality(cart);
+      carts[cartIndex] = cart;
+      sessionStorage.setItem('carts', JSON.stringify(carts));
+ 
+    },
         }
     }
 </script>
