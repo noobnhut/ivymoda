@@ -149,6 +149,7 @@
         </div>
 
     </div>
+    <toast ref="toast"></toast>
 
     <footerV />
 </template>
@@ -163,6 +164,8 @@
 import navbar from '../components/navbar.vue';
 import footerV from '../components/footer.vue';
 import checksize from '../components/checksize.vue';
+import toast from '../components/toastclient.vue';
+
 import { Swiper, SwiperSlide } from 'swiper/vue';
 
 // Import Swiper styles
@@ -181,6 +184,8 @@ export default
             checksize,
             Swiper,
             SwiperSlide,
+            toast
+
 
         },
         setup() {
@@ -208,7 +213,7 @@ export default
         },
         methods:
         {
-           
+
             showSize() {
                 this.isShowSize = !this.isShowSize
             },
@@ -297,6 +302,8 @@ export default
                         Squantity: 0
                     };
                     carts.push(cart);
+                    this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')
+
                 }
 
                 // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
@@ -316,9 +323,12 @@ export default
                     // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
                     if (this.getSizeQuantity(item.productId, item.sizeid, item.colorId) > item.quantity) {
                         item.quantity += 1;
+                        this.$refs.toast.showToast('Thêm thành công.')
+
                     }
                     else {
-                        alert('Số lượng max')
+                        this.$refs.toast.showToast('Số lượng đặt của sản phẩm đã tối đa.')
+
                     }
 
                 }
@@ -418,6 +428,8 @@ export default
                         Squantity: 0
                     };
                     carts.push(cart);
+                    this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')
+
                 }
 
                 // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
@@ -437,10 +449,12 @@ export default
                     // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
                     if (this.getSizeQuantity(item.productId, item.sizeid, item.colorId) > item.quantity) {
                         item.quantity = this.number;
-                       
+                        this.$refs.toast.showToast('Thêm thành công.')
+
                     }
                     else {
-                        alert('Số lượng max')
+                        this.$refs.toast.showToast('Số lượng đặt của sản phẩm đã tối đa.')
+
                     }
 
                 }
@@ -448,8 +462,8 @@ export default
                 this.updateCartQuality(cart);
                 carts[cartIndex] = cart;
                 sessionStorage.setItem('carts', JSON.stringify(carts));
-                
-                
+
+
             },
 
 

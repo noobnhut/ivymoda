@@ -97,11 +97,14 @@
         </div>
 
     </div>
+    <toast ref="toast"></toast>
+
     <footerV />
 </template>
 
 
 <script>
+import toast from '../components/toastclient.vue';
 
 import navbar from '../components/navbar.vue';
 import footerV from '../components/footer.vue';
@@ -119,6 +122,7 @@ export default
             footerV,
             Swiper,
             SwiperSlide,
+            toast
         },
         data() {
             return {
@@ -180,43 +184,7 @@ export default
 
                 return userId;
             },
-            async checkout() {
-                let a = JSON.parse(sessionStorage.getItem('carts') || '[]');
-                // check giỏ hàng rỗng
-                if (a.length === 0 || !a[0]?.items || a[0].items.length === 0) {
-                    console.error('có cc gì đâu mà thanh toán ?');
-                    return;
-                }
-                // Tạo đối tượng đơn hàng và chi tiết đơn hàng
-                let order = {
-                    userId: this.getIdUser(),
-                    total: this.total,
-                };
-                console.log('id của user = ' + order.userId);
 
-                let orderDetails = a[0]?.items.map(item => {
-                    return {
-                        productId: item.productId,
-                        quantity: item.quantity,
-                        price: item.price,
-                        userId: this.getIdUser()
-                    };
-                }) || [];
-                let data = {
-                    order: order,
-                    orderDetails: orderDetails
-                };
-                const checkout = await this.$axios.post(`orders`, data)
-                    .then(response => {
-                        console.log(response.data);
-                        // Xóa giỏ hàng sau khi lưu đơn hàng thành công
-                        sessionStorage.removeItem('carts');
-                        location.reload();
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            },
             removeItem(index) {
                 let removedItem = this.cartItems.splice(index, 1)[0]; // Lấy sản phẩm cần xóa và xóa khỏi mảng giỏ hàng
                 let a = JSON.parse(sessionStorage.getItem('carts') || '[]');
@@ -286,11 +254,14 @@ export default
                     if (newQuantity <= 0) {
                         newQuantity = 1;
                         event.target.value = newQuantity;
+
                     }
                     if (newQuantity > this.getSizeQuantity(item.productId, item.sizeid, item.colorId)) {
                         newQuantity = this.getSizeQuantity(item.productId, item.sizeid, item.colorId);
                         event.target.value = newQuantity;
-                        alert('Số lượng sản phẩm đã đạt tối đa.');
+                        this.$refs.toast.showToast('Số lượng đặt của sản phẩm đã tối đa.')
+
+
                     }
 
                     // Cập nhật số lượng sản phẩm và tổng giá trị trong giỏ hàng
@@ -310,6 +281,7 @@ export default
                     this.total = a[b].total
                     this.Squantity = a[b].Squantity;
                 }
+                this.$refs.toast.showToast('Cập nhập thành công.')
             },
             gotoOrder() {
                 let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
@@ -323,12 +295,13 @@ export default
                         this.$router.push({ name: 'order' });
                     }
                     else if (cart.items.length == 0) {
-                        alert('có cc gì đòi mua hàng')
+                        this.$refs.toast.showToast('Giỏ hàng trống.')
+
                     }
                 }
-                else
-                {
-                    alert('có cc gì đòi mua hàng')
+                else {
+                    this.$refs.toast.showToast('Giỏ hàng trống.')
+
                 }
 
 

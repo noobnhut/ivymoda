@@ -67,7 +67,9 @@
       </swiper-slide>
 
     </swiper>
+    
   </div>
+  <toast ref="toast"></toast>
 </template>
 <script>
 
@@ -80,6 +82,7 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination } from 'swiper';
+import toast from './toastclient.vue';
 export default {
   data() {
     return {
@@ -96,6 +99,7 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
+    toast
   },
   setup() {
     return {
@@ -206,22 +210,25 @@ export default {
           quantity: 1
         };
         cart.items.push(item);
+        this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')
       } else {
         // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
         if(this.getSizeQuantity(item.productId,item.sizeid,item.colorId)>item.quantity)
         {
           item.quantity += 1;
+          this.$refs.toast.showToast('Thêm thành công.')
+         
         }
         else
         {
-          alert('Số lượng max')
+          this.$refs.toast.showToast('Số lượng đặt của sản phẩm đã tối đa.')
         }
-
       }
       this.updateCartTotal(cart);
       this.updateCartQuality(cart);
       carts[cartIndex] = cart;
       sessionStorage.setItem('carts', JSON.stringify(carts));
+      
  
     },
  

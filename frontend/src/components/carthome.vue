@@ -47,9 +47,12 @@
             <router-link to="/cart">Xem giỏ hàng</router-link>
         </div>
     </div>
+  <toast ref="toast"></toast>
+
 </template>
 
 <script>
+import toast from './toastclient.vue';
 
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import Cookies from 'js-cookie';
@@ -73,6 +76,7 @@ export default
 
             Swiper,
             SwiperSlide,
+            toast
 
         },
         mounted() {
@@ -131,7 +135,22 @@ export default
                 }
                 return null;
             },
-            
+            updateCartTotal(cart) {
+                let total = 0;
+                cart.items.forEach(item => {
+                    total += item.quantity * item.price;
+                });
+                cart.total = total;
+
+            },
+            updateCartQuality(cart) {
+                let Squantity = 0;
+                cart.items.forEach(item => {
+                    Squantity += item.quantity;
+                });
+                cart.Squantity = Squantity;
+
+            },
             updateCart(event, cartS, index) {
                 let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
                 const userId = this.getUser();
@@ -153,7 +172,7 @@ export default
                     if (newQuantity > this.getSizeQuantity(item.productId, item.sizeid, item.colorId)) {
                         newQuantity = this.getSizeQuantity(item.productId, item.sizeid, item.colorId);
                         event.target.value = newQuantity;
-                        alert('Số lượng sản phẩm đã đạt tối đa.');
+                        this.$refs.toast.showToast('Số lượng sản phẩm đã đạt tối đa.');
                     }
 
                     // Cập nhật số lượng sản phẩm và tổng giá trị trong giỏ hàng
@@ -173,6 +192,7 @@ export default
                 this.cartItems = a[b].items
                 this.total = a[b].total
                 this.Squantity = a[b].Squantity;
+                this.$refs.toast.showToast('Cập nhập giỏ hàng thành công')
             }
             }
         },

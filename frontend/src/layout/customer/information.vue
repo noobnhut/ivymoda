@@ -7,9 +7,9 @@
 
             <div class="col-lg-8 col-xl">
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-8">
                         <h3 class="d-flex fw-bold">Thông tin cá nhân của bạn</h3>
-                        <div class="row form-group" style="padding-top: 10px;">
+                        <div class="row form-group" style="padding-top: 30px;">
                             <div class="col col-label">
                                 <label>Họ và tên:</label>
                             </div>
@@ -17,7 +17,7 @@
                                 <input class="form-control" v-model="user.username" type="text">
                             </div>
                         </div>
-                        <div class="row form-group" style="padding-top: 10px;">
+                        <div class="row form-group" style="padding-top: 30px;">
                             <div class="col col-label">
                                 <label>Email:</label>
                             </div>
@@ -25,16 +25,16 @@
                                 <input class="form-control" :value=user.email type="text" disabled="disabled">
                             </div>
                         </div>
-                        <div class="row form-group" style="padding-top: 10px;">
+                        <div class="row form-group" style="padding-top: 30px;">
                             <div class="col col-label">
                                 <label>Địa chỉ:</label>
                             </div>
                             <div class="col col-input">
-                                <input class="form-control" v-model="user.address" placeholder="Cập nhật địa chỉ"
-                                    type="text" @focus="hidePlaceholder">
+                                <textarea class="form-control" v-model="user.address" placeholder="Cập nhật địa chỉ"
+                                rows="4" cols="50" @focus="hidePlaceholder"></textarea>
                             </div>
                         </div>
-                        <div class="row form-group" style="padding-top: 10px;">
+                        <div class="row form-group" style="padding-top: 30px;">
                             <div class="col col-label">
                                 <label>Số điện thoại:</label>
                             </div>
@@ -50,7 +50,7 @@
 
                     </div>
 
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <table class="table">
                             <thead>
                                 <tr>

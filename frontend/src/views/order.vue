@@ -10,7 +10,7 @@
                         <label>Họ và tên:</label>
                     </div>
                     <div class="col col-input">
-                        <input class="form-control" v-model="user.username" type="text">
+                        <input class="form-control" v-model="user.username" type="text" disabled>
                     </div>
                 </div>
                 <div class="row form-group" style="padding-top: 10px;">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col col-input">
                         <input class="form-control" v-model="user.address" placeholder="Cập nhật địa chỉ" type="text"
-                            @focus="hidePlaceholder">
+                            @focus="hidePlaceholder " disabled>
                     </div>
                 </div>
                 <div class="row form-group" style="padding-top: 10px;">
@@ -36,8 +36,16 @@
                     </div>
                     <div class="col col-input">
                         <input class="form-control" v-model="user.phone" placeholder="Cập nhật số điện thoại" type="number"
-                            @focus="hidePlaceholder">
+                            @focus="hidePlaceholder" disabled>
                     </div>
+                </div>
+                <div class="d-flex btn_cart justify-content-between">
+                    <router-link to="/customer/information" class="text-decoration-none d-flex justify-content-between">
+                        <button class="btn_user">
+                          Quay lại cập nhập thông tin
+                        </button>
+
+                    </router-link>
                 </div>
                 <hr>
 
