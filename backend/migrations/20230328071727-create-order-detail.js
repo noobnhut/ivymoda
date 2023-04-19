@@ -31,6 +31,10 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER
       },
+      status: {
+        type: Sequelize.ENUM('Đã đặt', 'Đang giao', 'Đã giao'),
+        defaultValue: 'Đã đặt'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

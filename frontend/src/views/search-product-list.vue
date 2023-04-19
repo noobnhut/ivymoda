@@ -2,6 +2,7 @@
     <div>
         <navbar />
         <div class="container" style="padding-top:80px;">
+            <h3>Kết quả tìm kiếm cho '{{ this.searchQuery }}'</h3>
             <div class="row">
                 <div class="col-xl-3" v-for="product in searchResults">
                     <div class="product-card">

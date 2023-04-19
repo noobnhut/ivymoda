@@ -119,9 +119,6 @@ export default
           }
         )
         this.$refs.toast.showToast(catadd.data.message)
-        
-
-
       },
       async getCat() {
         try {
@@ -136,7 +133,6 @@ export default
         }
       },
       async updateCat() {
-
         const catupdate = await this.$axios.put(
           `updatecat/` + this.id,
           {
@@ -151,7 +147,6 @@ export default
           `deletecat/` + id,
         )
         this.$refs.toast.showToast(catdelete.data.message)
-
       },
     }
   }
