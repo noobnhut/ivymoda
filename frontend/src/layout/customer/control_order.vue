@@ -16,11 +16,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Thông tin mẫu</td>
-                            <td>Thông tin mẫu</td>
-                            <td>Thông tin mẫu</td>
-                            <td>Thông tin mẫu</td>
+                        <tr v-for="order in orders">
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.createdAt }}</td>
+                            <td >{{ order.status }}</td>
+                            <td>{{ formatCurrency(order.total) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -34,11 +34,52 @@
 import user_nav from '../../components/customer/user_nav.vue';
 export default
     {
-
+        data() {
+            return {
+                orders: [],
+                id: '',
+                total: '',
+                id_product: '',
+                quantity: '',
+                status: '{{ status }}',
+                products: []
+            }
+        },
         components:
         {
             user_nav
         },
+        mounted() {
+            this.getAllOrders()
+        },
+        methods:
+        {
+            getAllOrders() {
+                this.$axios.get(`orders/` + this.getID())
+                    .then(response => {
+                        this.orders = response.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.$refs.toast.show({ type: 'error', message: 'Lỗi khi lấy danh sách hóa đơn' });
+                    });
+            },
+            formatCurrency(value) {
+                let val = (value / 1).toFixed(0).replace('.', ',')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ'
+            },
+            getID() {
+                const userJSON = localStorage.getItem('user'); // Lấy chuỗi JSON từ localStorage
+                let userId;
+                const data = JSON.parse(userJSON); // Chuyển chuỗi JSON thành đối tượng JavaScript
+                if (data.id) {
+                    userId = data.id; // Lấy giá trị của thuộc tính "id" trong đối tượng "user"
+                } else {
+                    userId = data.user.id; // Lấy giá trị của thuộc tính "id" trong đối tượng "user" trong chuỗi JSON
+                }
+                return userId;
+            },
+        }
     }
-    
+
 </script>

@@ -27,7 +27,7 @@
                     </div>
                     <div class="col col-input">
                         <input class="form-control" v-model="user.address" placeholder="Cập nhật địa chỉ" type="text"
-                            @focus="hidePlaceholder " disabled>
+                            @focus="hidePlaceholder" disabled>
                     </div>
                 </div>
                 <div class="row form-group" style="padding-top: 10px;">
@@ -42,7 +42,7 @@
                 <div class="d-flex btn_cart justify-content-between">
                     <router-link to="/customer/information" class="text-decoration-none d-flex justify-content-between">
                         <button class="btn_user">
-                          Quay lại cập nhập thông tin
+                            Quay lại cập nhập thông tin
                         </button>
 
                     </router-link>
@@ -92,7 +92,7 @@
             <h3 class="fw-bold">Danh sách sản phẩm đã mua</h3>
         </div>
         <div class="content_right order_content">
-           
+
             <table class="table">
                 <thead>
                     <tr>
@@ -137,12 +137,13 @@
             </table>
         </div>
     </div>
+    <toast ref="toast"></toast>
+
     <footerV />
 </template>
 
 <style>
-.order_content
-{
+.order_content {
     overflow: auto;
     height: 250px;
 }
@@ -155,6 +156,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 // Import Swiper styles
 import 'swiper/css';
 import Cookies from 'js-cookie';
+import toast from '../components/toastclient.vue';
 
 import 'swiper/css/pagination';
 export default
@@ -165,6 +167,7 @@ export default
             footerV,
             Swiper,
             SwiperSlide,
+            toast
         },
         data() {
             return {
@@ -259,11 +262,13 @@ export default
                         console.log(response.data);
                         // Xóa giỏ hàng sau khi lưu đơn hàng thành công
                         sessionStorage.removeItem('carts');
-                        location.reload();
+                        this.$refs.toast.showToast('Mua hàng thành công !')
+
                     })
                     .catch(error => {
                         console.log(error);
                     });
+                this.$router.push({ name: "control_order" });
             },
             getUser() {
                 const user_inf_gg = Cookies.get('user_inf_gg');

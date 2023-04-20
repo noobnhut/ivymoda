@@ -222,6 +222,7 @@ export default
                         }
                     });
                     this.$refs.toast.showToast(response.data.message);
+                    this.getimg()
                 } catch (error) {
                     console.error(error);
                 }
@@ -230,14 +231,11 @@ export default
                 const detaildelete = await this.$axios.delete(
                     `deleteImg/` + id,
                 )
-                if (detaildelete.status == 200) {
+               
                     this.$refs.toast.showToast(detaildelete.data.message)
-                    location.reload()
-                }
-                else {
-                    this.$refs.toast.showToast(detaildelete.data.message)
-                    location.reload()
-                }
+                    this.getimg()
+                    
+               
             },
             async updateimg()
             {
@@ -250,7 +248,8 @@ export default
                             'Content-Type': 'multipart/form-data'
                         }
                     });
-                   
+                    this.$refs.toast.showToast( response.data.message)
+                    this.getimg()
                 } catch (error) {
                     console.error(error);
                 }

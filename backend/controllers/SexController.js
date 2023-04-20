@@ -52,7 +52,7 @@ const updateSex = async (req, res) => {
         }
         else if(existingSex && existingSex.id!=req.params.id)
         {
-            res.status(20).json({ message: "Dữ liệu trùng lặp" });
+            res.status(202).json({ message: "Dữ liệu trùng lặp" });
         }
         else {
             await Sex.update({ Sexes_value }, { where: { id: req.params.id } });

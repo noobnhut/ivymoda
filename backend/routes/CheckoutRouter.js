@@ -9,7 +9,7 @@ router.post('/api/orders', ordersController.createOrder);
 router.get('/api/orders', ordersController.getAllOrders);
 
 // Lấy danh sách đơn hàng của một người dùng
-router.get('/api/orders/:userId', ordersController.getOrdersByUserId);
+router.get('/api/orderdetail/:id', ordersController.getOrdersByUserId);
 
 // Cập nhật trạng thái của một chi tiết đơn hàng
 router.put('/api/orders/:orderDetailId', ordersController.updateOrderDetailStatus);

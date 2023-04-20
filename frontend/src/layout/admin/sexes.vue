@@ -85,6 +85,7 @@
 </template>
 
 <script>
+
 import toast from '../../components/toast.vue';
 export default
     {
@@ -114,8 +115,10 @@ export default
                     {
                         Sexes_value: this.Sexes_value
                     }
-
                 )
+                this.$refs.toast.showToast(catadd.data.message)
+                this.getSex()
+
             },
             async getSex() {
                 try {
@@ -137,38 +140,15 @@ export default
                         Sexes_value: this.Sexes_value
                     }
                 )
-                if (sexupdate.status == 200) {
-                    alert(sexupdate.data.message)
-                    location.reload()
-                }
-                else if (sexupdate.status == 201) {
-                    alert(sexupdate.data.message)
-                }
-                else if (sexupdate.status == 203) {
-                    alert(sexupdate.data.message)
-                }
-                else if (sexupdate.status == 202) {
-                    alert(sexupdate.data.message)
-                }
-                else if (sexupdate.status == 401) {
-                    alert(sexupdate.data.message)
-                }
+                this.$refs.toast.showToast(sexupdate.data.message)
+                this.getSex()
             },
             async deleteSex(id) {
                 const sexdelete = await this.$axios.delete(
                     `deleteSex/` + id
                 )
-                if (sexdelete.status == 200) {
-                    alert(sexdelete.data.message)
-                    location.reload()
-                }
-                else if (sexdelete.status == 202) {
-                    alert(sexdelete.data.message)
-                }
-                else {
-                    alert(sexdelete.data.message)
-                    location.reload()
-                }
+                this.$refs.toast.showToast(sexdelete.data.message)
+                this.getSex()
 
             },
         }

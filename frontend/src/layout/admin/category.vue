@@ -119,6 +119,7 @@ export default
           }
         )
         this.$refs.toast.showToast(catadd.data.message)
+        this.getCat()
       },
       async getCat() {
         try {
@@ -139,7 +140,9 @@ export default
             cat_name: this.cat_name
           }
         )
+        console.log(catupdate)
         this.$refs.toast.showToast(catupdate.data.message)
+        this.getCat()
 
       },
       async deleteCat(id) {
@@ -147,6 +150,8 @@ export default
           `deletecat/` + id,
         )
         this.$refs.toast.showToast(catdelete.data.message)
+        this.getCat()
+
       },
     }
   }

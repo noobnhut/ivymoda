@@ -47,7 +47,7 @@ const getAllOrders = async (req, res) => {
   }
 };
 const getOrdersByUserId = async (req, res) => {
-  const userId = req.params.userId;
+  const userId = req.params.id;
   try {
     // Lấy tất cả các đơn hàng của người dùng
     const orders = await Orders.findAll({
@@ -91,7 +91,8 @@ const getOrdersByUserId = async (req, res) => {
           createdAt: order.createdAt,
           updatedAt: order.updatedAt,
           total: total,
-          products: products
+          products: products,
+          status:products[0].status
         };
       })
     );

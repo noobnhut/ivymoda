@@ -48,7 +48,7 @@ const updateCat = async (req, res) => {
             res.status(201).json({ message: "Dữ liệu không thể rỗng" });
         }
         else if (existingCat && existingCat.id != req.params.id) {
-            res.status(20).json({ message: "Dữ liệu trùng lặp" });
+            res.status(202).json({ message: "Dữ liệu trùng lặp" });
         }
         else if (existingCatSex) {
             return res.status(202).json({ message: "danh mục đang dùng không thể update" });

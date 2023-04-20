@@ -236,6 +236,7 @@ export default
                             quantity: this.quantity
                         });
                     this.$refs.toast.showToast(response.data.message);
+                    this.getsize()
                 } catch (error) {
                     console.error(error);
                 }
@@ -245,14 +246,9 @@ export default
                 const detaildelete = await this.$axios.delete(
                     `deleteSize/` + id,
                 )
-                if (detaildelete.status == 200) {
                     this.$refs.toast.showToast(detaildelete.data.message)
-                    location.reload()
-                }
-                else {
-                    this.$refs.toast.showToast(detaildelete.data.message)
-                    location.reload()
-                }
+                    this.getsize()
+               
             },
 
             async updatesize() {
@@ -263,7 +259,8 @@ export default
                         size: this.size,
                         quantity: this.quantity
                     });
-
+                    this.$refs.toast.showToast(response.data.message)
+                    this.getsize()
                 } catch (error) {
                     console.error(error);
                 }

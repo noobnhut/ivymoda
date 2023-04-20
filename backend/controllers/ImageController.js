@@ -60,14 +60,14 @@ const getImg = async (req,res)=>{
       upload.array('avatar', 10)(req, res, async function (err) {
         const { id_color } = req.body;
         if (err instanceof multer.MulterError) {
-          return res.status(400).json({ error: err.message });
+          return res.status(400).json({message: err.message });
         } else if (err) {
-          return res.status(400).json({ error: err.message });
+          return res.status(400).json({message: err.message });
         }
   
         // Nếu không có file ảnh được chọn
         if (!req.files || req.files.length === 0) {
-          return res.status(400).json({ error: 'Vui lòng chọn ít nhất một ảnh đại diện' });
+          return res.status(400).json({message: 'Vui lòng chọn ít nhất một ảnh đại diện' });
         }
   
         const imgs = [];
@@ -89,7 +89,7 @@ const getImg = async (req,res)=>{
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'Lỗi server' });
+      return res.status(500).json({message: 'Lỗi server' });
     }
   };
 
@@ -99,15 +99,15 @@ const getImg = async (req,res)=>{
         const id = req.params.id;
         const { id_color } = req.body;
         if (err instanceof multer.MulterError) {
-          return res.status(400).json({ error: err.message });
+          return res.status(400).json({message: err.message });
         } else if (err) {
-          return res.status(400).json({ error: err.message });
+          return res.status(400).json({message: err.message });
         }
   
         const img = await Img.findByPk(id);
   
         if (!img) {
-          return res.status(404).json({ error: 'Không tìm thấy màu sắc' });
+          return res.status(404).json({message: 'Không tìm thấy màu sắc' });
         }
   
         // Kiểm tra nếu có file ảnh mới được chọn
@@ -134,7 +134,7 @@ const getImg = async (req,res)=>{
   
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'Lỗi server' });
+      return res.status(500).json({message: 'Lỗi server' });
     }
   }
 

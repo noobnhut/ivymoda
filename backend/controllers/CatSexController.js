@@ -60,12 +60,17 @@ const updateCatSex = async (req, res) => {
     if (!catsex) return res.status(404).json({ message: "Không tìm thấy dữ liệu" });
 
     const { id_cat,id_sex } = req.body;
+    const existingCatSex = await CatSex.findOne({where:{id_cat,id_sex}});
 
     try {
         if (id_cat == '' && id_sex =='') {
             res.status(201).json({ message: "Dữ liệu không thể rỗng" });
         }
-       
+        else if(existingCatSex && existingCatSex.id !== req.params.id )
+     {
+        return res.status(203).json({ message: 'danh mục đối tượng tồn tại trong hệ thống' });
+
+     }
         else {
             await CatSex.update({ id_cat ,id_sex }, { where: { id: req.params.id } });
             res.status(200).json({ message: "Cập nhật thành công" });

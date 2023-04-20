@@ -26,7 +26,7 @@
         <tbody>
           <tr v-for="product in products">
             <td>{{ product.name }}</td>
-            <td>{{ product.price }}</td>
+            <td>{{ formatCurrency( product.price) }}</td>
             <td>{{ product.information }}</td>
             <td>{{ product.discount }}%</td>
             <td>{{ product.cat_name }}</td>
@@ -199,6 +199,7 @@ export default
        this.id_product=product.id;
        this.id_catsex=product.id_catsex;
       },
+
       setDefault()
       {
         this.name='';
@@ -208,6 +209,10 @@ export default
        this.id_product='';
        this.id_catsex='';
       },
+      formatCurrency(value) {
+      let val = (value / 1).toFixed(0).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ'
+    },
       async addcatsex() {
         const productadd = await this.$axios.post(
           'addProduct',
@@ -216,11 +221,11 @@ export default
             name:this.name,
             price:this.price,
             information:this.information,
-            discount:this.discount
-            
+            discount:this.discount 
           } 
         )
         this.$refs.toast.showToast(productadd.data.message)
+        this.getproduct()
        
       },
       async updateProduct()
@@ -236,20 +241,16 @@ export default
           } 
         )
         this.$refs.toast.showToast(productupdate.data.message)
+        this.getproduct()
+
       },
       async deleteProduct(id)
       {
         const productdelete = await this.$axios.delete(
           `deleteProduct/` + id,
         )
-        if (productdelete.status == 200) {
-          this.$refs.toast.showToast(productdelete.data.message)
-          location.reload()
-        }
-        else {
-          this.$refs.toast.showToast(productdelete.data.message)
-          location.reload()
-        }
+        this.$refs.toast.showToast(productdelete.data.message)
+        this.getproduct()      
       }
     },
   }

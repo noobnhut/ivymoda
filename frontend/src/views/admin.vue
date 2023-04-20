@@ -15,35 +15,35 @@
             <div class="sidebar-content">
                 <ul class="lists">
                     <li class="list">
-                        <router-link to="/admin/user" class="nav-link">
+                        <router-link  to="/admin/user" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-bar-chart-alt-2 icon"></i>
                             <span class="link">QL người dùng</span>
                         </router-link>
                     </li>
 
                     <li class="list">
-                        <router-link to="/admin/category" class="nav-link">
+                        <router-link  to="/admin/category" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-bar-chart-alt-2 icon"></i>
                             <span class="link">QL danh mục</span>
                         </router-link>
                     </li>
 
                     <li class="list">
-                        <router-link to="/admin/sexes" class="nav-link">
+                        <router-link  to="/admin/sexes" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-bar-chart-alt-2 icon"></i>
                             <span class="link">QL đối tượng</span>
                         </router-link>
                     </li>
 
                     <li class="list">
-                        <router-link to="/admin/catsex" class="nav-link">
+                        <router-link  to="/admin/catsex" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-bar-chart-alt-2 icon"></i>
                             <span class="link">QL danh mục đối tượng</span>
                         </router-link>
                     </li>
 
                     <li class="list">
-                        <router-link to="/admin/product" class="nav-link">
+                        <router-link  to="/admin/product" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-bar-chart-alt-2 icon"></i>
                             <span class="link">QL sản phẩm</span>
                         </router-link>
@@ -51,28 +51,28 @@
 
 
                     <li class="list">
-                        <router-link to="/admin/color" class="nav-link">
+                        <router-link  to="/admin/color" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-bar-chart-alt-2 icon"></i>
                             <span class="link">QL màu</span>
                         </router-link>
                     </li>
 
                     <li class="list">
-                        <router-link to="/admin/img" class="nav-link">
+                        <router-link  to="/admin/img" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-bar-chart-alt-2 icon"></i>
                             <span class="link">QL hình ảnh</span>
                         </router-link>
                     </li>
 
                     <li class="list">
-                        <router-link to="/admin/size" class="nav-link">
+                        <router-link  to="/admin/size" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-bar-chart-alt-2 icon"></i>
                             <span class="link">QL size</span>
                         </router-link>
                     </li>
 
                     <li class="list">
-                        <router-link to="/admin/bill" class="nav-link">
+                        <router-link  to="/admin/bill" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-folder-open icon"></i>
                             <span class="link">QL hóa đơn</span>
                         </router-link>

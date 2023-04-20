@@ -198,6 +198,7 @@ export default
           }
         )
         this.$refs.toast.showToast(catsexadd.data.message)
+        this.getcatsex()
       },
       async updatecatsex() {
         const catsexupdate = await this.$axios.put(
@@ -208,6 +209,7 @@ export default
           }
         )
         this.$refs.toast.showToast(catsexupdate.data.message)
+        this.getcatsex()
 
       },
       async deleteCatSex(id) {
@@ -215,6 +217,7 @@ export default
           `deleteCatSex/` + id,
         )
         this.$refs.toast.showToast(catsexdelete.data.message)
+        this.getcatsex()
 
       },
 

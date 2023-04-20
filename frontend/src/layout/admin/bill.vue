@@ -22,7 +22,7 @@
                         <td>{{ order.total }}.000đ</td>
                         <td>
                             <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"
-                                @click="getOrderDetails(order.id)">xem chi tiết</a>
+                                @click="sendata(order)">Xem chi tiết</a>
                             <a class="delete"><i class="fa-solid fa-trash-can"></i></a>
                         </td>
                     </tr>
@@ -40,31 +40,24 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Chi tiết hóa đơn</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+
+                <div class="modal-body" v-for="order in orderDetails.filter(item => item.id == this.id)">
                     <div class="form-group">
-                        <label><strong>Mã hóa đơn:</strong> {{ id }}</label>
+                        <label><strong>Mã hóa đơn:</strong> {{ order.id }}</label>
                     </div>
                     <div class="form-group">
-                        <label><strong>Mã sản phẩm:</strong> {{ id_product }}</label>
+                        <label><strong>Danh sách sản phẩm:</strong></label>
+                        <p v-for="product in order.products">Tên: {{ product.name }} - Giá: {{product.price}} - Số lượng: {{product.quantity}}</p>
                     </div>
                     <div class="form-group">
-                        <label><strong>Tên sản phẩm:</strong> {{ name }}</label>
-                    </div>
-                    <div class="form-group">
-                        <label><strong>Số lượng:</strong> {{ quantity }}</label>
-                    </div>
-                    <div class="form-group">
-                        <label><strong>Giá:</strong> {{ price }}</label>
-                    </div>
-                    <div class="form-group">
-                        <label><strong>Trạng thái hiện tại:</strong> {{ status }} </label>
+                        <label><strong>Trạng thái hiện tại:</strong> {{ order.status }} </label>
                     </div>
                     <div class="form-group">
                         <label for="status-select"><strong>chọn trạng thái mới:</strong></label>
                         <select class="form-control" id="status-select" v-model="status">
-                            <option value="đã đặt" v-bind:selected="status === 'đã đặt'">Đã đặt</option>
-                            <option value="đang giao" v-bind:selected="status === 'đang giao'">Đang giao</option>
-                            <option value="đã giao" v-bind:selected="status === 'đã giao'">Đã giao</option>
+                            <option value="đã đặt" v-bind:selected="status === 'Đã đặt'">Đã đặt</option>
+                            <option value="đang giao" v-bind:selected="status === 'Đang giao'">Đang giao</option>
+                            <option value="đã giao" v-bind:selected="status === 'Đã giao'">Đã giao</option>
                         </select>
                     </div>
 
@@ -87,17 +80,21 @@ export default
             return {
                 orders: [],
                 id: '',
+                id_user: 0,
                 total: '',
                 id_product: '',
                 quantity: '',
                 status: '{{ status }}',
-                products: []
+                products: [],
+                orderDetails: []
+
             }
         },
         components: {
             toast
         },
         mounted() {
+           
             this.getAllOrders();
         },
         methods: {
@@ -111,35 +108,23 @@ export default
                         this.$refs.toast.show({ type: 'error', message: 'Lỗi khi lấy danh sách hóa đơn' });
                     });
             },
-            getOrderDetails(orderId) {
-                this.$axios.get(`orders/${orderId}`)
-                    .then(response => {
-                        const orderDetails = response.data;
-                        this.id = orderDetails[0].id;
-                        this.total = orderDetails[0].total;
-                        this.products = orderDetails[0].products; // Thêm dòng này để lấy thông tin sản phẩm
-                        this.id_product = orderDetails[0].products[0].id;
-                        this.quantity = orderDetails[0].products[0].quantity,
-                            this.price = orderDetails[0].products[0].price,
-                            this.status = orderDetails[0].products[0].status,
-                            this.name = orderDetails[0].products[0].name
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.$refs.toast.show({ type: 'error', message: 'Lỗi khi lấy chi tiết hóa đơn' });
-                    });
-            },
-            showOrderDetails(order) {
+            sendata(order) {
                 this.id = order.id;
-                this.id_user = order.id_user;
-                this.id_product = order.id_product;
-                this.quantity = order.quantity;
-                this.price = order.price;
-                this.status = order.status;
-                this.name = order.name;
+                this.id_user = order.id_user
+                this.getOrderDetails();
             },
+            async getOrderDetails() {
+                console.log(this.id_user); // in ra giá trị của biến this.id_user để kiểm tra
+                try {
+                    const result = await this.$axios.get(`orderdetail/` + this.id_user);
+                    this.orderDetails = result.data;
+                } catch (e) {
+                    this.orderDetails = []
+                }
+            }
+            ,
             updateStatus(orderId, newStatus) {
-                console.log(orderId, newStatus);
+               
                 const updateOrder = this.$axios.put(`orders/${orderId}`, { status: newStatus })
                     .then(response => {
                         // Cập nhật trạng thái đơn hàng trong danh sách hiện tại
@@ -149,10 +134,13 @@ export default
                         }
                         // Hiển thị thông báo thành công
                         this.$refs.toast.showToast(`trạng thái đơn đã chuyển thành : ${newStatus}`);
+                        this.status = 'đã đặt';
+                        this.getOrderDetails()
                     })
                     .catch(error => {
                         console.log(error);
                     });
+                    
             }
         }
     }
