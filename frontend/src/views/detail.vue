@@ -347,7 +347,7 @@ export default
                         const response = await this.$axios.post('addseen',
                             {
                                 id_product: id,
-                                id_user: a['user'].id
+                                id_user: a.id
 
                             });
                     } catch (error) {
@@ -361,7 +361,7 @@ export default
 
                 try {
                     const result = await this.$axios.get(
-                        `getlike/` + a['user'].id
+                        `getlike/` + a.id
                     );
                     this.likes = result.data;
                     console.log(result);
@@ -372,21 +372,7 @@ export default
 
             },
             async addlike(id) {
-                let user = localStorage.getItem("user");
-                const a = JSON.parse(user);
-                if (user) {
-                    try {
-                        const response = await this.$axios.post('addlike',
-                            {
-                                id_product: id,
-                                id_user: a['user'].id,
-                                status: true
-                            });
-                        location.reload()
-                    } catch (error) {
-                        console.error(error);
-                    }
-                }
+                console.log(id)
             },
             async updatelike(like, id_product) {
                 let user = localStorage.getItem("user");
@@ -398,7 +384,7 @@ export default
                         const response = await this.$axios.post('addlike',
                             {
                                 id_product: id_product,
-                                id_user: a['user'].id,
+                                id_user: a.id,
                                 status: statusreal
                             });
                         like.status = !like.status

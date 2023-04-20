@@ -55,7 +55,7 @@ export default
         methods:
         {
             getAllOrders() {
-                this.$axios.get(`orders/` + this.getID())
+                this.$axios.get(`orderdetail/` + this.getID())
                     .then(response => {
                         this.orders = response.data;
                     })
@@ -79,7 +79,9 @@ export default
                 }
                 return userId;
             },
+            
         }
+
     }
 
 </script>

@@ -113,7 +113,7 @@ export default {
       const a = JSON.parse(user);
       if(cart!==null)
       {      
-       cart[0]['userId']=a['user'].id;
+       cart[0]['userId']=a.id;
       }
       if(cart==null)
       {

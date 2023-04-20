@@ -92,10 +92,34 @@ const loginUser = async (req, res) => {
     }, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN
     });
-
+    const userData = {
+      id: user.id,
+      googleId: user.googleId,
+      facebookId: user.facebookId,
+      provider: user.provider,
+      providerId: user.providerId,
+      username: user.username,
+      email: user.email,
+      password: "do_not_save_password_when_login_with_google",
+      address: user.address,
+      phone: user.phone,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
     // Trả về JWT và thông tin người dùng
     res.json({
-      user,
+      id: user.id,
+      googleId: user.googleId,
+      facebookId: user.facebookId,
+      provider: user.provider,
+      providerId: user.providerId,
+      username: user.username,
+      email: user.email,
+      password: "do_not_save_password_when_login_with_google",
+      address: user.address,
+      phone: user.phone,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
       token
     });
   } catch (error) {

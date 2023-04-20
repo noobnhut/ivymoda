@@ -11,19 +11,19 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>mã khách hàng:</th>
-                        <th>tổng tiền hóa đơn:</th>
+                        <th>Mã khách hàng:</th>
+                        <th>Tổng tiền hóa đơn:</th>
                         <th>Actions:</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="order in orders">
                         <td>{{ order.id_user }}</td>
-                        <td>{{ order.total }}.000đ</td>
+                        <td>{{   formatCurrency(order.total) }}</td>
                         <td>
                             <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"
                                 @click="sendata(order)">Xem chi tiết</a>
-                            <a class="delete"><i class="fa-solid fa-trash-can"></i></a>
+                            
                         </td>
                     </tr>
                 </tbody>
@@ -47,7 +47,7 @@
                     </div>
                     <div class="form-group">
                         <label><strong>Danh sách sản phẩm:</strong></label>
-                        <p v-for="product in order.products">Tên: {{ product.name }} - Giá: {{product.price}} - Số lượng: {{product.quantity}}</p>
+                        <p v-for="product in order.products">Tên: {{ product.name }} - Giá: {{  formatCurrency(product.price)}} - Số lượng: {{product.quantity}}</p>
                     </div>
                     <div class="form-group">
                         <label><strong>Trạng thái hiện tại:</strong> {{ order.status }} </label>
@@ -141,7 +141,11 @@ export default
                         console.log(error);
                     });
                     
-            }
+            },
+            formatCurrency(value) {
+                let val = (value / 1).toFixed(0).replace('.', ',')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ'
+            },
         }
     }
 </script>

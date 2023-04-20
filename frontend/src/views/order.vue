@@ -263,12 +263,16 @@ export default
                         // Xóa giỏ hàng sau khi lưu đơn hàng thành công
                         sessionStorage.removeItem('carts');
                         this.$refs.toast.showToast('Mua hàng thành công !')
-
+                        if (response.data.message === 'Đặt hàng thành công') {
+                            setTimeout(() => {
+                                this.$router.push({ name: "control_order" });
+                            }, 1000); 
+                        }
                     })
                     .catch(error => {
                         console.log(error);
                     });
-                this.$router.push({ name: "control_order" });
+
             },
             getUser() {
                 const user_inf_gg = Cookies.get('user_inf_gg');
