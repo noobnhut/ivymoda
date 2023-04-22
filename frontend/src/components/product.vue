@@ -148,19 +148,7 @@ export default {
       }
       return null;
     },
-    getUser() {
-                let user = JSON.parse(localStorage.getItem("user"));
 
-                if (!user) {
-                    const userId = "trans";
-                    return userId;
-                }
-                else {
-                    const userId = user.id;
-                    return userId;
-                }
-
-            },
     updateCartTotal(cart) {
       let total = 0;
       cart.items.forEach(item => {
@@ -175,12 +163,22 @@ export default {
       });
       cart.Squantity = Squantity;
     },
+    getUser() {
+      let user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        const userId = "trans";
+        return userId;
+      }
+      else {
+        const userId = user.id;
+        return userId;
+      }
+    },
     addToCart(product, sizeid) {
-      const userId = this.getUser();
-
+      let userId = this.getUser();
+      console.log(userId);
       // Lấy thông tin giỏ hàng từ sessionStorage
       let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
-
       // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong sessionStorage hay chưa
       let cartIndex = carts.findIndex(cart => cart.userId === userId);
       let cart = cartIndex >= 0 ? carts[cartIndex] : null;
@@ -214,18 +212,20 @@ export default {
         if (this.getSizeQuantity(item.productId, item.sizeid, item.colorId) > item.quantity) {
           item.quantity += 1;
           this.$refs.toast.showToast('Thêm thành công.')
-
         }
         else {
           this.$refs.toast.showToast('Số lượng đặt của sản phẩm đã tối đa.')
         }
       }
+
       this.updateCartTotal(cart);
       this.updateCartQuality(cart);
-      carts[cartIndex] = cart;
+      // Nếu người dùng đăng nhập, cập nhật userId trong sessionStorage
+      if (userId !== "trans") {
+        cart.userId = userId;
+        carts[cartIndex] = Object.assign({}, cart);
+      }
       sessionStorage.setItem('carts', JSON.stringify(carts));
-
-
     },
 
     async addseen(id) {

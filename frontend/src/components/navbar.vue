@@ -147,6 +147,7 @@ export default {
     this.getSex();
     this.getcatsex();
     this.luuVaoLocalStorage();
+    this.updateCartUserId();
   },
   methods:
   {
@@ -163,18 +164,18 @@ export default {
     },
 
     getUser() {
-                let user = JSON.parse(localStorage.getItem("user"));
+      let user = JSON.parse(localStorage.getItem("user"));
 
-                if (!user) {
-                    const userId = "trans";
-                    return userId;
-                }
-                else {
-                    const userId = user.id;
-                    return userId;
-                }
+      if (!user) {
+        const userId = "trans";
+        return userId;
+      }
+      else {
+        const userId = user.id;
+        return userId;
+      }
 
-            },
+    },
     outWeb() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -225,6 +226,7 @@ export default {
     },
 
     luuVaoLocalStorage() {
+
       // Lấy query string từ URL hiện tại
       const queryString = window.location.search;
 
@@ -246,8 +248,30 @@ export default {
 
         // Lưu thông tin user vào localStorage
         localStorage.setItem('user', JSON.stringify(user));
+
       }
     },
+    updateCartUserId() {
+      // Kiểm tra xem thông tin người dùng có tồn tại trong localStorage hay không
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        // Nếu thông tin người dùng tồn tại thì lấy giá trị userId từ localStorage
+        const userId = user.id;
+        console.log(userId);
+
+        // Lấy danh sách các giỏ hàng từ sessionStorage
+        let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+
+        // Duyệt qua danh sách các giỏ hàng và cập nhật giá trị userId của chúng
+        carts.forEach(cart => {
+          cart.userId = userId;
+        });
+
+        // Lưu lại danh sách các giỏ hàng đã được cập nhật vào sessionStorage
+        sessionStorage.setItem('carts', JSON.stringify(carts));
+      }
+    },
+
     async searchProducts() {
       if (this.searchQuery.length > 0) {
         const response = await this.$axios.get(`search?q=${this.searchQuery}`);
@@ -383,4 +407,5 @@ export default {
   height: 50px;
   margin-right: 10px;
   vertical-align: middle;
-}</style>
+}
+</style>
