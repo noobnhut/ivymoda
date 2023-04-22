@@ -207,6 +207,7 @@ export default
                 return null;
             },
             getUser() {
+
                 let user = JSON.parse(localStorage.getItem("user"));
 
                 if (!user) {

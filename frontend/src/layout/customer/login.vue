@@ -96,7 +96,6 @@ export default {
         console.log(error);
       }
     },
-    //fix 
     socialLogin(provider) {
       // Thực hiện đăng nhập bằng cách chuyển hướng đến trang đăng nhập của nhà cung cấp
       switch (provider) {
