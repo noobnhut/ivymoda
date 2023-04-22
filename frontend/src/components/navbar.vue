@@ -58,11 +58,11 @@
             <button class="search_button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
         </div>
-        <div class="dropdown item_action">
-          <button @click="handleButtonClick" class="btn_custom" data-bs-toggle="dropdown" :aria-expanded="buttonLabel">
+        <div v-if="dropdown" class="dropdown item_action">
+          <button @click="handleButtonClick" class="btn_custom" :class="btnClass">
             <i class="fa-solid fa-user"></i>
           </button>
-          <ul class="dropdown-menu sub-action">
+          <ul class="dropdown-menu sub-action" >
             <div class="top-action">
               <a class="icon">
                 <h3>Tài khoản của tôi</h3>
@@ -119,21 +119,24 @@
     </div>
 
   </div>
+  <toast ref="toast"></toast>
 </template>
 <script>
 
 import carthome from './carthome.vue';
 import mobile from './mobile.vue';
+import toast from './toastclient.vue';
 export default {
   components:
   {
     mobile,
-    carthome
+    carthome,
+    toast
 
   },
   data() {
     return {
-      buttonLabel: false,
+      buttonLabel: '',
       isShowModel: false,
       isShowMobile: false,
       sexs: [],
@@ -141,40 +144,66 @@ export default {
       searchQuery: '',
       searchResults: [],
       showResults: false,
+      isDropdownEnabled: false,
+      dropdown:true
+
     }
   },
   mounted() {
     this.getSex();
     this.getcatsex();
     this.luuVaoLocalStorage();
+    this.updateCartUserId();
+  },
+  computed: {
+    btnClass() {
+      return {
+        btn_custom: true,
+        'dropdown-toggle': this.isDropdownEnabled,
+      }
+    },
+
   },
   methods:
   {
     handleButtonClick() {
       let user = JSON.parse(localStorage.getItem("user"));
       if (user) {
-        // Thông tin user đã tồn tại trong local storage, cho phép truy cập
-        this.buttonLabel = 'dropdown'
+        this.isDropdownEnabled = true;
+        const btnEl = document.querySelector('.btn_custom');
+        btnEl.setAttribute('data-bs-toggle', 'dropdown');
       } else {
-        // Không tìm thấy thông tin user trong local storage, yêu cầu đăng nhập
-        alert("Bạn chưa đăng nhập");
-        this.$router.push({ name: "login" });
+        this.$refs.toast.showToast('Bạn chưa đăng nhập hãy đăng nhập !')
+        setTimeout(() => {
+          this.$router.push({ name: "login" });
+        }, 1000);
+        this.disableDropdown()
+        this.dropdown=false
       }
     },
-
+    disableDropdown() {
+      const dropdownEl = document.querySelector('.dropdown-menu');
+      if (dropdownEl.classList.contains('show')) {
+        dropdownEl.classList.remove('show');
+      }
+      this.isDropdownEnabled = false;
+      const btnEl = document.querySelector('.btn_custom');
+      btnEl.classList.remove('dropdown-toggle');
+      btnEl.removeAttribute('data-bs-toggle');
+    },
     getUser() {
-                let user = JSON.parse(localStorage.getItem("user"));
+      let user = JSON.parse(localStorage.getItem("user"));
 
-                if (!user) {
-                    const userId = "trans";
-                    return userId;
-                }
-                else {
-                    const userId = user.id;
-                    return userId;
-                }
+      if (!user) {
+        const userId = "trans";
+        return userId;
+      }
+      else {
+        const userId = user.id;
+        return userId;
+      }
 
-            },
+    },
     outWeb() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -188,9 +217,14 @@ export default {
       if (carts !== null) {
         sessionStorage.setItem('carts', '');
         this.$router.push({ name: 'login' });
+        this.disableDropdown();
+        this.dropdown=false
       }
       else {
         this.$router.push({ name: 'login' });
+        this.disableDropdown()
+        this.dropdown=false
+       
       }
     },
     onShow() {
@@ -279,6 +313,23 @@ export default {
     },
     submitSearch() {
       this.showProductList();
+    },
+    updateCartUserId() {
+      // Kiểm tra xem thông tin người dùng có tồn tại trong localStorage hay không
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        // Nếu thông tin người dùng tồn tại thì lấy giá trị userId từ localStorage
+        const userId = user.id;
+        console.log(userId);
+        // Lấy danh sách các giỏ hàng từ sessionStorage
+        let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+        // Duyệt qua danh sách các giỏ hàng và cập nhật giá trị userId của chúng
+        carts.forEach(cart => {
+          cart.userId = userId;
+        });
+        // Lưu lại danh sách các giỏ hàng đã được cập nhật vào sessionStorage
+        sessionStorage.setItem('carts', JSON.stringify(carts));
+      }
     },
   }
 };
@@ -383,4 +434,5 @@ export default {
   height: 50px;
   margin-right: 10px;
   vertical-align: middle;
-}</style>
+}
+</style>

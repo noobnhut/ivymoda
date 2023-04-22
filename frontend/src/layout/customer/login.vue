@@ -9,7 +9,7 @@
               Nếu bạn đã có tài khoản, hãy đăng nhập để tích lũy điểm thành viên và nhận được những ưu đãi tốt hơn!
             </p>
             <div class="social-container">
-              <a @click="socialLogin('facebook')" class="social"><i class="fab fa-facebook-f"></i></a>
+            
               <a @click="socialLogin('google')" class="social"><i class="fab fa-google-plus-g"
                   style="color: red;"></i></a>
             </div>
@@ -102,6 +102,7 @@ export default {
       switch (provider) {
         case 'google':
           this.$router.push({ name: 'google-auth' });
+          
           break;
         case 'facebook':
           this.$router.push({ name: 'facebook-auth' });
