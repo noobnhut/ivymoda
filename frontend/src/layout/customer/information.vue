@@ -98,7 +98,7 @@ export default {
         },
         async getUserById() {
             const userId = this.getID();
-            console.log(userId); // In ra giá trị của "id"
+            console.log(userId ); // In ra giá trị của "id"
             try {
                 const response = await this.$axios.get(`getUserById/${userId}`);
                 this.user = response.data;
