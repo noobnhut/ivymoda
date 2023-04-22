@@ -18,7 +18,7 @@
                     <tbody>
                         <tr v-for="order in orders">
                             <td>{{ order.id }}</td>
-                            <td>{{ order.createdAt }}</td>
+                            <td>{{  formatTime(order.createdAt) }}</td>
                             <td >{{ order.status }}</td>
                             <td>{{ formatCurrency(order.total) }}</td>
                         </tr>
@@ -32,6 +32,7 @@
 <script>
 
 import user_nav from '../../components/customer/user_nav.vue';
+import moment from 'moment';
 export default
     {
         data() {
@@ -67,6 +68,10 @@ export default
             formatCurrency(value) {
                 let val = (value / 1).toFixed(0).replace('.', ',')
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ'
+            },
+            formatTime(value)
+            {
+                return moment(value).format('DD/MM/YYYY HH:mm:ss');
             },
             getID() {
                 const userJSON = localStorage.getItem('user'); // Lấy chuỗi JSON từ localStorage

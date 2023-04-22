@@ -67,7 +67,7 @@
       </swiper-slide>
 
     </swiper>
-    
+
   </div>
   <toast ref="toast"></toast>
 </template>
@@ -138,8 +138,8 @@ export default {
       }
     },
 
-    getSizeQuantity(productId, sizeid,colorId) {
-      const product = this.products.find(product => product.id === productId && product.color_id===colorId);
+    getSizeQuantity(productId, sizeid, colorId) {
+      const product = this.products.find(product => product.id === productId && product.color_id === colorId);
       if (product) {
         const size = product.sizes.find(size => size.id === sizeid);
         if (size) {
@@ -149,15 +149,14 @@ export default {
       return null;
     },
     getUser() {
-                const user_inf_gg = localStorage.getItem('user');
-                const user = localStorage.getItem("user");
+                let user = JSON.parse(localStorage.getItem("user"));
 
-                if (!user_inf_gg &&  !user) {
-                    const userId = "";
+                if (!user) {
+                    const userId = "trans";
                     return userId;
                 }
                 else {
-                    const userId = user_inf_gg || user;
+                    const userId = user.id;
                     return userId;
                 }
 
@@ -212,14 +211,12 @@ export default {
         this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')
       } else {
         // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
-        if(this.getSizeQuantity(item.productId,item.sizeid,item.colorId)>item.quantity)
-        {
+        if (this.getSizeQuantity(item.productId, item.sizeid, item.colorId) > item.quantity) {
           item.quantity += 1;
           this.$refs.toast.showToast('Thêm thành công.')
-         
+
         }
-        else
-        {
+        else {
           this.$refs.toast.showToast('Số lượng đặt của sản phẩm đã tối đa.')
         }
       }
@@ -227,10 +224,10 @@ export default {
       this.updateCartQuality(cart);
       carts[cartIndex] = cart;
       sessionStorage.setItem('carts', JSON.stringify(carts));
-      
- 
+
+
     },
- 
+
     async addseen(id) {
       let user = localStorage.getItem("user");
       const a = JSON.parse(user);

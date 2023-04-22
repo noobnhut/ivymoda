@@ -136,6 +136,7 @@
     </div>
   </div>
 </template>
+
 <script>
 
 import toast from '../../components/toast.vue';

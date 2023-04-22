@@ -149,14 +149,14 @@ export default
                 return null;
             },
             getUser() {
-                const user_inf_gg = localStorage.getItem('user');
-                const user = localStorage.getItem("user");
-                if (!user_inf_gg &&  !user) {
-                    const userId = "";
+                let user = JSON.parse(localStorage.getItem("user"));
+
+                if (!user) {
+                    const userId = "trans";
                     return userId;
                 }
                 else {
-                    const userId = user_inf_gg || user;
+                    const userId = user.id;
                     return userId;
                 }
 

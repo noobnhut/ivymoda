@@ -207,15 +207,14 @@ export default
                 return null;
             },
             getUser() {
-                const user_inf_gg = localStorage.getItem('user');
-                const user = localStorage.getItem("user");
+                let user = JSON.parse(localStorage.getItem("user"));
 
-                if (!user_inf_gg &&  !user) {
-                    const userId = "";
+                if (!user) {
+                    const userId = "trans";
                     return userId;
                 }
                 else {
-                    const userId = user_inf_gg || user;
+                    const userId = user.id;
                     return userId;
                 }
 
@@ -285,21 +284,31 @@ export default
             gotoOrder() {
                 let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
                 const userId = this.getUser();
-
+                let user = JSON.parse(localStorage.getItem("user"));
                 // Tìm kiếm giỏ hàng của người dùng hiện tại
                 let cartIndex = carts.findIndex(cart => cart.userId === userId);
                 let cart = cartIndex >= 0 ? carts[cartIndex] : null;
+
                 if (cart !== null) {
                     if (cart.items.length > 0) {
-                        this.$router.push({ name: 'order' });
+                        if (user) {
+                            this.$router.push({ name: 'order' });
+                        }
+                        else {
+                            this.$refs.toast.showToast('Bạn chưa đăng nhập vui lòng đăng nhập để mua hàng.')
+                            setTimeout(() => {
+                                this.$router.push({ name: "login" });
+                            }, 1000);
+
+                        }
                     }
                     else if (cart.items.length == 0) {
                         this.$refs.toast.showToast('Giỏ hàng trống.')
-
                     }
                 }
                 else {
                     this.$refs.toast.showToast('Giỏ hàng trống.')
+                    console.log(cart)
 
                 }
 

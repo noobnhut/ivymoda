@@ -170,7 +170,7 @@ export default
                     return this.sees.some((see) => see.id_product === product.id && see.status_seen === 1);
                 });
             },
-            
+
             async getlike() {
                 let user = localStorage.getItem("user");
                 const a = JSON.parse(user);
@@ -236,15 +236,14 @@ export default
                 return null;
             },
             getUser() {
-                const user_inf_gg = localStorage.getItem('user');
-                const user = localStorage.getItem("user");
+                let user = JSON.parse(localStorage.getItem("user"));
 
-                if (!user_inf_gg &&  !user) {
-                    const userId = "";
+                if (!user) {
+                    const userId = "trans";
                     return userId;
                 }
                 else {
-                    const userId = user_inf_gg || user;
+                    const userId = user.id;
                     return userId;
                 }
 

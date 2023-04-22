@@ -69,14 +69,19 @@
               </a>
             </div>
             <ul>
-              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'information' }"><i style="margin-right: 10px;" class="fa-solid fa-user"></i>Thông tin tài
+              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'information' }"><i
+                    style="margin-right: 10px;" class="fa-solid fa-user"></i>Thông tin tài
                   khoản</router-link></li>
-              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'productsee' }"><i style="margin-right: 10px;" class="fa-solid fa-camera-retro"></i>Sản phẩm đã
+              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'productsee' }"><i
+                    style="margin-right: 10px;" class="fa-solid fa-camera-retro"></i>Sản phẩm đã
                   xem</router-link></li>
-              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'productlike' }"><i style="margin-right: 10px;" class="fa-solid fa-heart"></i>Sản phẩm yêu
+              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'productlike' }"><i
+                    style="margin-right: 10px;" class="fa-solid fa-heart"></i>Sản phẩm yêu
                   thích</router-link></li>
-                  <li><router-link class="text-decoration-none text-dark" :to="{ name: 'control_order' }"><i style="margin-right: 10px;" class="fa-solid fa-cart-shopping"></i>Theo dõi đơn hàng</router-link></li>
-              <li><a class="text-decoration-none text-dark" @click="outWeb"><i style="margin-right: 10px;" class="fa-solid fa-circle-xmark"></i>Đăng xuất</a></li>
+              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'control_order' }"><i
+                    style="margin-right: 10px;" class="fa-solid fa-cart-shopping"></i>Theo dõi đơn hàng</router-link></li>
+              <li><a class="text-decoration-none text-dark" @click="outWeb"><i style="margin-right: 10px;"
+                    class="fa-solid fa-circle-xmark"></i>Đăng xuất</a></li>
             </ul>
           </ul>
         </div>
@@ -101,8 +106,8 @@
 
     <div class="navi_item">
       <router-link :to="{ name: 'information' }" class="nav-link"> <button type="button" class="btn position-relative">
-        <i class="fa-solid fa-user"></i>
-      </button></router-link>
+          <i class="fa-solid fa-user"></i>
+        </button></router-link>
       <p>Thông tin</p>
     </div>
 
@@ -156,6 +161,20 @@ export default {
         this.$router.push({ name: "login" });
       }
     },
+
+    getUser() {
+                let user = JSON.parse(localStorage.getItem("user"));
+
+                if (!user) {
+                    const userId = "trans";
+                    return userId;
+                }
+                else {
+                    const userId = user.id;
+                    return userId;
+                }
+
+            },
     outWeb() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -364,5 +383,4 @@ export default {
   height: 50px;
   margin-right: 10px;
   vertical-align: middle;
-}
-</style>
+}</style>

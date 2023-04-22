@@ -73,7 +73,7 @@ const addProduct = async (req, res) => {
                 message: 'Sản phẩm tồn tại trong hệ thống'
             });
 
-        } else if (isNaN(price) || price <= 0) {
+        } else if (isNaN(price) || price <= 1000) {
             return res.status(206).json({
                 message: "Giá sản phẩm không hợp lệ"
             });
