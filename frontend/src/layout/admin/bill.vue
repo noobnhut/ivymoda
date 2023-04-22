@@ -53,7 +53,7 @@
                         <label><strong>Trạng thái hiện tại:</strong> {{ order.status }} </label>
                     </div>
                     <div class="form-group">
-                        <label for="status-select"><strong>chọn trạng thái mới:</strong></label>
+                        <label for="status-select"><strong>Chọn trạng thái mới:</strong></label>
                         <select class="form-control" id="status-select" v-model="status">
                             <option value="đã đặt" v-bind:selected="status === 'Đã đặt'">Đã đặt</option>
                             <option value="đang giao" v-bind:selected="status === 'Đang giao'">Đang giao</option>
@@ -150,54 +150,3 @@ export default
     }
 </script>
 
-<style>
-.modal-content {
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: none;
-}
-
-.modal-body {
-    padding: 20px 0;
-}
-
-.form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.modal-footer {
-    border-top: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.btnorder {
-    border-radius: 5px;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-</style>

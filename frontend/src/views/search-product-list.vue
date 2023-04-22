@@ -15,7 +15,7 @@
                         </div>
                         <div class="product-details">
                             <div class="d-flex justify-content-between">
-                                <span class="product-catagory">{{ product.cat_name}} - {{ product.sex_name }}</span>
+                                <span class="product-catagory">{{ product.cat_name }} - {{ product.sex_name }}</span>
                                 <span class="product-color" :style="{ backgroundColor: product.color_code }"></span>
                             </div>
                             <h4 style="height:50px">
@@ -66,7 +66,7 @@
             </div>
 
         </div>
-    <toast ref="toast"></toast>
+        <toast ref="toast"></toast>
         <footerV />
     </div>
 </template>
@@ -128,16 +128,14 @@ export default {
             return null;
         },
         getUser() {
-            const user_inf_gg = Cookies.get('user_inf_gg');
-            const user_inf_fb = Cookies.get('user_inf_fb');
-            const user = localStorage.getItem("user");
+            let user = JSON.parse(localStorage.getItem("user"));
 
-            if (!user_inf_gg && !user_inf_fb && !user) {
+            if (!user) {
                 const userId = "trans";
                 return userId;
             }
             else {
-                const userId = user_inf_gg || user_inf_fb || user;
+                const userId = user.id;
                 return userId;
             }
 

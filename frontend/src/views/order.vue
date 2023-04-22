@@ -10,7 +10,7 @@
                         <label>Họ và tên:</label>
                     </div>
                     <div class="col col-input">
-                        <input class="form-control" v-model="user.username" type="text" disabled>
+                        <input class="form-control" v-model="username" type="text" disabled>
                     </div>
                 </div>
                 <div class="row form-group" style="padding-top: 10px;">
@@ -18,7 +18,7 @@
                         <label>Email:</label>
                     </div>
                     <div class="col col-input">
-                        <input class="form-control" :value=user.email type="text" disabled="disabled">
+                        <input class="form-control" v-model=email type="text" disabled="disabled">
                     </div>
                 </div>
                 <div class="row form-group" style="padding-top: 10px;">
@@ -26,7 +26,7 @@
                         <label>Địa chỉ:</label>
                     </div>
                     <div class="col col-input">
-                        <input class="form-control" v-model="user.address" placeholder="Cập nhật địa chỉ" type="text"
+                        <input class="form-control" v-model="address" placeholder="Cập nhật địa chỉ" type="text"
                             @focus="hidePlaceholder" disabled>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                         <label>Số điện thoại:</label>
                     </div>
                     <div class="col col-input">
-                        <input class="form-control" v-model="user.phone" placeholder="Cập nhật số điện thoại" type="number"
+                        <input class="form-control" v-model="phone" placeholder="Cập nhật số điện thoại" type="number"
                             @focus="hidePlaceholder" disabled>
                     </div>
                 </div>
@@ -177,6 +177,10 @@ export default
                 total: 0,
                 Squantity: 0,
                 paymentMethod: 'cash',
+                username:'',
+                email:'',
+                phone:'',
+                address:''
             }
         },
         mounted() {
@@ -189,7 +193,8 @@ export default
                 }
             }
             this.getproduct();
-            this.getUserById()
+            this.getUserById();
+      
         },
         methods:
         {
@@ -210,29 +215,25 @@ export default
                 }
             },
             getIdUser() {
-                const carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
-                let userId = null;
+                let user = JSON.parse(localStorage.getItem("user"));
 
-                // Lấy userId từ chuỗi JSON trong mảng
-                const userIdJson = carts[0]?.userId || null;
-                try {
-                    userId = userIdJson ? JSON.parse(userIdJson).user?.id : null;
-                } catch (error) {
-                    console.error('Error parsing user ID from JSON:', error);
+                if (!user) {
+                    const userId = "trans";
+                    return userId;
                 }
-
-                // Nếu không tìm thấy userId, lấy userId từ thuộc tính id của đối tượng user
-                if (!userId) {
-                    let Google = JSON.parse(sessionStorage.getItem('carts') || '[]');
-                    let userIdJson = Google[0]?.userId || null;
-                    let userId = userIdJson ? JSON.parse(userIdJson).id : null;
+                else {
+                    const userId = user.id;
                     return userId;
                 }
 
-                return userId;
             },
             async checkout() {
-                let a = JSON.parse(sessionStorage.getItem('carts') || '[]');
+                if(!this.address||!this.email ||!this.phone || !this.username){
+                    this.$refs.toast.showToast('Thông tin bị trống vui lòng cập nhập !')
+                }
+                else
+                {
+                    let a = JSON.parse(sessionStorage.getItem('carts') || '[]');
                 // check giỏ hàng rỗng
                 if (a.length === 0 || !a[0]?.items || a[0].items.length === 0) {
                     console.error('có cc gì đâu mà thanh toán ?');
@@ -266,25 +267,25 @@ export default
                         if (response.data.message === 'Đặt hàng thành công') {
                             setTimeout(() => {
                                 this.$router.push({ name: "control_order" });
-                            }, 1000); 
+                            }, 1000);
                         }
                     })
                     .catch(error => {
                         console.log(error);
                     });
+                }
+               
 
             },
             getUser() {
-                const user_inf_gg = Cookies.get('user_inf_gg');
-                const user_inf_fb = Cookies.get('user_inf_fb');
-                const user = localStorage.getItem("user");
+                let user = JSON.parse(localStorage.getItem("user"));
 
-                if (!user_inf_gg && !user_inf_fb && !user) {
+                if (!user) {
                     const userId = "trans";
                     return userId;
                 }
                 else {
-                    const userId = user_inf_gg || user_inf_fb || user;
+                    const userId = user.id;
                     return userId;
                 }
 
@@ -306,6 +307,10 @@ export default
                 try {
                     const response = await this.$axios.get(`getUserById/${userId}`);
                     this.user = response.data;
+                    this.address=response.data.address;
+                    this.email=response.data.email;
+                    this.phone=response.data.phone;
+                    this.username=response.data.username;
                 } catch (error) {
                     console.log(error);
                 }

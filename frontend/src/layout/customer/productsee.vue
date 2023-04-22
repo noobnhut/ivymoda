@@ -170,7 +170,7 @@ export default
                     return this.sees.some((see) => see.id_product === product.id && see.status_seen === 1);
                 });
             },
-            
+
             async getlike() {
                 let user = localStorage.getItem("user");
                 const a = JSON.parse(user);
@@ -236,16 +236,14 @@ export default
                 return null;
             },
             getUser() {
-                const user_inf_gg = Cookies.get('user_inf_gg');
-                const user_inf_fb = Cookies.get('user_inf_fb');
-                const user = localStorage.getItem("user");
+                let user = JSON.parse(localStorage.getItem("user"));
 
-                if (!user_inf_gg && !user_inf_fb && !user) {
+                if (!user) {
                     const userId = "trans";
                     return userId;
                 }
                 else {
-                    const userId = user_inf_gg || user_inf_fb || user;
+                    const userId = user.id;
                     return userId;
                 }
 
