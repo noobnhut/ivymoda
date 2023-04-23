@@ -64,7 +64,8 @@
                         <div class="detail_infor">
                             <h3>Chi tiết sản phẩm</h3>
                             <p>{{ product.information }}</p>
-
+                            <h5>Thông tin màu sắc</h5>
+                            <p>{{ product.detail_product }}</p>
 
                             <p class="note">Lưu ý: Màu sắc sản phẩm thực tế sẽ có sự chênh lệch nhỏ so với ảnh do điều
                                 kiện ánh sáng khi chụp và màu sắc hiển thị qua màn hình máy tính/ điện thoại.</p>

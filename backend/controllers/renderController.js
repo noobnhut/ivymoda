@@ -27,7 +27,7 @@ const renderProduct = async (req, res) => {
                 },
                 {
                     model: Color,
-                    attributes: ['id', 'color', 'color_code'],
+                    attributes: ['id', 'color', 'color_code','detail_product'],
                     include: [
                         {
                             model: Img,
@@ -60,6 +60,7 @@ const renderProduct = async (req, res) => {
                     color_id: color.id,
                     color_name: color.color,
                     color_code: color.color_code,
+                    detail_product:color.detail_product,
                     images: color.Imgs.map(img => ({
                         id: img.id,
                         avatar: img.avatar,

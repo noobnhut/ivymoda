@@ -10,10 +10,10 @@
               <a class="social">IN</a>
             </div>
             <input type="email" placeholder="Email" v-model="email" />
-            <span v-if="!isValidEmail">Email không hợp lệ</span>
+            
             <br />
             <input type="password" placeholder="Password" v-model="password" />
-            <span v-if="!isValidPassword">Mật khẩu không hợp lệ</span>
+           
             <button @click="login()">Đăng nhập</button>
           </div>
         </div>
@@ -29,7 +29,7 @@
   </template>
   
   <script>
-  import axios from "axios";
+
   
   export default {
     data() {
@@ -38,15 +38,7 @@
         password: "",
       };
     },
-    computed: {
-      isValidEmail() {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(this.email);
-      },
-      isValidPassword() {
-        return this.password.length >= 8;
-      },
-    },
+    
     methods: {
       async login() {
         try {
