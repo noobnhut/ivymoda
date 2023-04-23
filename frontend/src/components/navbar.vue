@@ -58,32 +58,30 @@
             <button class="search_button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
         </div>
-        <div v-if="dropdown" class="dropdown item_action">
-          <button @click="handleButtonClick" class="btn_custom" :class="btnClass">
+        <div class="dropdown" >
+          <button @click="handleButtonClick" class="btn_custom">
             <i class="fa-solid fa-user"></i>
           </button>
-          <ul class="dropdown-menu sub-action" >
+          <div class="dropdown-content" v-show="isLoggedIn">
             <div class="top-action">
-              <a class="icon">
-                <h3>Tài khoản của tôi</h3>
+              <a class="icon text-decoration-none text-dark">
+                <h5>Tài khoản của tôi</h5>
               </a>
             </div>
-            <ul>
-              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'information' }"><i
-                    style="margin-right: 10px;" class="fa-solid fa-user"></i>Thông tin tài
-                  khoản</router-link></li>
-              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'productsee' }"><i
-                    style="margin-right: 10px;" class="fa-solid fa-camera-retro"></i>Sản phẩm đã
-                  xem</router-link></li>
-              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'productlike' }"><i
-                    style="margin-right: 10px;" class="fa-solid fa-heart"></i>Sản phẩm yêu
-                  thích</router-link></li>
-              <li><router-link class="text-decoration-none text-dark" :to="{ name: 'control_order' }"><i
-                    style="margin-right: 10px;" class="fa-solid fa-cart-shopping"></i>Theo dõi đơn hàng</router-link></li>
-              <li><a class="text-decoration-none text-dark" @click="outWeb"><i style="margin-right: 10px;"
-                    class="fa-solid fa-circle-xmark"></i>Đăng xuất</a></li>
-            </ul>
-          </ul>
+            <p><router-link @click='isLoggedIn = !isLoggedIn' class="text-decoration-none text-dark" :to="{ name: 'information' }"><i
+                  style="margin-right: 10px;" class="fa-solid fa-user"></i>Thông tin tài
+                khoản</router-link></p>
+            <p><router-link @click='isLoggedIn = !isLoggedIn' class="text-decoration-none text-dark" :to="{ name: 'productsee' }" ><i
+                  style="margin-right: 10px;" class="fa-solid fa-camera-retro"></i>Sản phẩm đã
+                xem</router-link></p>
+            <p><router-link @click='isLoggedIn = !isLoggedIn' class="text-decoration-none text-dark" :to="{ name: 'productlike' }"><i
+                  style="margin-right: 10px;" class="fa-solid fa-heart"></i>Sản phẩm yêu
+                thích</router-link></p>
+            <p><router-link @click='isLoggedIn = !isLoggedIn' class="text-decoration-none text-dark" :to="{ name: 'control_order' }"><i
+                  style="margin-right: 10px;" class="fa-solid fa-cart-shopping"></i>Theo dõi đơn hàng</router-link></p>
+            <p><a class="text-decoration-none text-dark" @click="outWeb"><i style="margin-right: 10px;"
+                  class="fa-solid fa-circle-xmark"></i>Đăng xuất</a></p>
+          </div>
         </div>
         <button class=" btn_custom position-relative" @click="onShow">
           <i class="fa-solid fa-bag-shopping"></i>
@@ -144,9 +142,7 @@ export default {
       searchQuery: '',
       searchResults: [],
       showResults: false,
-      isDropdownEnabled: false,
-      dropdown:true
-
+      isLoggedIn: false
     }
   },
   mounted() {
@@ -159,29 +155,18 @@ export default {
   {
     handleButtonClick() {
       let user = JSON.parse(localStorage.getItem("user"));
-      if (user) {
-        this.isDropdownEnabled = true;
-        const btnEl = document.querySelector('.btn_custom');
-        btnEl.setAttribute('data-bs-toggle', 'dropdown');
-      } else {
+      if (!user) {
         this.$refs.toast.showToast('Bạn chưa đăng nhập hãy đăng nhập !')
         setTimeout(() => {
           this.$router.push({ name: "login" });
         }, 1000);
-        this.disableDropdown()
-        this.dropdown=false
+      }
+      else
+      {
+        this.isLoggedIn =!this.isLoggedIn
       }
     },
-    disableDropdown() {
-      const dropdownEl = document.querySelector('.dropdown-menu');
-      if (dropdownEl.classList.contains('show')) {
-        dropdownEl.classList.remove('show');
-      }
-      this.isDropdownEnabled = false;
-      const btnEl = document.querySelector('.btn_custom');
-      btnEl.classList.remove('dropdown-toggle');
-      btnEl.removeAttribute('data-bs-toggle');
-    },
+
     getUser() {
       let user = JSON.parse(localStorage.getItem("user"));
 
@@ -208,14 +193,11 @@ export default {
       if (carts !== null) {
         sessionStorage.setItem('carts', '');
         this.$router.push({ name: 'login' });
-        this.disableDropdown();
-        this.dropdown=false
+        this.isLoggedIn = false
       }
       else {
         this.$router.push({ name: 'login' });
-        this.disableDropdown()
-        this.dropdown=false
-       
+        this.isLoggedIn = false
       }
     },
     onShow() {
@@ -248,7 +230,6 @@ export default {
         console.log(e);
       }
     },
-
     luuVaoLocalStorage() {
 
       // Lấy query string từ URL hiện tại
@@ -295,7 +276,6 @@ export default {
         sessionStorage.setItem('carts', JSON.stringify(carts));
       }
     },
-
     async searchProducts() {
       if (this.searchQuery.length > 0) {
         const response = await this.$axios.get(`search?q=${this.searchQuery}`);
@@ -448,5 +428,44 @@ export default {
   height: 50px;
   margin-right: 10px;
   vertical-align: middle;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #FFF;
+  z-index: 2;
+  border: 1px solid #E7E8E9;
+  box-sizing: border-box;
+  border-radius: 4px;
+  width: max-content;
+  min-width: 255px;
+  color: black;
+
+}
+.dropdown-content p
+{
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  color: #808285;
+  margin-bottom: 24px;
+  padding: 0 24px
+}
+
+
+.dropdown .top-action
+{
+  padding: 24px 24px 20px;
+    position: relative;
+    border-bottom: 1px solid #F7F8F9;
+    margin-bottom: 24px;
 }
 </style>
