@@ -36,7 +36,6 @@
             <td>{{ user.email }}</td>
             <td>{{ user.address }}</td>
             <td>{{ user.phone }}</td>
-
             <td v-if="user.provider !== 'google'" style="display: table-cell;">
               <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"><i
                   class="fa-solid fa-spinner" @click="select(user)"></i></a>
@@ -74,7 +73,7 @@
           </div>
           <div class="form-group">
             <label>Mật khẩu mới:</label>
-            <input type="text" class="form-control" v-model="pass">
+            <input type="text" class="form-control" v-model="password">
           </div>
         </div>
         <div class="modal-footer">
@@ -97,7 +96,7 @@ export default {
       email: '',
       address: '',
       phone: '',
-      pass: '',
+      password : '',
       selectedOption: '',
     }
   },
@@ -109,9 +108,8 @@ export default {
       this.username = user.username,
         this.email = user.email,
         this.address = user.address,
-        this.phone = user.phone
+        this.phone = user.phone,
       this.id = user.id
-    
     },
     async getAllUser() {
       try {
@@ -139,7 +137,7 @@ export default {
           email: this.email,
           address: this.address,
           phone: this.phone,
-          password:this.updateUserPassword(this.password)
+          password:this.password
         }
       )
       this.$refs.toast.showToast(catupdate.data.message)
@@ -148,14 +146,6 @@ export default {
     created() {
       this.getUserById(this.$route.params.id);
     },
-    async hashPassword(password) {
-      const salt = await bcrypt.genSalt(10);
-      const hash = await bcrypt.hash(password, salt);
-      return hash;
-    },
-    async updateUserPassword(newPassword) {
-      const hashedPassword = await this.hashPassword(newPassword);
-    }
   }
 
 }

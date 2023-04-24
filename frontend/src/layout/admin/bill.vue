@@ -134,7 +134,7 @@ export default
                         }
                         // Hiển thị thông báo thành công
                         this.$refs.toast.showToast(`trạng thái đơn đã chuyển thành : ${newStatus}`);
-                        this.status = 'đã đặt';
+                        this.status = 'Đã đặt';
                         this.getOrderDetails()
                     })
                     .catch(error => {
