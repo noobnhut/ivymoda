@@ -47,6 +47,8 @@
       </div>
     </div>
   </div>
+  <toast ref="toast"></toast>
+
 </template>
 <style>
 .social-container {
@@ -69,6 +71,7 @@
 </style>
 <script>
 import '../../assets/login.css';
+import toast from '../../components/toastclient.vue';
 export default {
   data() {
     return {
@@ -76,6 +79,10 @@ export default {
       password: '',
     };
   },
+  components: {
+toast
+
+},
   methods: {
     async login() {
       try {
@@ -87,12 +94,18 @@ export default {
           // Lưu thông tin người dùng vào localStorage hoặc sessionStorage
           localStorage.setItem('user', JSON.stringify(login.data));
           localStorage.setItem('token', login.data.token);
+          this.$refs.toast.showToast('Đăng nhập thành công.');
+
           // Chuyển hướng đến trang chính của ứng dụng
           this.$router.push({ name: 'information' });
           this.handleCart();
+          this.$refs.toast.showToast('Đăng nhập thành công.');
+
         }
       } catch (error) {
         // Xử lý lỗi nếu có
+        this.$refs.toast.showToast('Đăng nhập thất bại');
+
         console.log(error);
       }
     },

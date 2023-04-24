@@ -3,14 +3,13 @@
     <div class="d-flex justify-content-between">
       <div class="form-group">
         <label for="product_id" style="padding:10px">Loại tài khoản:</label>
-        <select v-model="selectedOption" required>
+        <select v-model="selectedOption" required @change="getAllUser()">
           <option disabled value="">Chọn loại đối tượng:</option>
           <option value="google">Tài khoản Google</option>
           <option value="rỗng">Tài khoản IVYMODA</option>
         </select>
       </div>
-      <a type="button" class="btn btn-primary" @click="getAllUser()">
-        <span>Lấy danh sách khách hàng</span></a>
+      
     </div>
     <div class="table-wrapper">
       <div class="table-title">
@@ -35,7 +34,7 @@
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.address }}</td>
-            <td>{{ user.phone }}</td>
+            <td>0{{ user.phone }}</td>
             <td v-if="user.provider !== 'google'" style="display: table-cell;">
               <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"><i
                   class="fa-solid fa-spinner" @click="select(user)"></i></a>
@@ -108,7 +107,7 @@ export default {
       this.username = user.username,
         this.email = user.email,
         this.address = user.address,
-        this.phone = user.phone,
+        this.phone = '0'+ user.phone,
       this.id = user.id
     },
     async getAllUser() {
@@ -128,6 +127,10 @@ export default {
       }
     },
     async updateUser() {
+      if (!this.validateForm()) {
+                    return;
+                }
+
       const userID = this.id;
       console.log(userID)
       const catupdate = await this.$axios.put(
@@ -146,6 +149,35 @@ export default {
     created() {
       this.getUserById(this.$route.params.id);
     },
+    validateForm() {
+                // Check if all the required fields are not empty
+                if (!this.email || !this.password || !this.username || !this.phone || !this.address) {
+                     this.$refs.toast.showToast('Không được để trống thông tin khách hàng');
+                    return false;
+                }
+
+                // Validate email format using regular expression
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(this.email)) {
+                     this.$refs.toast.showToast('Email nhập vào không đúng chuẩn.');
+                    return false;
+                }
+
+                const TestPasss = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(this.password);
+                if (!TestPasss) {
+                     this.$refs.toast.showToast('Mật khẩu phải trên 8 ký tự và có kí tự đặc biệt và chữ cái in hoa.');
+                    return false;
+                }
+
+                // Validate phone number format
+                const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+                if (!phoneRegex.test(this.phone)) {
+                     this.$refs.toast.showToast('Số điện thoại phải đủ 10 số.');
+                    return false;
+                }
+
+                return true;
+            },
   }
 
 }

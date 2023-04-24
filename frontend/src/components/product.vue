@@ -3,7 +3,7 @@
     <div class="title_product">
       IVY {{ cat.cat_name }}
     </div>
-    <swiper :spaceBetween="10" :modules="modules"
+    <swiper :spaceBetween="10" :modules="modules"  
       :breakpoints="{ 600: { slidesPerView: 1 }, 800: { slidesPerView: 2 }, 1000: { slidesPerView: 3 }, 1200: { slidesPerView: 4 }, 1400: { slidesPerView: 5 }, }"
       class="mySwiper">
 
@@ -77,7 +77,6 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import Cookies from 'js-cookie';
 // Import Swiper styles
 import 'swiper/css';
-
 import 'swiper/css/pagination';
 
 // import required modules
@@ -89,6 +88,7 @@ export default {
       products: [],
       cats: [],
       likes: [],
+      
     }
   },
   mounted() {
@@ -99,7 +99,7 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
-    toast
+    toast,
   },
   setup() {
     return {
