@@ -3,14 +3,13 @@
     <div class="d-flex justify-content-between">
       <div class="form-group">
         <label for="product_id" style="padding:10px">Loại tài khoản:</label>
-        <select v-model="selectedOption" required>
+        <select v-model="selectedOption" required @change="getAllUser()">
           <option disabled value="">Chọn loại đối tượng:</option>
           <option value="google">Tài khoản Google</option>
           <option value="rỗng">Tài khoản IVYMODA</option>
         </select>
       </div>
-      <a type="button" class="btn btn-primary" @click="getAllUser()">
-        <span>Lấy danh sách khách hàng</span></a>
+      
     </div>
     <div class="table-wrapper">
       <div class="table-title">

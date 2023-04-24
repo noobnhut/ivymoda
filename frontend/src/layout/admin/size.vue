@@ -3,31 +3,29 @@
 
         <div class="d-flex justify-content-between">
             <div class="form-group">
-                <label for="product_id" style="padding:10px">Sản phẩm:</label>
-                <select id="product_id" v-model="product_id" required>
+                <label for="product_id" style="padding:10px" >Sản phẩm:</label>
+                <select id="product_id" v-model="product_id" required @change="getcolor()">
                     <option disabled>Chọn loại đối tượng:</option>
                     <option v-for="product in products" :key="product.id" :value="product.id">{{ product.name }}
                     </option>
                 </select>
                 <br>
             </div>
-            <a type="button" class="btn btn-primary" @click="getcolor()">
-                <span>Lấy danh sách màu</span></a>
+           
         </div>
 
         <br>
         <div class="d-flex justify-content-between">
             <div class="form-group">
                 <label for="color_id" style="padding:10px">Màu sắc:</label>
-                <select id="color_id" v-model="color_id" required>
+                <select id="color_id" v-model="color_id" required @change="getsize()">
                     <option disabled>Chọn loại màu:</option>
                     <option v-for="color in colors" :key="color.id" :value="color.id">{{ color.color }}
                     </option>
                 </select>
                 <br>
             </div>
-            <a type="button" class="btn btn-primary" @click="getsize()">
-                <span>Lấy danh sách size</span></a>
+  
         </div>
 
         <br>
