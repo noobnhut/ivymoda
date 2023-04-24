@@ -149,7 +149,8 @@ const updateUserById = async (req, res) => {
   const {
     username,
     address,
-    phone
+    phone,
+    password
   } = req.body;
 
   try {

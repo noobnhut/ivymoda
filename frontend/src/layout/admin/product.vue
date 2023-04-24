@@ -195,7 +195,7 @@ export default
       sendata(product) {
        this.name=product.name;
        this.information=product.information;
-       this.price=product.price;
+       this.price=parseInt(product.price);
        this.discount=product.discount;
        this.id_product=product.id;
        this.id_catsex=product.id_catsex;

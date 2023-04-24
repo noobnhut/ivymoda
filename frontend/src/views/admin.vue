@@ -74,7 +74,7 @@
                     <li class="list">
                         <router-link  to="/admin/bill" class="nav-link" @click='toggle = !toggle'>
                             <i class="bx bx-folder-open icon"></i>
-                            <span class="link">QL hóa đơn</span>
+                            <span class="link">QL đơn hàng</span>
                         </router-link>
                     </li>
                 </ul>
