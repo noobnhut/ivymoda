@@ -1,7 +1,8 @@
 const sgMail = require('@sendgrid/mail');
 const db = require('../models');
 const User = db.users;
-// key : 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
+const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+
 const sendMail = async (req, res) => {
     const {
         name,
@@ -36,7 +37,7 @@ const sendMail = async (req, res) => {
         return;
     }
 
-    sgMail.setApiKey('');//bỏ key ở trên cùng vào dấu ''
+    sgMail.setApiKey(SENDGRID_API_KEY);//bỏ key ở trên cùng vào dấu ''
 
     let productsHTML = ''; // Chuỗi HTML để lưu thông tin sản phẩm
     if (nameProduct.length > 0) {
@@ -53,7 +54,7 @@ const sendMail = async (req, res) => {
 
     const msg = {
         to: email,
-        from: 'nguyenthevann6@gmail.com',
+        from: '	',
         subject: 'Thông báo mua hàng thành công',
         html: `
           <div style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px;">
@@ -119,10 +120,10 @@ const sendQuestionCodeByEmail = async (userId) => {
       };
     }
 
-    sgMail.setApiKey('');
+    sgMail.setApiKey(SENDGRID_API_KEY);
     const msg = {
       to: user.email,
-      from: 'nguyenthevann6@gmail.com',
+      from: 'nguyen.nhut.99.2017@gmail.com',
       subject: 'Xác nhận đổi mật khẩu',
       text: `Mã question của bạn là: ${user.question}`,
     };
