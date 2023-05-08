@@ -152,9 +152,7 @@ const updateUserById = async (req, res) => {
     phone,
     password
   } = req.body;
- // Mã hóa mật khẩu
- const salt = await bcrypt.genSalt(10);
- const hashedPassword = await bcrypt.hash(password, salt);
+
   try {
     const user = await User.findByPk(userId);
     if (!user) {
@@ -162,11 +160,17 @@ const updateUserById = async (req, res) => {
         message: `User with id ${userId} not found.`
       });
     } else {
+      let hashedPassword = user.hashedPassword;
+      if (password) {
+        const salt = await bcrypt.genSalt(10);
+        hashedPassword = await bcrypt.hash(password, salt);
+      }
+
       await user.update({
         name: username || user.name,
         address: address || user.address,
-        phone: phone || user.phone, 
-        password : hashedPassword || user.hashedPassword
+        phone: phone || user.phone,
+        password: hashedPassword
       });
 
       res.json({

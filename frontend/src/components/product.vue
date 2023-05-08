@@ -27,7 +27,7 @@
                 @click="addseen(product.id)">{{
                   product.name
                 }} - {{ product.color_name }}</router-link>
-            </h4>
+            </h4> 
 
             <div class="product-bottom-details">
               <div class="product-price" style="height:50px">
@@ -188,7 +188,7 @@ export default {
           userId: userId,
           items: [],
           total: 0,
-          Squantity: 0
+          Squantity: 0,
         };
         carts.push(cart);
       }
@@ -203,7 +203,9 @@ export default {
           colorId: product.color_id,
           sizeid: sizeid,
           price: product.price,
-          quantity: 1
+          quantity: 1,
+          name : product.name,
+          in4 : product.information
         };
         cart.items.push(item);
         this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')

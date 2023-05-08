@@ -20,8 +20,8 @@ const {routerFollow} = require('./routes/FollowRouter');
 const routerMomo = require('./routes/MomoRouter');
 const routerCheckout = require('./routes/CheckoutRouter');
 const routerAmin = require('./routes/AdminRouter');
-
-
+//mail
+const {sendMail} = require('./routes/MailRouter')
 const router = require('./routes/UserRouterAPI');
 
 // Passport session setup. 
@@ -72,6 +72,7 @@ app.use(routerAmin);
 // Serve các tệp tĩnh trong thư mục "uploads"
 app.use(express.static("uploads"));
 
+app.use(sendMail);
 
 
 const CryptoJS = require('crypto-js') 
@@ -83,6 +84,18 @@ const CryptoJS = require('crypto-js')
 // console.log(hash)
 // 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
 // Khởi động máy chủ
+
+
+
+// function generateVerificationCode() {
+//   const min = 100000;
+//   const max = 999999;
+//   return Math.floor(Math.random() * (max - min + 1)) + min;
+// }
+
+// const verificationCode = generateVerificationCode();
+// console.log(verificationCode); 
+
 const port = 3000;
 app.listen(port, () => {
   console.log(`API đang chạy : http://localhost:${port}/`);

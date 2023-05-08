@@ -314,7 +314,6 @@ export default {
       if (user) {
         // Nếu thông tin người dùng tồn tại thì lấy giá trị userId từ localStorage
         const userId = user.id;
-        console.log(userId);
         // Lấy danh sách các giỏ hàng từ sessionStorage
         let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
         // Duyệt qua danh sách các giỏ hàng và cập nhật giá trị userId của chúng

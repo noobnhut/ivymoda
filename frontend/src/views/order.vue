@@ -177,10 +177,10 @@ export default
                 total: 0,
                 Squantity: 0,
                 paymentMethod: 'cash',
-                username:'',
-                email:'',
-                phone:'',
-                address:''
+                username: '',
+                email: '',
+                phone: '',
+                address: ''
             }
         },
         mounted() {
@@ -194,7 +194,9 @@ export default
             }
             this.getproduct();
             this.getUserById();
-      
+            this.getData();
+            this.getItemsCartName();
+            this.getIn4Items();
         },
         methods:
         {
@@ -208,8 +210,6 @@ export default
                         `renderProduct`
                     );
                     this.products = result.data;
-                    console.log(result);
-
                 } catch (e) {
                     console.log(e);
                 }
@@ -228,54 +228,123 @@ export default
 
             },
             async checkout() {
-                if(!this.address||!this.email ||!this.phone || !this.username){
-                    this.$refs.toast.showToast('Thông tin bị trống vui lòng cập nhập !')
-                }
-                else
-                {
+                // Kiểm tra xem thông tin khách hàng có đầy đủ không
+                if (!this.address || !this.email || !this.phone || !this.username) {
+                    this.$refs.toast.showToast('Thông tin bị trống vui lòng cập nhập !');
+                } else {
+                    // Lấy các sản phẩm trong giỏ hàng từ session storage
                     let a = JSON.parse(sessionStorage.getItem('carts') || '[]');
-                // check giỏ hàng rỗng
-                if (a.length === 0 || !a[0]?.items || a[0].items.length === 0) {
-                    console.error('có cc gì đâu mà thanh toán ?');
-                    return;
-                }
-                // Tạo đối tượng đơn hàng và chi tiết đơn hàng
-                let order = {
-                    userId: this.getIdUser(),
-                    total: this.total,
-                };
-                console.log('id của user = ' + order.userId);
 
-                let orderDetails = a[0]?.items.map(item => {
-                    return {
-                        productId: item.productId,
-                        quantity: item.quantity,
-                        price: item.price,
-                        userId: this.getIdUser()
+                    // Kiểm tra xem giỏ hàng có trống không
+                    if (a.length === 0 || !a[0]?.items || a[0].items.length === 0) {
+                        console.error('không có sản phẩm, không thể thanh toán!!!');
+                        return;
+                    }
+
+                    // Tạo đối tượng đơn hàng và chi tiết đơn hàng
+                    let order = {
+                        userId: this.getIdUser(),
+                        total: this.total,
                     };
-                }) || [];
-                let data = {
-                    order: order,
-                    orderDetails: orderDetails
+                    let orderDetails = a[0]?.items.map(item => {
+                        return {
+                            productId: item.productId,
+                            quantity: item.quantity,
+                            price: item.price,
+                            userId: this.getIdUser()
+                        };
+                    }) || [];
+                    let data = {
+                        order: order,
+                        orderDetails: orderDetails
+                    };
+
+                    // Gửi yêu cầu HTTP POST đến endpoint orders với dữ liệu đơn hàng
+                    const checkout = await this.$axios.post(`orders`, data)
+                        .then(async response => {
+                            // Xóa các sản phẩm trong giỏ hàng khỏi session storage
+                            this.$refs.toast.showToast('Mua hàng thành công !');
+                            if (response.data.message === 'Đặt hàng thành công') {
+                                // Gửi email lên server
+                                await this.sendEmail();
+                                sessionStorage.removeItem('carts');
+                                setTimeout(() => {
+                                    // Chuyển hướng đến trang control_order
+                                    this.$router.push({ name: "control_order" });
+                                }, 1000);
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            },
+
+            async sendEmail() {
+                const data = this.getData();
+                const nameproduct = this.getItemsCartName();
+                const price = this.getItemsPrice();
+                const in4 = this.getIn4Items();
+                // Tạo dữ liệu email
+                let emailData = {
+                    email: data.email,
+                    name: data.username,
+                    nameProduct: nameproduct, // truyền mảng names vào đây
+                    price : price,
+                    information : in4,
+                    total : this.total,
                 };
-                const checkout = await this.$axios.post(`orders`, data)
+
+                // Gửi yêu cầu HTTP POST đến endpoint send-email để gửi email
+                await this.$axios.post(`send-email`, emailData)
                     .then(response => {
-                        console.log(response.data);
-                        // Xóa giỏ hàng sau khi lưu đơn hàng thành công
-                        sessionStorage.removeItem('carts');
-                        this.$refs.toast.showToast('Mua hàng thành công !')
-                        if (response.data.message === 'Đặt hàng thành công') {
-                            setTimeout(() => {
-                                this.$router.push({ name: "control_order" });
-                            }, 1000);
-                        }
+                        console.log('Gửi email thành công:', response.data);
                     })
                     .catch(error => {
-                        console.log(error);
+                        console.log('Lỗi khi gửi email:', error);
                     });
+            },
+            getData() {
+                const userJSON = localStorage.getItem('user'); // Lấy chuỗi JSON từ localStorage
+                let dulieu;
+                const data = JSON.parse(userJSON); // Chuyển chuỗi JSON thành đối tượng JavaScript
+                if (data) {
+                    dulieu = data; // Lấy giá trị của thuộc tính "email" trong đối tượng "user"
                 }
-               
-
+                return dulieu;
+            },
+            getItemsCartName() {
+                let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+                let names = [];
+                carts.forEach(cart => {
+                    cart.items.forEach(item => {
+                        names.push(item.name);
+                    });
+                });
+                console.log(names);
+                return names; // trả về mảng names
+            },
+            getItemsPrice() {
+                let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+                let names = [];
+                carts.forEach(cart => {
+                    cart.items.forEach(item => {
+                        names.push(item.price);
+                    });
+                });
+                console.log(names);
+                return names; // trả về mảng names
+            },
+            getIn4Items(){
+                let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+                let names = [];
+                carts.forEach(cart => {
+                    cart.items.forEach(item => {
+                        names.push(item.in4);
+                    });
+                });
+                console.log(names);
+                return names; // trả về mảng names
             },
             getUser() {
                 let user = JSON.parse(localStorage.getItem("user"));
@@ -301,16 +370,16 @@ export default
                 }
                 return userId;
             },
+
             async getUserById() {
                 const userId = this.getID();
-                console.log(userId); // In ra giá trị của "id"
                 try {
                     const response = await this.$axios.get(`getUserById/${userId}`);
                     this.user = response.data;
-                    this.address=response.data.address;
-                    this.email=response.data.email;
-                    this.phone=response.data.phone;
-                    this.username=response.data.username;
+                    this.address = response.data.address;
+                    this.email = response.data.email;
+                    this.phone = response.data.phone;
+                    this.username = response.data.username;
                 } catch (error) {
                     console.log(error);
                 }

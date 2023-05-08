@@ -4,7 +4,8 @@
         <div class="d-flex justify-content-between">
             <div class="form-group">
                 <label for="product_id" style="padding:10px">Sản phẩm:</label>
-                <select id="product_id" v-model="product_id" required>
+             
+                <select id="product_id" v-model="product_id" required @change="getcolor">
                     <option disabled>Chọn loại đối tượng:</option>
                     <option v-for="product in products" :key="product.id" :value="product.id">{{ product.name }}
                     </option>
