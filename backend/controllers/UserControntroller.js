@@ -16,7 +16,8 @@ const registerUser = async (req, res) => {
     email,
     password,
     address,
-    phone
+    phone,
+    question
   } = req.body;
 
   try {
@@ -43,6 +44,7 @@ const registerUser = async (req, res) => {
       username,
       address,
       phone,
+      question,
       googleId: 'không sử dụng',
       facebookId: 'không sử dụng',
       provider: 'rỗng',

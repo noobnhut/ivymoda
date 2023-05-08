@@ -36,6 +36,9 @@ module.exports = {
       phone: {
         type: Sequelize.INTEGER
       },
+     question: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

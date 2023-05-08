@@ -162,6 +162,27 @@ const router = createRouter({
         window.location.href = 'http://localhost:3000/auth/google'
       }
     },
+    {
+      path:'/reset',
+      name:'reset',
+      component:()=>import('../views/reset.vue'),
+      children:
+      [
+        {
+          path:'/reset/step1',
+          name:'step1',
+          component:()=>import('../layout/reset/step1.vue'),
+
+        },
+        {
+          path:'/reset/step2',
+          name:'step2',
+          component:()=>import('../layout/reset/step2.vue'),
+
+        },
+        
+      ]
+    }
   ]
 })
 

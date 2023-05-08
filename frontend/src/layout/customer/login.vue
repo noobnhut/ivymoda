@@ -21,7 +21,9 @@
                 <input class="form-control" name="customer_password" type="password" placeholder="Mật khẩu"
                   v-model="password">
               </div>
-
+               <div class="form-group">
+                <router-link class="text-decoration-none" to="/reset/step1">Quên mật khẩu ?</router-link>
+               </div>
               <div class="auth__form__buttons">
                 <button class="btn btn--large " @click="login">Đăng nhập</button>
               </div>
