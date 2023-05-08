@@ -25,6 +25,10 @@
                                     v-model="username">
                             </div>
                             <div class="form-group">
+                                <input class="form-control" name="customer_password" type="text" placeholder="Mật khẩu dự phòng"
+                                    v-model="question">
+                            </div>
+                            <div class="form-group">
                                 <textarea class="form-control" name="customer_password" type="text-aria"
                                     placeholder="Địa chỉ" v-model="address"></textarea>
                             </div>
@@ -73,7 +77,8 @@ export default
                 phone: '',
                 email: '',
                 repassword: '',
-                emailError: ''
+                emailError: '',
+                question:''
             };
         },
        
@@ -94,7 +99,8 @@ export default
                             password: this.password,
                             email: this.email,
                             phone: this.phone,
-                            address: this.address
+                            address: this.address,
+                            question:this.question
                         }
                     );
 
