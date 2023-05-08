@@ -13,14 +13,6 @@
                                 <input class="form-control" type="email" name="customer_phone"
                                     placeholder="Nhập email" />
                             </div>
-                            <div class="form-group">
-                                <input class="form-control" name="captcha" type="text"
-                                    placeholder="Nhập kí tự trong hình vào ô sau">
-                            </div>
-                            <p class="img_capcha">
-                                <img src="https://ivymoda.com/ajax/captcha" border="0"
-                                    class="img-responsive">
-                            </p>
                            <div class="form-group">
                             <router-link class="text-decoration-none" to="/reset/step2">Nhớ mã bảo mật</router-link>
 

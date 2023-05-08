@@ -18,14 +18,6 @@
                                 <input class="form-control" type="text" name="customer_phone"
                                     placeholder="Mật khẩu mới" />
                             </div>
-                            <div class="form-group">
-                                <input class="form-control" name="captcha" type="text"
-                                    placeholder="Nhập kí tự trong hình vào ô sau">
-                            </div>
-                            <p class="img_capcha">
-                                <img src="https://ivymoda.com/ajax/captcha" border="0"
-                                    class="img-responsive">
-                            </p>
                             <div class="auth__form__buttons">
                                 <button type="submit" class="btn btn--large">Cập nhập mật khẩu</button>
                             </div>
