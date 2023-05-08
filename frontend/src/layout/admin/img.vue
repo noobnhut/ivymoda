@@ -220,6 +220,9 @@ export default
                         }
                     });
                     this.$refs.toast.showToast(response.data.message);
+                    setTimeout(() => {
+          location.reload()
+        }, 1000);
                     this.getimg()
                 } catch (error) {
                     console.error(error);

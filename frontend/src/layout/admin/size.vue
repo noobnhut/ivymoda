@@ -234,6 +234,9 @@ export default
                             quantity: this.quantity
                         });
                     this.$refs.toast.showToast(response.data.message);
+                    setTimeout(() => {
+          location.reload()
+        }, 1000);
                     this.getsize()
                 } catch (error) {
                     console.error(error);

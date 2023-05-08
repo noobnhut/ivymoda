@@ -6,17 +6,21 @@
                     <h3 class="auth__title">Bạn muốn tìm lại mật khẩu?</h3>
                     <div class="auth__login__content">
                         <p class="auth__description">
-                            Vui lòng nhập lại mật khẩu dự phòng hệ thống sẽ xác nhận và cho bạn cập nhập lại mật khẩu mới
+                            Vui lòng nhập lại mật khẩu dự phòng và email hệ thống sẽ xác nhận và cho bạn cập nhập lại mật khẩu mới
                         </p>
-                        <form class="auth__form" role="login" enctype="application/x-www-form-urlencoded"
-                            name="frm_register" method="post" action="">
-                            <div class="form-group">
-                                <input class="form-control" type="text" name="customer_phone"
-                                    placeholder="Mật khẩu bảo mật" />
+                        <form class="auth__form" role="login"
+                            name="frm_register" >
+                            <div class="form-group" >
+                                <input class="form-control" type="email" name="customer_phone"
+                                    placeholder="Nhập địa chỉ email" v-model="email" />
                             </div>
                             <div class="form-group">
                                 <input class="form-control" type="text" name="customer_phone"
-                                    placeholder="Mật khẩu mới" />
+                                    placeholder="Mật khẩu bảo mật" v-model="question" />
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="customer_phone"
+                                    placeholder="Mật khẩu mới" v-model="password" />
                             </div>
                             <div class="auth__form__buttons">
                                 <button type="submit" class="btn btn--large">Cập nhập mật khẩu</button>
@@ -31,17 +35,38 @@
 
 <script>
 import '../../assets/login.css'
+
+export default {
+  data() {
+    return {
+      email: '',
+      password:'',
+      question:''
+    }
+  },
+  methods: {
+    sendCodeEmail() {
+      this.$axios.post(`resetPassword`, { email: this.email,question:this.question,password:this.password })
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error('loi'+ error);
+        });
+    }
+  }
+}
 </script>
 
 <style>
 .auth2 {
-    margin: 20px;
+margin: 20px;
 }
 .img_capcha {
-    border: 1px solid #E7E8E9;
-    margin-top: 15px;
-    padding: 5px 10px;
-    line-height: 0;
-    display: inline-block;
+border: 1px solid #E7E8E9;
+margin-top: 15px;
+padding: 5px 10px;
+line-height: 0;
+display: inline-block;
 }
 </style>

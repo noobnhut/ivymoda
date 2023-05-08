@@ -119,6 +119,9 @@ export default
           }
         )
         this.$refs.toast.showToast(catadd.data.message)
+        setTimeout(() => {
+          location.reload()
+        }, 1000);
         this.getCat()
       },
       async getCat() {

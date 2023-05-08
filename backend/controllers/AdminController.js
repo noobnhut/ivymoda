@@ -6,6 +6,7 @@ const dotenv = require ( 'dotenv');
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
+
 const loginAdmin = async (req, res) => {
   try {
     const { email, password } = req.body;

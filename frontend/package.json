@@ -16,6 +16,7 @@
     "dotenv": "^16.0.3",
     "js-cookie": "^3.0.1",
     "moment": "^2.29.4",
+    "nodemailer": "^6.9.1",
     "swiper": "^9.1.1",
     "vue": "^3.2.47",
     "vue-carousel": "^0.18.0",

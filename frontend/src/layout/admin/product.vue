@@ -226,6 +226,9 @@ export default
           } 
         )
         this.$refs.toast.showToast(productadd.data.message)
+        setTimeout(() => {
+          location.reload()
+        }, 1000);
         this.getproduct()
        
       },

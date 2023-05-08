@@ -161,7 +161,9 @@ export default
           );
           this.cats = result.data;
           console.log(result);
-
+          setTimeout(() => {
+          location.reload()
+        }, 1000);
         } catch (e) {
           console.log(e);
         }

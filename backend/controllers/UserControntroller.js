@@ -2,8 +2,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const db = require('../models');
-const path = require('path');
-const multer = require('multer');
 const User = db.users;
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -185,12 +183,55 @@ const updateUserById = async (req, res) => {
     });
   }
 };
+const resetPassword = async (req, res) => {
 
+  console.log(req.body);
+  const {
+    email,
+    question,
+    password
+  } = req.body;
+
+  try {
+    const user = await User.findOne({where:{email}});
+    const questions = await User.findOne({where:{email,question}})
+    if (!user) {
+      res.status(404).json({
+        message: `Không tồn tại tài khoản.`
+      });
+    }
+    else if (!questions) {
+      res.status(404).json({
+        message: `Mã bảo mật sai`
+      });
+    }
+    else {
+      let hashedPassword = user.hashedPassword;
+      if (password) {
+        const salt = await bcrypt.genSalt(10);
+        hashedPassword = await bcrypt.hash(password, salt);
+      }
+
+      await user.update({
+        password: hashedPassword
+      });
+
+      res.json({
+        message: `Cập nhập thành công mật khẩu mới`
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Lỗi cập nhập"
+    });
+  }
+};
 module.exports = {
   registerUser,
   loginUser,
   getAllUser,
   getUserById,
   updateUserById,
+  resetPassword
 
 };

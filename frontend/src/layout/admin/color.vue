@@ -207,6 +207,9 @@ export default
                 this.color= ''
                 this.color_code=  "#000000"
                 this.detail_product=''
+                setTimeout(() => {
+          location.reload()
+        }, 1000);
                 this.getcolor()
             },
             async deletecolor(id) {
