@@ -1,36 +1,53 @@
 <template>
-    <div class=" auth2 auth-forgotpass">
-        <div class="auth-container">
-            <div class="auth-forgotpass">
-                <div class="auth__login auth__block">
-                    <h3 class="auth__title">Bạn muốn tìm lại mật khẩu?</h3>
-                    <div class="auth__login__content">
-                        <p class="auth__description">
-                            Vui lòng nhập mail để xác thực và nhận lại mã bảo mật
-                        </p>
-                        <form class="auth__form"  >
-                            <div class="form-group">
-                                <input class="form-control" type="email" name="customer_phone"
-                                    placeholder="Nhập email" />
-                            </div>
-                           <div class="form-group">
-                            <router-link class="text-decoration-none" to="/reset/step2">Nhớ mã bảo mật</router-link>
-
-                           </div>
-                            <div class="auth__form__buttons">
-                                <button type="submit" class="btn btn--large">Gửi đi</button>
-                            </div>
-                        </form>
-                    </div>
+    <div class="auth2 auth-forgotpass">
+      <div class="auth-container">
+        <div class="auth-forgotpass">
+          <div class="auth__login auth__block">
+            <h3 class="auth__title">Bạn muốn tìm lại mật khẩu?</h3>
+            <div class="auth__login__content">
+              <p class="auth__description">
+                Vui lòng nhập mail để xác thực và nhận lại mã bảo mật
+              </p>
+              <form class="auth__form" @submit.prevent="sendCodeEmail">
+                <div class="form-group">
+                  <input class="form-control" type="email" v-model="email" name="customer_phone" placeholder="Nhập email" />
                 </div>
+                <div class="form-group">
+                  <router-link class="text-decoration-none" to="/reset/step2">Nhớ mã bảo mật</router-link>
+                </div>
+                <div class="auth__form__buttons">
+                  <button type="submit" class="btn btn--large">Gửi đi</button>
+                </div>
+              </form>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</template>
-
-<script>
-import '../../assets/login.css'
-</script>
+  </template>
+  
+  <script>
+    import '../../assets/login.css'
+  
+    export default {
+      data() {
+        return {
+          email: ''
+        }
+      },
+      methods: {
+        sendCodeEmail() {
+          this.$axios.post(`send-code`, { email: this.email })
+            .then(response => {
+              console.log(response.data);
+            })
+            .catch(error => {
+              console.error('loi'+ error);
+            });
+        }
+      }
+    }
+  </script>
 
 <style>
 .auth2 {
