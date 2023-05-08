@@ -1,7 +1,7 @@
 const sgMail = require('@sendgrid/mail');
 const db = require('../models');
 const User = db.users;
-//key :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
+// key : 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
 const sendMail = async (req, res) => {
     const {
         name,
@@ -36,7 +36,7 @@ const sendMail = async (req, res) => {
         return;
     }
 
-    sgMail.setApiKey('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');//bỏ key ở trên cùng vào dấu ''
+    sgMail.setApiKey('');//bỏ key ở trên cùng vào dấu ''
 
     let productsHTML = ''; // Chuỗi HTML để lưu thông tin sản phẩm
     if (nameProduct.length > 0) {
@@ -119,7 +119,7 @@ const sendQuestionCodeByEmail = async (userId) => {
       };
     }
 
-    sgMail.setApiKey('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');
+    sgMail.setApiKey('');
     const msg = {
       to: user.email,
       from: 'nguyen.nhut.99.2017@gmail.com',
