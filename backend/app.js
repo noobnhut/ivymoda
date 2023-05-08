@@ -21,7 +21,7 @@ const routerMomo = require('./routes/MomoRouter');
 const routerCheckout = require('./routes/CheckoutRouter');
 const routerAmin = require('./routes/AdminRouter');
 //mail
-const {sendMail} = require('./routes/MailRouter')
+const {routerMail} = require('./routes/MailRouter')
 const router = require('./routes/UserRouterAPI');
 
 // Passport session setup. 
@@ -72,8 +72,7 @@ app.use(routerAmin);
 // Serve các tệp tĩnh trong thư mục "uploads"
 app.use(express.static("uploads"));
 
-app.use(sendMail);
-
+app.use(routerMail);
 
 const CryptoJS = require('crypto-js') 
 

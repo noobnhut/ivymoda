@@ -1,5 +1,7 @@
 const sgMail = require('@sendgrid/mail');
-
+const db = require('../models');
+const User = db.users;
+// key : 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
 const sendMail = async (req, res) => {
     const {
         name,
@@ -34,7 +36,7 @@ const sendMail = async (req, res) => {
         return;
     }
 
-    sgMail.setApiKey('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');
+    sgMail.setApiKey('');//bỏ key ở trên cùng vào dấu ''
 
     let productsHTML = ''; // Chuỗi HTML để lưu thông tin sản phẩm
     if (nameProduct.length > 0) {
@@ -88,6 +90,99 @@ const sendMail = async (req, res) => {
     }
 };
 
+const getEmailByUserId = async (userId) => {
+  try {
+    const user = await User.findByPk(userId, { attributes: ['email', 'question'] });
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const sendQuestionCodeByEmail = async (userId) => {
+  try {
+    // Lấy thông tin về email và mã question của người dùng
+    const user = await getEmailByUserId(userId);
+
+    // Kiểm tra xem có email hợp lệ không
+    if (!user.email || !user.email.includes('@')) {
+      return {
+        success: false,
+        message: 'Email không hợp lệ'
+      };
+    }
+    // Kiểm tra xem có mã question hợp lệ không
+    if (!user.question) {
+      return {
+        success: false,
+        message: 'Không tìm thấy mã question'
+      };
+    }
+
+    sgMail.setApiKey('');
+    const msg = {
+      to: user.email,
+      from: 'nguyenthevann6@gmail.com',
+      subject: 'Xác nhận đổi mật khẩu',
+      text: `Mã question của bạn là: ${user.question}`,
+    };
+
+    // Gửi email
+    await sgMail.send(msg);
+
+    return {
+      success: true,
+      message: 'Gửi mã question thành công'
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Lỗi khi gửi mã question'
+    };
+  }
+};
+
+const sendCode = async (req, res) => {
+  const { email } = req.body;
+  // Kiểm tra xem email có hợp lệ hay không
+  if (!email || !email.includes('@')) {
+    res.status(400).json({
+      message: 'Email không hợp lệ'
+    });
+    return;
+  }
+
+  try {
+    // Kiểm tra xem email có trùng với email đã đăng ký và đã xác thực hay không
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      res.status(400).json({
+        message: 'Email không tồn tại hoặc chưa xác thực'
+      });
+      return;
+    }
+
+    // Email hợp lệ, gửi mã question cho người dùng
+    const result = await sendQuestionCodeByEmail(user.id);
+    if (result.success) {
+      res.status(200).json({
+        message: 'Gửi mã xác thực thành công'
+      });
+    } else {
+      res.status(500).json({
+        message: result.message
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Lỗi khi kiểm tra email'
+    });
+  }
+};
+
 module.exports = {
-    sendMail
+    sendMail,
+    sendCode
 };
