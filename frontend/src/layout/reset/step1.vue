@@ -8,11 +8,10 @@
                         <p class="auth__description">
                             Vui lòng nhập mail để xác thực và nhận lại mã bảo mật
                         </p>
-                        <form class="auth__form" role="login" enctype="application/x-www-form-urlencoded"
-                            name="frm_register" method="post" action="">
+                        <form class="auth__form"  >
                             <div class="form-group">
-                                <input class="form-control" type="text" name="customer_phone"
-                                    placeholder="Mật khẩu bảo mật" />
+                                <input class="form-control" type="email" name="customer_phone"
+                                    placeholder="Nhập email" />
                             </div>
                             <div class="form-group">
                                 <input class="form-control" name="captcha" type="text"
