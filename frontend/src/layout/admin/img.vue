@@ -11,22 +11,22 @@
                 </select>
                 <br>
             </div>
-           
+
         </div>
-         <br>
+        <br>
         <div class="d-flex justify-content-between">
             <div class="form-group">
                 <label for="color_id" style="padding:10px">Màu sắc:</label>
                 <select id="color_id" v-model="color_id" required @change="getimg()">
                     <option disabled>Chọn loại màu:</option>
-                    <option v-for="color in colors" :key="color.id" :value="color.id">{{ color.color  }}
+                    <option v-for="color in colors" :key="color.id" :value="color.id">{{ color.color }}
                     </option>
                 </select>
                 <br>
             </div>
-            
+
         </div>
- <br>
+        <br>
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -53,7 +53,7 @@
                     <tr v-for="img in imgs">
                         <td>{{ img.color.color }}</td>
                         <td>{{ img.color.color_code }}</td>
-                        <td>{{ img.avatar}}</td>
+                        <td>{{ img.avatar }}</td>
                         <td><img :src=img.url alt="" style="width:80px"></td>
                         <td>
                             <a type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModaledit"><i
@@ -142,15 +142,15 @@ export default
                 color: '',
                 color_code: "",
                 avatar: '',
-                url:'',
+                url: '',
                 colors: [],
-                color_id:null,
+                color_id: null,
                 product_id: null,
                 products: [],
             }
         },
 
-        mounted() {    
+        mounted() {
             this.getproduct();
         },
         components: {
@@ -158,7 +158,8 @@ export default
         },
         methods: {
             onFileSelected(event) {
-                this.avatar = event.target.files[0]
+                const files = event.target.files;
+                this.avatar = files;
             },
             updateColor(event) {
                 this.color_code = event.target.value;
@@ -171,8 +172,8 @@ export default
                     this.imgs = result.data;
 
                 } catch (e) {
-                    
-                    this.imgs=[]
+
+                    this.imgs = []
                 }
 
 
@@ -196,33 +197,36 @@ export default
                     this.colors = result.data;
 
                 } catch (e) {
-                    
-                    this.colors=[]
+
+                    this.colors = []
                 }
 
 
             },
             sendata(img) {
-                this.id=img.id;      
-                this.url=img.url;  
-                console.log(img.id)     
+                this.id = img.id;
+                this.url = img.url;
+                console.log(img.id)
             },
             async addimg() {
-               
+
                 const formData = new FormData();
-                formData.append('avatar', this.avatar);
-                formData.append('id_color',this.color_id);
+                for (let i = 0; i < this.avatar.length; i++) {
+                    const file = this.avatar[i];
+                    formData.append('avatar', file);
+                }
+                formData.append('id_color', this.color_id);
                 try {
                     const response = await this.$axios.post('addImg', formData, {
-                       
+
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
                     });
                     this.$refs.toast.showToast(response.data.message);
                     setTimeout(() => {
-          location.reload()
-        }, 1000);
+                        location.reload()
+                    }, 1000);
                     this.getimg()
                 } catch (error) {
                     console.error(error);
@@ -232,14 +236,13 @@ export default
                 const detaildelete = await this.$axios.delete(
                     `deleteImg/` + id,
                 )
-               
-                    this.$refs.toast.showToast(detaildelete.data.message)
-                    this.getimg()
-                    
-               
+
+                this.$refs.toast.showToast(detaildelete.data.message)
+                this.getimg()
+
+
             },
-            async updateimg()
-            {
+            async updateimg() {
                 const formData = new FormData();
                 formData.append('id_color', this.color_id);
                 formData.append('avatar', this.avatar);
@@ -249,7 +252,7 @@ export default
                             'Content-Type': 'multipart/form-data'
                         }
                     });
-                    this.$refs.toast.showToast( response.data.message)
+                    this.$refs.toast.showToast(response.data.message)
                     this.getimg()
                 } catch (error) {
                     console.error(error);
