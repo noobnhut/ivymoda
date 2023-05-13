@@ -393,58 +393,61 @@ export default
             },
 
             addToCart2(product, sizeid) {
-      const userId = this.getUser();
+                let userId = this.getUser();
+                console.log(userId);
+                // Lấy thông tin giỏ hàng từ sessionStorage
+                let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+                // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong sessionStorage hay chưa
+                let cartIndex = carts.findIndex(cart => cart.userId === userId);
+                let cart = cartIndex >= 0 ? carts[cartIndex] : null;
+                if (!cart) {
+                    // Nếu giỏ hàng của người dùng chưa tồn tại trong sessionStorage, tạo một giỏ hàng mới
+                    cart = {
+                        userId: userId,
+                        items: [],
+                        total: 0,
+                        Squantity: 0,
+                    };
+                    carts.push(cart);
+                }
 
-      // Lấy thông tin giỏ hàng từ sessionStorage
-      let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+                // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
+                let itemIndex = cart.items.findIndex(item => item.productId === product.id && item.sizeid === sizeid);
+                let item = itemIndex >= 0 ? cart.items[itemIndex] : null;
+                if (!item) {
+                    let discountedPrice = product.price - (product.price * (product.discount) / 100);
+                    // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới
+                    item = {
+                        productId: product.id,
+                        colorId: product.color_id,
+                        sizeid: sizeid,
+                        price: discountedPrice,
+                        quantity: 1,
+                        name: product.name,
+                        in4: product.information
+                    };
+                    cart.items.push(item);
+                    this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')
+                } else {
+                    // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
+                    if (this.getSizeQuantity(item.productId, item.sizeid, item.colorId) > item.quantity) {
+                        item.quantity += 1;
+                        this.$refs.toast.showToast('Thêm thành công.')
+                    }
+                    else {
+                        this.$refs.toast.showToast('Số lượng đặt của sản phẩm đã tối đa.')
+                    }
+                }
 
-      // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong sessionStorage hay chưa
-      let cartIndex = carts.findIndex(cart => cart.userId === userId);
-      let cart = cartIndex >= 0 ? carts[cartIndex] : null;
-      if (!cart) {
-        // Nếu giỏ hàng của người dùng chưa tồn tại trong sessionStorage, tạo một giỏ hàng mới
-        cart = {
-          userId: userId,
-          items: [],
-          total: 0,
-          Squantity: 0
-        };
-        carts.push(cart);
-        this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')
-      }
-
-      // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
-      let itemIndex = cart.items.findIndex(item => item.productId === product.id && item.sizeid === sizeid);
-      let item = itemIndex >= 0 ? cart.items[itemIndex] : null;
-      if (!item) {
-        // Tính toán giá đã giảm
-        let discountedPrice = product.price - (product.price * (product.discount) / 100);
-
-        // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới với giá đã giảm
-        item = {
-          productId: product.id,
-          colorId: product.color_id,
-          sizeid: sizeid,
-          price: discountedPrice,
-          quantity: 1
-        };
-        cart.items.push(item);
-      } else {
-        // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
-        if (this.getSizeQuantity(item.productId, item.sizeid, item.colorId) > item.quantity) {
-          item.quantity += 1;
-          this.$refs.toast.showToast('Thêm thành công.')
-        } else {
-          this.$refs.toast.showToast('Số lượng đặt của sản phẩm đã tối đa.')
-        }
-      }
-
-      this.updateCartTotal(cart);
-      this.updateCartQuality(cart);
-      carts[cartIndex] = cart;
-      sessionStorage.setItem('carts', JSON.stringify(carts));
-    },
-
+                this.updateCartTotal(cart);
+                this.updateCartQuality(cart);
+                // Nếu người dùng đăng nhập, cập nhật userId trong sessionStorage
+                if (userId !== "trans") {
+                    cart.userId = userId;
+                    carts[cartIndex] = Object.assign({}, cart);
+                }
+                sessionStorage.setItem('carts', JSON.stringify(carts));
+            },
         }
 
     }
