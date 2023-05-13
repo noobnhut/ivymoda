@@ -29,7 +29,7 @@
                                         size.size_name }}</p>
                             </div>
                             <div class="item_info_price">
-                                <p class="detail">Giá:{{ formatCurrency(product.price) }}</p>
+                                <p class="detail">Giá:{{ formatCurrency(product.price- (product.price * (product.discount) / 100)) }}</p>
                                 <input type="number" min="1" @input="updateCart($event, cart, index)"
                                     :value="cart.quantity">
                             </div>

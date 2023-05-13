@@ -46,7 +46,7 @@
                                 <td><input type="number" min="1" @input="updateCart($event, cart, index)"
                                         :value="cart.quantity">
                                 </td>
-                                <td class="fw-bold ">{{ formatCurrency(product.price) }}</td>
+                                <td class="fw-bold">{{ formatCurrency(product.price - (product.price * (product.discount) / 100)) }}</td>
                                 <td>
                                     <div>
                                         <div class="d-flex btn_cart justify-content-between">

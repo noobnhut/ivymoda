@@ -3,7 +3,7 @@
     <div class="title_product">
       IVY {{ cat.cat_name }}
     </div>
-    <swiper :spaceBetween="10" :modules="modules"  
+    <swiper :spaceBetween="10" :modules="modules"
       :breakpoints="{ 600: { slidesPerView: 1 }, 800: { slidesPerView: 2 }, 1000: { slidesPerView: 3 }, 1200: { slidesPerView: 4 }, 1400: { slidesPerView: 5 }, }"
       class="mySwiper">
 
@@ -27,7 +27,7 @@
                 @click="addseen(product.id)">{{
                   product.name
                 }} - {{ product.color_name }}</router-link>
-            </h4> 
+            </h4>
 
             <div class="product-bottom-details">
               <div class="product-price" style="height:50px">
@@ -88,7 +88,7 @@ export default {
       products: [],
       cats: [],
       likes: [],
-      
+
     }
   },
   mounted() {
@@ -175,10 +175,11 @@ export default {
       }
     },
     addToCart(product, sizeid) {
-      let userId = this.getUser();
-      console.log(userId);
+      const userId = this.getUser();
+
       // Lấy thông tin giỏ hàng từ sessionStorage
       let carts = JSON.parse(sessionStorage.getItem('carts') || '[]');
+
       // Kiểm tra xem giỏ hàng của người dùng đã tồn tại trong sessionStorage hay chưa
       let cartIndex = carts.findIndex(cart => cart.userId === userId);
       let cart = cartIndex >= 0 ? carts[cartIndex] : null;
@@ -188,45 +189,41 @@ export default {
           userId: userId,
           items: [],
           total: 0,
-          Squantity: 0,
+          Squantity: 0
         };
         carts.push(cart);
+        this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')
       }
 
       // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
       let itemIndex = cart.items.findIndex(item => item.productId === product.id && item.sizeid === sizeid);
       let item = itemIndex >= 0 ? cart.items[itemIndex] : null;
       if (!item) {
-        // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới
+        // Tính toán giá đã giảm
+        let discountedPrice = product.price - (product.price * (product.discount) / 100);
+
+        // Nếu sản phẩm chưa có trong giỏ hàng, tạo một sản phẩm mới với giá đã giảm
         item = {
           productId: product.id,
           colorId: product.color_id,
           sizeid: sizeid,
-          price: product.price,
-          quantity: 1,
-          name : product.name,
-          in4 : product.information
+          price: discountedPrice,
+          quantity: 1
         };
         cart.items.push(item);
-        this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')
       } else {
         // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng sản phẩm lên 1
         if (this.getSizeQuantity(item.productId, item.sizeid, item.colorId) > item.quantity) {
           item.quantity += 1;
           this.$refs.toast.showToast('Thêm thành công.')
-        }
-        else {
+        } else {
           this.$refs.toast.showToast('Số lượng đặt của sản phẩm đã tối đa.')
         }
       }
 
       this.updateCartTotal(cart);
       this.updateCartQuality(cart);
-      // Nếu người dùng đăng nhập, cập nhật userId trong sessionStorage
-      if (userId !== "trans") {
-        cart.userId = userId;
-        carts[cartIndex] = Object.assign({}, cart);
-      }
+      carts[cartIndex] = cart;
       sessionStorage.setItem('carts', JSON.stringify(carts));
     },
 
