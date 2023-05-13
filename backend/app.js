@@ -25,6 +25,7 @@ const {routerMail} = require('./routes/MailRouter')
 const router = require('./routes/UserRouterAPI');
 
 // Passport session setup. 
+
 passport.serializeUser(function(user, done) {
   done(null, user);
 });

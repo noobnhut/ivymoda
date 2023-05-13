@@ -25,6 +25,14 @@ module.exports = {
           key: 'id'
         }
       },
+      id_color: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'colors',
+          key: 'id'
+        }
+      },
       quantity: {
         type: Sequelize.INTEGER
       },

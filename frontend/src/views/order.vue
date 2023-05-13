@@ -251,6 +251,7 @@ export default
                             productId: item.productId,
                             quantity: item.quantity,
                             price: item.price,
+                            colorId : item.colorId,
                             userId: this.getIdUser()
                         };
                     }) || [];

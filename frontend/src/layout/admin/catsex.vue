@@ -118,7 +118,6 @@
 
 <script>
 import toast from '../../components/toast.vue';
-
 export default
   {
     data() {
@@ -162,7 +161,7 @@ export default
           this.cats = result.data;
           console.log(result);
           setTimeout(() => {
-          location.reload()
+          //location.reload()
         }, 1000);
         } catch (e) {
           console.log(e);

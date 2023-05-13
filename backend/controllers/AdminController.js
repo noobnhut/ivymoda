@@ -22,7 +22,7 @@ const loginAdmin = async (req, res) => {
     // Kiểm tra tài khoản đăng nhập
     if (!admin || !comparePassword(password, admin.password)) {
       throw new Error('Email hoặc mật khẩu không đúng');
-    }
+    }                                                           
 
     // Tạo JWT token và trả về thông tin đăng nhập thành công
     const token = jwt.sign({ id: admin.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });

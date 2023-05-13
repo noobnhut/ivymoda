@@ -17,11 +17,15 @@ module.exports = (sequelize, DataTypes) => {
       OrderDetails.belongsTo(models.Products, {
         foreignKey: 'id_product'
       });
+      OrderDetails.belongsTo(models.colors, {
+        foreignKey: 'id_color'
+      });
     }
   }
   OrderDetails.init({
     order_id: DataTypes.INTEGER,
     id_product: DataTypes.INTEGER,
+    id_color: DataTypes.INTEGER,
     quantity: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
     status: {

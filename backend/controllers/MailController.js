@@ -1,62 +1,63 @@
+const bcrypt = require('bcryptjs');
 const sgMail = require('@sendgrid/mail');
 const db = require('../models');
 const User = db.users;
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 
 const sendMail = async (req, res) => {
-    const {
-        name,
-        email,
-        nameProduct,
-        price,
-        information,
-        total
-    } = req.body;
-    console.log(total)
-    // Kiểm tra xem có email hợp lệ không
-    if (!email || !email.includes('@')) {
-        res.status(400).json({
-            message: 'Email không hợp lệ'
-        });
-        return;
-    }
+  const {
+    name,
+    email,
+    nameProduct,
+    price,
+    information,
+    total
+  } = req.body;
+  console.log(total)
+  // Kiểm tra xem có email hợp lệ không
+  if (!email || !email.includes('@')) {
+    res.status(400).json({
+      message: 'Email không hợp lệ'
+    });
+    return;
+  }
 
-    // Kiểm tra xem có sản phẩm trong đơn hàng không
-    if (!nameProduct || !Array.isArray(nameProduct) || nameProduct.length === 0) {
-        res.status(400).json({
-            message: 'Đơn hàng không hợp lệ'
-        });
-        return;
-    }
+  // Kiểm tra xem có sản phẩm trong đơn hàng không
+  if (!nameProduct || !Array.isArray(nameProduct) || nameProduct.length === 0) {
+    res.status(400).json({
+      message: 'Đơn hàng không hợp lệ'
+    });
+    return;
+  }
 
-    // Kiểm tra xem giá sản phẩm có hợp lệ không
-    if (!price || !Array.isArray(price) || price.length !== nameProduct.length) {
-        res.status(400).json({
-            message: 'Giá sản phẩm không hợp lệ'
-        });
-        return;
-    }
+  // Kiểm tra xem giá sản phẩm có hợp lệ không
+  if (!price || !Array.isArray(price) || price.length !== nameProduct.length) {
+    res.status(400).json({
+      message: 'Giá sản phẩm không hợp lệ'
+    });
+    return;
+  }
 
-    sgMail.setApiKey(SENDGRID_API_KEY);//bỏ key ở trên cùng vào dấu ''
+  sgMail.setApiKey(SENDGRID_API_KEY); //bỏ key ở trên cùng vào dấu ''
 
-    let productsHTML = ''; // Chuỗi HTML để lưu thông tin sản phẩm
-    if (nameProduct.length > 0) {
-        for (let i = 0; i < nameProduct.length; i++) {
-            productsHTML += `
+  let productsHTML = ''; // Chuỗi HTML để lưu thông tin sản phẩm
+  if (nameProduct.length > 0) {
+    for (let i = 0; i < nameProduct.length; i++) {
+      productsHTML += `
             <tr>
               <td>${nameProduct[i]}</td>
               <td>${information[i]}</td>
               <td>${price[i]}Đ</td>
             </tr>
           `;
-        }
     }
+  }
 
-    const msg = {
-        to: email,
-        from: '	',
-        subject: 'Thông báo mua hàng thành công',
-        html: `
+  const msg = {
+    to: email,
+    from: 'nguyenthevann6@gmail.com',
+    subject: 'Thông báo mua hàng thành công',
+    html: `
           <div style="font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px;">
             <h1 style="color: #1a1a1a; margin-bottom: 20px;">Chào ${name},</h1>
             <p style="font-size: 16px; color: #1a1a1a; margin-bottom: 10px; text-align: center;">🎉🎉🎉Chúc mừng bạn đã đặt hàng thành công 🎉🎉🎉</p>
@@ -76,24 +77,26 @@ const sendMail = async (req, res) => {
             <img src="https://pubcdn.ivymoda.com/files/news/2023/04/26/b2f0113a134232d03c3f1b0cd50bb844.jpg" alt="hình ảnh" style="max-width: 100%; height: auto; margin-bottom: 20px;">
           </div>
         `,
-    };
+  };
 
-    try {
-        await sgMail.send(msg);
-        res.status(200).json({
-            message: 'Gửi email thành công'
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: 'Lỗi khi gửi email'
-        });
-    }
+  try {
+    await sgMail.send(msg);
+    res.status(200).json({
+      message: 'Gửi email thành công'
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Lỗi khi gửi email'
+    });
+  }
 };
 
 const getEmailByUserId = async (userId) => {
   try {
-    const user = await User.findByPk(userId, { attributes: ['email', 'question'] });
+    const user = await User.findByPk(userId, {
+      attributes: ['email', 'question']
+    });
     return user;
   } catch (error) {
     throw error;
@@ -123,7 +126,7 @@ const sendQuestionCodeByEmail = async (userId) => {
     sgMail.setApiKey(SENDGRID_API_KEY);
     const msg = {
       to: user.email,
-      from: 'nguyen.nhut.99.2017@gmail.com',
+      from: 'nguyenthevann6@gmail.com',
       subject: 'Xác nhận đổi mật khẩu',
       text: `Mã question của bạn là: ${user.question}`,
     };
@@ -145,7 +148,9 @@ const sendQuestionCodeByEmail = async (userId) => {
 };
 
 const sendCode = async (req, res) => {
-  const { email } = req.body;
+  const {
+    email
+  } = req.body;
   // Kiểm tra xem email có hợp lệ hay không
   if (!email || !email.includes('@')) {
     res.status(400).json({
@@ -156,7 +161,11 @@ const sendCode = async (req, res) => {
 
   try {
     // Kiểm tra xem email có trùng với email đã đăng ký và đã xác thực hay không
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({
+      where: {
+        email
+      }
+    });
     if (!user) {
       res.status(400).json({
         message: 'Email không tồn tại hoặc chưa xác thực'
@@ -183,8 +192,83 @@ const sendCode = async (req, res) => {
     });
   }
 };
+const sendMailAuth = async (req, res) => {
+  const {
+    email,
+    question,
+    password
+  } = req.body;
+
+  // Kiểm tra xem email có hợp lệ hay không
+  if (!email || !email.includes('@')) {
+    res.status(400).json({
+      message: 'Email không hợp lệ'
+    });
+    return;
+  }
+
+  try {
+    // Tìm kiếm người dùng trong database
+    const user = await User.findOne({
+      where: {
+        email
+      }
+    });
+
+    // Kiểm tra xem người dùng có tồn tại và đã xác thực hay chưa
+    if (!user) {
+      res.status(400).json({
+        message: 'Email không tồn tại hoặc chưa xác thực'
+      });
+      return;
+    }
+
+    // Kiểm tra xem mã question nhập vào có trùng với mã question trong database hay không
+    if (user.question !== question) {
+      res.status(400).json({
+        message: 'Mã question không chính xác'
+      });
+      return;
+    }
+
+    // Kiểm tra tính hợp lệ của mật khẩu
+    if (!password || password.length < 6) {
+      res.status(400).json({
+        message: 'Mật khẩu không hợp lệ'
+      });
+      return;
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // Cập nhật mật khẩu mới cho người dùng trong database
+    user.password = hashedPassword;
+    await user.save();
+
+    // Gửi email thông báo đổi mật khẩu thành công
+    sgMail.setApiKey(SENDGRID_API_KEY);
+    const msg = {
+      to: user.email,
+      from: 'nguyenthevann6@gmail.com',
+      subject: 'Đổi mật khẩu thành công',
+      text: `Bạn đã đổi mật khẩu thành công. Vui lòng đăng nhập lại bằng mật khẩu mới.`,
+    };
+    await sgMail.send(msg);
+
+    res.status(200).json({
+      message: 'Đổi mật khẩu thành công'
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Lỗi khi đổi mật khẩu'
+    });
+  }
+};
+
+
 
 module.exports = {
-    sendMail,
-    sendCode
+  sendMail,
+  sendCode,
+  sendMailAuth
 };
