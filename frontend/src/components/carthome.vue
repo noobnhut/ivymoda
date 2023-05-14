@@ -15,7 +15,10 @@
                         <div class="item_img">
                             <swiper :modules="modules" class="mySwiper">
                                 <swiper-slide v-for="img in product.images">
-                                    <img :src="img.url" alt="">
+                                    <router-link
+                                        :to="{ name: 'detail', params: { id: product.id, id_color: product.color_id, id_cat: product.id_cat } }">
+                                        <img :src="img.url" alt="">
+                                    </router-link>
                                 </swiper-slide>
                             </swiper>
                         </div>
@@ -29,7 +32,8 @@
                                         size.size_name }}</p>
                             </div>
                             <div class="item_info_price">
-                                <p class="detail">Giá:{{ formatCurrency(product.price- (product.price * (product.discount) / 100)) }}</p>
+                                <p class="detail">Giá:{{ formatCurrency(product.price - (product.price * (product.discount) /
+                                    100)) }}</p>
                                 <input type="number" min="1" @input="updateCart($event, cart, index)"
                                     :value="cart.quantity">
                             </div>

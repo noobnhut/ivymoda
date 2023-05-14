@@ -192,6 +192,7 @@ const sendCode = async (req, res) => {
     });
   }
 };
+
 const sendMailAuth = async (req, res) => {
   const {
     email,
@@ -234,7 +235,7 @@ const sendMailAuth = async (req, res) => {
     // Kiểm tra tính hợp lệ của mật khẩu
     if (!password || password.length < 6) {
       res.status(400).json({
-        message: 'Mật khẩu không hợp lệ, phải đó độ dài lớn hơn 6 ký tự'
+        message: 'Mật khẩu không hợp lệ, phải có độ dài lớn hơn 6 ký tự'
       });
       return;
     }
@@ -270,8 +271,6 @@ const sendMailAuth = async (req, res) => {
     });
   }
 };
-
-
 
 module.exports = {
   sendMail,

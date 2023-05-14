@@ -26,6 +26,7 @@
     "googleapis": "^114.0.0",
     "jsonwebtoken": "^9.0.0",
     "lsof": "^0.1.0",
+    "mailboxlayer-node-client": "^1.0.13",
     "messagebird": "^4.0.1",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.2.0",

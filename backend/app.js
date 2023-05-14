@@ -96,6 +96,7 @@ const CryptoJS = require('crypto-js')
 // const verificationCode = generateVerificationCode();
 // console.log(verificationCode); 
 
+
 const port = 3000;
 app.listen(port, () => {
   console.log(`API đang chạy : http://localhost:${port}/`);

@@ -3,7 +3,7 @@
     <div class="title_product">
       IVY {{ cat.cat_name }}
     </div>
-    <swiper :spaceBetween="10" :modules="modules"  
+    <swiper :spaceBetween="10" :modules="modules"
       :breakpoints="{ 600: { slidesPerView: 1 }, 800: { slidesPerView: 2 }, 1000: { slidesPerView: 3 }, 1200: { slidesPerView: 4 }, 1400: { slidesPerView: 5 }, }"
       class="mySwiper">
 
@@ -12,7 +12,10 @@
           <div class="product-tumb">
             <swiper :modules="modules" class="mySwiper">
               <swiper-slide v-for="img in product.images">
-                <img :src="img.url" alt="">
+                <router-link
+                  :to="{ name: 'detail', params: { id: product.id, id_color: product.color_id, id_cat: product.id_cat } }">
+                  <img :src="img.url" alt="">
+                </router-link>
               </swiper-slide>
             </swiper>
           </div>
@@ -27,7 +30,7 @@
                 @click="addseen(product.id)">{{
                   product.name
                 }} - {{ product.color_name }}</router-link>
-            </h4> 
+            </h4>
 
             <div class="product-bottom-details">
               <div class="product-price" style="height:50px">
@@ -88,7 +91,7 @@ export default {
       products: [],
       cats: [],
       likes: [],
-      
+
     }
   },
   mounted() {
@@ -205,8 +208,8 @@ export default {
           sizeid: sizeid,
           price: discountedPrice,
           quantity: 1,
-          name : product.name,
-          in4 : product.information
+          name: product.name,
+          in4: product.information
         };
         cart.items.push(item);
         this.$refs.toast.showToast('Thêm thành công sản phẩm vào giỏ hàng.')

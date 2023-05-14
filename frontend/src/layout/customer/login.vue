@@ -9,7 +9,7 @@
               Nếu bạn đã có tài khoản, hãy đăng nhập để tích lũy điểm thành viên và nhận được những ưu đãi tốt hơn!
             </p>
             <div class="social-container">
-            
+
               <a @click="socialLogin('google')" class="social"><i class="fab fa-google-plus-g"
                   style="color: red;"></i></a>
             </div>
@@ -21,9 +21,9 @@
                 <input class="form-control" name="customer_password" type="password" placeholder="Mật khẩu"
                   v-model="password">
               </div>
-               <div class="form-group">
+              <div class="form-group">
                 <router-link class="text-decoration-none" to="/reset/step1">Quên mật khẩu ?</router-link>
-               </div>
+              </div>
               <div class="auth__form__buttons">
                 <button class="btn btn--large " @click="login">Đăng nhập</button>
               </div>
@@ -50,7 +50,6 @@
     </div>
   </div>
   <toast ref="toast"></toast>
-
 </template>
 <style>
 .social-container {
@@ -82,9 +81,9 @@ export default {
     };
   },
   components: {
-toast
+    toast
 
-},
+  },
   methods: {
     async login() {
       try {
@@ -106,7 +105,7 @@ toast
         }
       } catch (error) {
         // Xử lý lỗi nếu có
-        this.$refs.toast.showToast('Đăng nhập thất bại');
+        this.$refs.toast.showToast('Tài khoản hoặc mật khẩu không đúng');
 
         console.log(error);
       }
@@ -116,7 +115,7 @@ toast
       switch (provider) {
         case 'google':
           this.$router.push({ name: 'google-auth' });
-          
+
           break;
         case 'facebook':
           this.$router.push({ name: 'facebook-auth' });

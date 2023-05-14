@@ -18,23 +18,24 @@
                             <div class="form-group">
                                 <input class="form-control" name="customer_password" type="password" placeholder="Mật khẩu"
                                     v-model="password">
-                                   
+
                             </div>
                             <div class="form-group">
                                 <input class="form-control" name="customer_password" type="text" placeholder="Họ và tên"
                                     v-model="username">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" name="customer_password" type="text" placeholder="Mật khẩu dự phòng"
-                                    v-model="question">
+                                <h6 class="small-text">mã dự phòng dùng để khôi phục tài khoản khi quên mật khẩu</h6>
+                                <input class="form-control" name="customer_password" type="text"
+                                    placeholder="Mã dự phòng" v-model="question">
                             </div>
                             <div class="form-group">
                                 <textarea class="form-control" name="customer_password" type="text-aria"
                                     placeholder="Địa chỉ" v-model="address"></textarea>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" name="customer_password" type="tel"
-                                    placeholder="Số điện thoại" v-model="phone">
+                                <input class="form-control" name="customer_password" type="tel" placeholder="Số điện thoại"
+                                    v-model="phone">
                             </div>
                             <div class="auth__form__buttons">
                                 <button class="btn btn--large " @click="register">Đăng ký</button>
@@ -62,11 +63,12 @@
             </div>
         </div>
     </div>
+    <toast ref="toast"></toast>
 </template>
 
 <script>
 import '../../assets/login.css';
-
+import toast from '../../components/toast.vue';
 export default
     {
         data() {
@@ -78,10 +80,12 @@ export default
                 email: '',
                 repassword: '',
                 emailError: '',
-                question:''
+                question: ''
             };
         },
-       
+        components: {
+            toast
+        },
         methods:
         {
             async register() {
@@ -89,7 +93,6 @@ export default
                 if (!this.validateForm()) {
                     return;
                 }
-
                 try {
                     // Send the registration request
                     const register = await this.$axios.post(
@@ -100,26 +103,45 @@ export default
                             email: this.email,
                             phone: this.phone,
                             address: this.address,
-                            question:this.question
+                            question: this.question
                         }
                     );
-
                     // If the registration is successful, redirect the user to the login page
                     if (register.status === 200) {
                         this.$router.push({ name: 'login' });
                     }
                 } catch (error) {
                     // Handle any errors that occur during the registration process
-                    console.error(error);
-                    alert('An error occurred during registration. Please try again later.');
+                    if (error.response && error.response.data) {
+                        const { message } = error.response.data;
+                        this.$refs.toast.showToast(message);
+                    } else {
+                        this.$refs.toast.showToast('lỗi server');
+                    }
                 }
             },
             validateForm() {
                 // Check if all the required fields are not empty
-                if (!this.email || !this.password || !this.username || !this.phone || !this.address) {
-                    alert('Không được để trống');
+                if (!this.email) {
+                    this.$refs.toast.showToast('Email không được bỏ trống');
+                    return false;
+                } else if (!this.password) {
+                    this.$refs.toast.showToast('Mật khẩu không được bỏ trống');
+                    return false;
+                } else if (!this.username) {
+                    this.$refs.toast.showToast('Tên người dùng không được bỏ trống');
+                    return false;
+                } else if (!this.question) {
+                    this.$refs.toast.showToast('Mã dự phòng không được bỏ trống');
+                    return false;
+                } else if (!this.phone) {
+                    this.$refs.toast.showToast('Số điện thoại không được bỏ trống');
+                    return false;
+                } else if (!this.address) {
+                    this.$refs.toast.showToast('Địa chỉ không được bỏ trống');
                     return false;
                 }
+
 
                 // Validate email format using regular expression
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -140,7 +162,6 @@ export default
                     alert('Số điện thoại phải đủ 10 số.');
                     return false;
                 }
-
                 return true;
             },
 
@@ -150,3 +171,10 @@ export default
         }
     }
 </script>
+
+<style>
+.small-text {
+  font-size: 77%;
+}
+
+</style>

@@ -6,8 +6,12 @@ const User = db.users;
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
-
+const API_KEY_CHECK_MAIL = process.env.API_KEY_CHECK_MAIL;
 //register user
+const axios = require('axios');
+const headers = {
+  'apikey': API_KEY_CHECK_MAIL
+};
 const registerUser = async (req, res) => {
   const {
     username,
@@ -27,32 +31,54 @@ const registerUser = async (req, res) => {
     });
     if (existingUser) {
       return res.status(400).json({
-        error: 'Email đã tồn tại trong hệ thống'
+        message: 'Email đã tồn tại trong hệ thống'
+      });
+    }
+    const encodedEmail = encodeURIComponent(email);
+    const url = `http://api.apilayer.com/email_verification/check?email=${encodedEmail}`;
+
+    try {
+      const response = await axios.get(url, { headers });
+      const emailVerificationResult = response.data;
+      await continueRegister(emailVerificationResult);
+
+    } catch (error) {
+      return res.status(500).json({
+        message: 'Lỗi xác minh email'
       });
     }
 
-    // Mã hóa mật khẩu
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Hàm tiếp tục quá trình đăng ký
+    async function continueRegister(emailVerificationResult) {
+      // Kiểm tra kết quả xác minh email từ API
+      if (!emailVerificationResult.format_valid || !emailVerificationResult.mx_found || !emailVerificationResult.smtp_check) {
+        return res.status(400).json({
+          message: 'Email không tồn tại'
+        });
+      }
+      // Mã hóa mật khẩu
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      // Tạo một user mới
+      const user = await User.create({
+        email,
+        password: hashedPassword, // Lưu mật khẩu đã mã hóa vào cơ sở dữ liệu
+        username,
+        address,
+        phone,
+        question,
+        googleId: 'không sử dụng',
+        facebookId: 'không sử dụng',
+        provider: 'rỗng',
+        providerId: 'rỗng'
+      });
 
-    // Tạo một user mới
-    const user = await User.create({
-      email,
-      password: hashedPassword, // Lưu mật khẩu đã mã hóa vào cơ sở dữ liệu
-      username,
-      address,
-      phone,
-      question,
-      googleId: 'không sử dụng',
-      facebookId: 'không sử dụng',
-      provider: 'rỗng',
-      providerId: 'rỗng'
-    });
+      res.json({
+        user,
+        message: "Đăng ký tài khoản thành công!"
+      });
+    }
 
-    res.json({
-      user,
-      message: "Đăng ký tài khoản thành công!"
-    });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({
@@ -60,6 +86,7 @@ const registerUser = async (req, res) => {
     });
   }
 };
+
 //login user
 const loginUser = async (req, res) => {
   const {
