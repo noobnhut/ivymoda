@@ -35,6 +35,7 @@
 
 <script>
 import '../../assets/login.css'
+import toast from '../../components/toastclient.vue';
 export default {
   data() {
     return {
@@ -43,23 +44,37 @@ export default {
       question: ''
     }
   },
+  components: {
+    toast
+  },
   methods: {
     sendEmailAuth() {
+      if (!this.email || !this.question || !this.password) {
+        this.$refs.toast.showToast('Vui lòng điền đầy đủ thông tin');
+        return;
+      }
+
       console.log(this.question);
       this.$axios.post(`resetPassword`, { email: this.email, question: this.question, password: this.password })
         .then(response => {
           console.log(response.data);
+          const { message } = response.data;
+          this.$refs.toast.showToast(message);
+          setTimeout(() => {
+            this.$router.push({ name: 'login' });
+          }, 1500);
         })
         .catch(error => {
           console.error(error);
           if (error.response && error.response.data) {
             const { message } = error.response.data;
-            alert(message);
+            this.$refs.toast.showToast(message);
           } else {
             alert('Lỗi khi kết nối đến server');
           }
         });
     }
+
   }
 }
 </script>

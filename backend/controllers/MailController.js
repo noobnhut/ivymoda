@@ -128,7 +128,7 @@ const sendQuestionCodeByEmail = async (userId) => {
       to: user.email,
       from: 'nguyenthevann6@gmail.com',
       subject: 'Xác nhận đổi mật khẩu',
-      text: `Mã question của bạn là: ${user.question}`,
+      text: `Mã dự phòng của bạn là: ${user.question}`,
     };
 
     // Gửi email
@@ -234,12 +234,18 @@ const sendMailAuth = async (req, res) => {
     // Kiểm tra tính hợp lệ của mật khẩu
     if (!password || password.length < 6) {
       res.status(400).json({
-        message: 'Mật khẩu không hợp lệ'
+        message: 'Mật khẩu không hợp lệ, phải đó độ dài lớn hơn 6 ký tự'
       });
       return;
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    if( user.password === hashedPassword)
+    {
+      res.status(400).json({
+        message: 'Không được trùng với mật khẩu cũ'
+      });
+    }
     // Cập nhật mật khẩu mới cho người dùng trong database
     user.password = hashedPassword;
     await user.save();

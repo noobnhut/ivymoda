@@ -46,7 +46,8 @@
                                 <td><input type="number" min="1" @input="updateCart($event, cart, index)"
                                         :value="cart.quantity">
                                 </td>
-                                <td class="fw-bold">{{ formatCurrency(product.price - (product.price * (product.discount) / 100)) }}</td>
+                                <td class="fw-bold">{{ formatCurrency(product.price - (product.price * (product.discount) /
+                                    100)) }}</td>
                                 <td>
                                     <div>
                                         <div class="d-flex btn_cart justify-content-between">
@@ -195,7 +196,9 @@ export default
                 this.cartItems = a[0].items; // Cập nhật lại mảng giỏ hàng trên giao diện
                 this.total = a[0].total; // Cập nhật lại tổng giá trị trên giao diện
                 this.Squantity = a[0].Squantity; // Cập nhật lại tổng số lượng trên giao diện
+                this.$refs.toast.showToast('Đã xóa 1 sản phẩm');
             },
+
             getSizeQuantity(productId, sizeid, colorId) {
                 const product = this.products.find(product => product.id === productId && product.color_id === colorId);
                 if (product) {
