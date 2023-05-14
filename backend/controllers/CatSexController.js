@@ -5,7 +5,6 @@ const Sex = db.Sexes;
 
 
 const getCatSex = async (req, res) => {
-
     try {
         const catsexes = await CatSex.findAll({
             attributes: ['id', 'id_cat', 'id_sex'],

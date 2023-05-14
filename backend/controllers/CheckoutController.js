@@ -22,7 +22,7 @@ const createOrder = async (req, res) => {
       id_product: orderDetail.productId,
       quantity: orderDetail.quantity,
       price: orderDetail.price,
-      id_color : orderDetail.colorId,
+      id_color: orderDetail.colorId,
     }));
 
     // Lưu danh sách chi tiết đơn hàng mới vào cơ sở dữ liệu
@@ -78,7 +78,7 @@ const getOrdersByUserId = async (req, res) => {
       include: [{
         model: OrderDetails,
         as: 'order_details',
-        attributes: ['id', 'status', 'id_product','quantity','price'],
+        attributes: ['id', 'status', 'id_product', 'quantity', 'price'],
         include: [{
           model: Products,
           attributes: ['name'],
@@ -130,26 +130,23 @@ const getOrdersByUserId = async (req, res) => {
     });
   }
 };
- 
+
 const updateOrderDetailStatus = async (req, res) => {
-  const orderDetailId = req.params.orderDetailId;
+  const orderId = req.params.orderDetailId;
   const status = req.body.status;
 
   try {
-    const orderDetail = await OrderDetails.findByPk(orderDetailId);
+    await OrderDetails.update({
+      status
+    }, {
+      where: {
+        order_id: orderId
+      }
+    });
 
-    if (!orderDetail) {
-      res.status(404).json({
-        message: "Không tìm thấy chi tiết đơn hàng"
-      });
-    } else {
-      orderDetail.status = status;
-      await orderDetail.save();
-
-      res.status(200).json({
-        message: "Cập nhật trạng thái đơn hàng thành công"
-      });
-    }
+    res.status(200).json({
+      message: "Cập nhật trạng thái đơn hàng thành công"
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({
@@ -157,6 +154,7 @@ const updateOrderDetailStatus = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   createOrder,
   getAllOrders,

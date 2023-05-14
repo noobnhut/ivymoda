@@ -80,8 +80,8 @@
                         <div class="product-images">
                             <div>
                                 <div class="product-image" v-for="image in product.images">
-  <img :src="image" style="width: 100px; height: 100px;">
-</div>
+                                    <img :src="image" style="width: 100px; height: 100px;">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@ export default
                 total: '',
                 id_product: '',
                 quantity: '',
-                status: '{{ status }}',
+                status: '',
                 products: [],
                 orderDetails: [],
                 selectedOption: '',
@@ -202,24 +202,27 @@ export default
             }
             ,
             updateStatus(orderId, newStatus) {
-
-                const updateOrder = this.$axios.put(`orders/${orderId}`, { status: newStatus })
+                return this.$axios.put(`orders/${orderId}`, { status: newStatus })
                     .then(response => {
-                        // Cập nhật trạng thái đơn hàng trong danh sách hiện tại
-                        const orderIndex = this.orders.findIndex(order => order.id === orderId);
-                        if (orderIndex >= 0) {
-                            this.orders[orderIndex].status = newStatus;
+                        const order = this.orders.find(order => order.id === orderId);
+                        if (order) {
+                            order.status = newStatus;
                         }
-                        // Hiển thị thông báo thành công
-                        this.$refs.toast.showToast(`trạng thái đơn đã chuyển thành : ${newStatus}`);
-                        this.status = 'Đã đặt';
-                        this.getOrderDetails()
+
+                        // Cập nhật trạng thái cho hóa đơn cụ thể
+                        order.status = newStatus;
+
+                        this.$refs.toast.showToast(`Trạng thái đơn đã chuyển thành: ${newStatus}`);
+                        this.getOrderDetails();
                     })
                     .catch(error => {
                         console.log(error);
                     });
-
             },
+
+
+
+
             formatCurrency(value) {
                 let val = (value / 1).toFixed(0).replace('.', ',')
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ'
