@@ -38,8 +38,11 @@
                                     v-model="phone">
                             </div>
                             <div class="auth__form__buttons">
-                                <button class="btn btn--large " @click="register">Đăng ký</button>
-                            </div>
+    <button class="btn btn--large" :class="{ 'loading': isRegistering }" @click="register" :disabled="isRegistering">
+      <span v-if="!isRegistering">Đăng ký</span>
+      <span v-else><i class="fa fa-spinner fa-spin"></i> Đang đăng ký...</span>
+    </button>
+  </div>
                         </div>
                     </div>
                 </div>
@@ -80,7 +83,8 @@ export default
                 email: '',
                 repassword: '',
                 emailError: '',
-                question: ''
+                question: '',
+                isRegistering: false
             };
         },
         components: {
@@ -93,6 +97,7 @@ export default
                 if (!this.validateForm()) {
                     return;
                 }
+                this.isRegistering = true;
                 try {
                     // Send the registration request
                     const register = await this.$axios.post(
@@ -110,11 +115,14 @@ export default
                     if (register.status === 200) {
                         this.$router.push({ name: 'login' });
                     }
+                    this.isRegistering = false;
                 } catch (error) {
+                   
                     // Handle any errors that occur during the registration process
                     if (error.response && error.response.data) {
                         const { message } = error.response.data;
                         this.$refs.toast.showToast(message);
+                        this.isRegistering = false;
                     } else {
                         this.$refs.toast.showToast('lỗi server');
                     }
@@ -176,5 +184,14 @@ export default
 .small-text {
   font-size: 77%;
 }
+.loading {
+  position: relative;
+}
 
+.loading i.fa-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
