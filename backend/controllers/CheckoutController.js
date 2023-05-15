@@ -53,10 +53,7 @@ const createOrder = async (req, res) => {
 };
 const cancelOrder = async (req, res) => {
   const orderDetailId = req.params.id;
-<<<<<<< HEAD
   console.log(orderDetailId);
-=======
->>>>>>> 8fd11f6630c6430ebcaf1c3b4b713bb1230de794
   try {
     // Lấy thông tin chi tiết đơn hàng
     const orderDetail = await OrderDetails.findOne({
@@ -70,9 +67,7 @@ const cancelOrder = async (req, res) => {
         message: "Không tìm thấy chi tiết đơn hàng"
       });
     }
-
     // Cập nhật trạng thái của đơn hàng thành 'Đã hủy đơn'
-<<<<<<< HEAD
     await orderDetail.update({
       status: 'Đã hủy đơn'
     });
@@ -83,13 +78,11 @@ const cancelOrder = async (req, res) => {
         id_color: orderDetail.Color.id
       }
     });
-=======
     await OrderDetails.update(
       { status: 'Đã hủy đơn' },
       { where: { id: orderDetailId } }
     );
 
->>>>>>> 8fd11f6630c6430ebcaf1c3b4b713bb1230de794
     res.status(200).json({
       message: "Hủy đơn hàng thành công"
     });
@@ -101,17 +94,6 @@ const cancelOrder = async (req, res) => {
 };
 
 
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-=======
->>>>>>> 8fd11f6630c6430ebcaf1c3b4b713bb1230de794
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Orders.findAll({
