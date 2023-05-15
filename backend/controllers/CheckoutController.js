@@ -72,7 +72,7 @@ const cancelOrder = async (req, res) => {
     );
 
     res.status(200).json({
-      message: "Hủy đơn hàng thành công",id
+      message: "Hủy đơn hàng thành công"
     });
   } catch (error) {
     console.log(error.message);
