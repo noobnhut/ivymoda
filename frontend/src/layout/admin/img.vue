@@ -84,7 +84,8 @@
                         <br>
                         <div class="form-group">
                             <label for="image">Hình ảnh:</label>
-                            <input class="form-control" type="file" id="image" @change="onFileSelected">
+             
+                            <input class="form-control" type="file" id="image" @change="onFileSelected" multiple   accept=".png, .jpeg, .gif, .jpg">
                             <br>
                         </div>
 
@@ -116,7 +117,7 @@
                         </div>
                         <div class="form-group">
                             <label for="image">Hình ảnh:</label>
-                            <input class="form-control" type="file" id="image" @change="onFileSelected">
+                            <input class="form-control"  id="image" @change="onFileSelected"  accept=".png, .jpeg, .gif, .jpg" type="file" >
                             <br>
                         </div>
                         <div class="modal-footer">

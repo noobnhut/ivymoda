@@ -78,6 +78,7 @@ export default
                     this.$axios.put(`cancelorders/${orderId}`, { status: 'Đã hủy đơn' })
                         .then(response => {
                             this.getAllOrders();
+                            console.log(response)
                             // Hiển thị thông báo hoặc cập nhật UI sau khi đơn hàng được hủy
                             this.isOrderCancelled = true; // Đã hủy
                         })
