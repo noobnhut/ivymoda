@@ -10,6 +10,7 @@
                         <option value="đã đặt">Đơn hàng đã đặt</option>
                         <option value="đang giao">Đơn hàng đang giao</option>
                         <option value="đã giao">Đơn hàng đã giao</option>
+                        <option value="đã hủy đơn">Đơn hàng đã hủy</option>
                     </select>
                 </div>
             </div>
@@ -56,7 +57,6 @@
             </table>
         </div>
     </div>
-
     <toast ref="toast"></toast>
     <!-- Edit Modal HTML -->
     <div class="modal fade" id="exampleModaledit" tabindex="-1" aria-hidden="true">
@@ -89,14 +89,18 @@
                     <div class="form-group">
                         <label><strong>Trạng thái hiện tại:</strong> {{ order.status }} </label>
                     </div>
-                    <div class="form-group">
-                        <label for="status-select"><strong>Chọn trạng thái mới:</strong></label>
-                        <select class="form-control" id="status-select" v-model="status">
-                            <option value="đã đặt" v-bind:selected="status === 'Đã đặt'">Đã đặt</option>
-                            <option value="đang giao" v-bind:selected="status === 'Đang giao'">Đang giao</option>
-                            <option value="đã giao" v-bind:selected="status === 'Đã giao'">Đã giao</option>
-                        </select>
-                    </div>
+                    <div class="modal-body" v-for="order in orderDetails.filter(item => item.id == this.id)">
+  <!-- Các phần tử khác trong modal -->
+  <div class="form-group" v-if="order.status !== 'Đã hủy đơn'">
+    <label for="status-select"><strong>Chọn trạng thái mới:</strong></label>
+    <select class="form-control" id="status-select" v-model="status">
+      <option value="đã đặt" v-bind:selected="status === 'Đã đặt'">Đã đặt</option>
+      <option value="đang giao" v-bind:selected="status === 'Đang giao'">Đang giao</option>
+      <option value="đã giao" v-bind:selected="status === 'Đã giao'">Đã giao</option>
+    </select>
+  </div>
+</div>
+
 
 
                 </div>
@@ -137,41 +141,45 @@ export default
         },
         methods: {
             async getAllOrders() {
-                await this.$axios.get(`orders`)
-                    .then(response => {
-                        const orders = response.data;
-                        orders.forEach(order => {
-                            if (order.order_details.every(orderDetail => orderDetail.status === 'Đã giao')) {
-                                order.status = 'Đã giao';
-                            } else if (order.order_details.some(orderDetail => orderDetail.status === 'Đang giao')) {
-                                order.status = 'Đang giao';
-                            } else {
-                                order.status = 'Đã đặt';
-                            }
+  await this.$axios.get(`orders`)
+    .then(response => {
+      const orders = response.data;
+      orders.forEach(order => {
+        if (order.order_details.every(orderDetail => orderDetail.status === 'Đã giao')) {
+          order.status = 'Đã giao';
+        } else if (order.order_details.some(orderDetail => orderDetail.status === 'Đang giao')) {
+          order.status = 'Đang giao';
+        } else if (order.order_details.some(orderDetail => orderDetail.status === 'Đã hủy đơn')) {
+          order.status = 'Đã hủy đơn';
+        } else {
+          order.status = 'Đã đặt';
+        }
+      });
 
-                        });
+      switch (this.selectedOption) {
+        case 'đã đặt':
+          this.orders = orders.filter(order => order.status === 'Đã đặt');
+          break;
+        case 'đang giao':
+          this.orders = orders.filter(order => order.status === 'Đang giao');
+          break;
+        case 'đã giao':
+          this.orders = orders.filter(order => order.status === 'Đã giao');
+          break;
+        case 'đã hủy đơn':
+          this.orders = orders.filter(order => order.status === 'Đã hủy đơn');
+          break;
+        default:
+          this.orders = orders;
+          break;
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      this.$refs.toast.show({ type: 'error', message: 'Lỗi khi lấy danh sách hóa đơn' });
+    });
+},
 
-                        switch (this.selectedOption) {
-                            case 'đã đặt':
-                                this.orders = orders.filter(order => order.status === 'Đã đặt');
-                                break;
-                            case 'đang giao':
-                                this.orders = orders.filter(order => order.status === 'Đang giao');
-                                break;
-                            case 'đã giao':
-                                this.orders = orders.filter(order => order.status === 'Đã giao');
-                                break;
-                            default:
-                                this.orders = orders;
-                                break;
-                        }
-                        console.log(orders)
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.$refs.toast.show({ type: 'error', message: 'Lỗi khi lấy danh sách hóa đơn' });
-                    });
-            },
             getProductImages(order, productId) {
                 const images = [];
                 for (let i = 0; i < order.order_details.length; i++) {
@@ -188,7 +196,8 @@ export default
             },
             sendata(order) {
                 this.id = order.id;
-                this.id_user = order.id_user
+                this.id_user = order.id_user;
+                console.log(this.id_user );
                 this.getOrderDetails();
             },
             async getOrderDetails() {
@@ -219,10 +228,6 @@ export default
                         console.log(error);
                     });
             },
-
-
-
-
             formatCurrency(value) {
                 let val = (value / 1).toFixed(0).replace('.', ',')
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ'

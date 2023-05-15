@@ -15,11 +15,11 @@
             </div>
             <div class="auth__form" role="login" name="frm_customer_account_email">
               <div class="form-group">
-                <input class="form-control" name="customer_account" type="text" placeholder="Email" v-model="email">
+                <input class="form-control" name="customer_account" type="text" placeholder="Email" v-model="email" @keyup.enter="login">
               </div>
               <div class="form-group">
                 <input class="form-control" name="customer_password" type="password" placeholder="Mật khẩu"
-                  v-model="password">
+                  v-model="password" @keyup.enter="login">
               </div>
               <div class="form-group">
                 <router-link class="text-decoration-none" to="/reset/step1">Quên mật khẩu ?</router-link>

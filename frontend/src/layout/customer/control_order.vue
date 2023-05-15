@@ -13,14 +13,19 @@
                             <th scope="col">Ngày đặt</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Tổng tiền</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="order in orders">
                             <td>{{ order.id }}</td>
-                            <td>{{  formatTime(order.createdAt) }}</td>
-                            <td >{{ order.status }}</td>
+                            <td>{{ formatTime(order.createdAt) }}</td>
+                            <td>{{ order.status }}</td>
                             <td>{{ formatCurrency(order.total) }}</td>
+                            <th scope="col">
+                                <a type="button" class="btn" @click="CancelOrder(order.id)">Hủy đơn</a>
+                            </th>
+
                         </tr>
                     </tbody>
                 </table>
@@ -65,12 +70,28 @@ export default
                         this.$refs.toast.show({ type: 'error', message: 'Lỗi khi lấy danh sách hóa đơn' });
                     });
             },
+            CancelOrder(orderId) {
+                // Sử dụng hộp thoại xác nhận để hỏi người dùng trước khi hủy đơn hàng
+                if (confirm("Bạn có chắc chắn muốn hủy đơn hàng này?")) {
+                    // Gửi yêu cầu cập nhật trạng thái đơn hàng đến server
+                    this.$axios.put(`orders/${orderId}`, { status: 'Đã hủy đơn' })
+                        .then(response => {
+                            this.getAllOrders();
+                            // Hiển thị thông báo hoặc cập nhật UI sau khi đơn hàng được hủy
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            // Xử lý lỗi nếu cần thiết
+                        });
+                }
+            },
+
+
             formatCurrency(value) {
                 let val = (value / 1).toFixed(0).replace('.', ',')
                 return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' đ'
             },
-            formatTime(value)
-            {
+            formatTime(value) {
                 return moment(value).format('DD/MM/YYYY HH:mm:ss');
             },
             getID() {
@@ -84,7 +105,7 @@ export default
                 }
                 return userId;
             },
-            
+
         }
 
     }

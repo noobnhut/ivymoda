@@ -13,36 +13,38 @@
                         <div class="auth__form" role="login" name="frm_customer_account_email">
                             <div class="form-group">
                                 <input class="form-control" name="customer_account" type="text" placeholder="Email"
-                                    v-model="email">
+                                @keyup.enter="register" v-model="email">
                             </div>
                             <div class="form-group">
                                 <input class="form-control" name="customer_password" type="password" placeholder="Mật khẩu"
-                                    v-model="password">
+                                @keyup.enter="register" v-model="password">
 
                             </div>
                             <div class="form-group">
                                 <input class="form-control" name="customer_password" type="text" placeholder="Họ và tên"
-                                    v-model="username">
+                                @keyup.enter="register"   v-model="username">
                             </div>
                             <div class="form-group">
                                 <h6 class="small-text">mã dự phòng dùng để khôi phục tài khoản khi quên mật khẩu</h6>
-                                <input class="form-control" name="customer_password" type="text"
-                                    placeholder="Mã dự phòng" v-model="question">
+                                <input class="form-control" name="customer_password" type="text" placeholder="Mã dự phòng"
+                                @keyup.enter="register" v-model="question">
                             </div>
                             <div class="form-group">
                                 <textarea class="form-control" name="customer_password" type="text-aria"
-                                    placeholder="Địa chỉ" v-model="address"></textarea>
+                                @keyup.enter="register" placeholder="Địa chỉ" v-model="address"></textarea>
                             </div>
                             <div class="form-group">
                                 <input class="form-control" name="customer_password" type="tel" placeholder="Số điện thoại"
-                                    v-model="phone">
+                                @keyup.enter="register" v-model="phone">
                             </div>
                             <div class="auth__form__buttons">
-    <button class="btn btn--large" :class="{ 'loading': isRegistering }" @click="register" :disabled="isRegistering">
-      <span v-if="!isRegistering">Đăng ký</span>
-      <span v-else><i class="fa fa-spinner fa-spin"></i> Đang đăng ký...</span>
-    </button>
-  </div>
+                                <button class="btn btn--large" :class="{ 'loading': isRegistering }" @click="register" 
+                                    
+                                    :disabled="isRegistering">
+                                    <span v-if="!isRegistering">Đăng ký</span>
+                                    <span v-else><i class="fa fa-spinner fa-spin"></i> Đang đăng ký...</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,7 +119,7 @@ export default
                     }
                     this.isRegistering = false;
                 } catch (error) {
-                   
+
                     // Handle any errors that occur during the registration process
                     if (error.response && error.response.data) {
                         const { message } = error.response.data;
@@ -182,16 +184,17 @@ export default
 
 <style>
 .small-text {
-  font-size: 77%;
+    font-size: 77%;
 }
+
 .loading {
-  position: relative;
+    position: relative;
 }
 
 .loading i.fa-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 </style>
