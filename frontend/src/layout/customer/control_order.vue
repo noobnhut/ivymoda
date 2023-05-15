@@ -74,9 +74,10 @@ export default
                 // Sử dụng hộp thoại xác nhận để hỏi người dùng trước khi hủy đơn hàng
                 if (confirm("Bạn có chắc chắn muốn hủy đơn hàng này?")) {
                     // Gửi yêu cầu cập nhật trạng thái đơn hàng đến server
-                    this.$axios.put(`orders/${orderId}`, { status: 'Đã hủy đơn' })
+                    this.$axios.put(`cancelorders/${orderId}`, { status: 'Đã hủy đơn' })
                         .then(response => {
                             this.getAllOrders();
+                            console.log(response)
                             // Hiển thị thông báo hoặc cập nhật UI sau khi đơn hàng được hủy
                         })
                         .catch(error => {
