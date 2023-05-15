@@ -53,7 +53,7 @@ const createOrder = async (req, res) => {
   }
 };
 const cancelOrder = async (req, res) => {
-  const orderDetailId = req.params.orderDetailId;
+  const orderDetailId = req.params.id;
   try {
     // Lấy thông tin chi tiết đơn hàng
     const orderDetail = await OrderDetails.findOne({
@@ -71,17 +71,8 @@ const cancelOrder = async (req, res) => {
       { where: { id: orderDetailId } }
     );
 
-    // Tăng lại số lượng trong bảng sizes
-    await Sizes.update(
-      {
-        quantity : 10,
-        by: orderDetail.quantity,
-        where: { id_color: 1}
-      }
-    );
-      console.log(orderDetailId.quantity)
     res.status(200).json({
-      message: "Hủy đơn hàng thành công"
+      message: "Hủy đơn hàng thành công",id
     });
   } catch (error) {
     console.log(error.message);
@@ -90,11 +81,6 @@ const cancelOrder = async (req, res) => {
     });
   }
 };
-
-
-
-
-
 
 
 const getAllOrders = async (req, res) => {

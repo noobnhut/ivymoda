@@ -14,6 +14,6 @@ router.get('/api/orderdetail/:id', ordersController.getOrdersByUserId);
 // Cập nhật trạng thái của một chi tiết đơn hàng
 router.put('/api/orders/:orderDetailId', ordersController.updateOrderDetailStatus);
 // Hủy đơn hàng
-router.put('/api/orders/:id', ordersController.cancelOrder);
+router.put('/api/cancelorders/:id', ordersController.cancelOrder);
 
 module.exports = router;
