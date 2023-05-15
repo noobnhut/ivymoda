@@ -2,21 +2,37 @@ const db = require('../models');
 const Orders = db.Orders;
 const OrderDetails = db.OrderDetails;
 const Products = db.Products;
+const Sizes = db.size;
 const Color = db.colors;
 const Img = db.Imgs;
 const createOrder = async (req, res) => {
-  //console.log(req.body);
   let iduser = req.body.order;
   let orderDetails = req.body.orderDetails;
-  console.log(req.body)
 
   try {
-    // Tạo đơn hàng mới
+    // Giảm quantity của size trong bảng sizes
+    for (let i = 0; i < orderDetails.length; i++) {
+      let orderDetail = orderDetails[i];
+      let size = await Sizes.findOne({
+        where: {
+          id_color: orderDetail.colorId,
+        }
+      });
+      if (size.quantity < orderDetail.quantity) {
+        return res.status(400).json({
+          message: `Sản phẩm ${orderDetail.productId} không đủ số lượng`
+        });
+      }
+      await size.decrement('quantity', {
+        by: orderDetail.quantity
+      });
+    }
+
+    // Lưu thông tin đơn hàng vào cơ sở dữ liệu
     const order = await Orders.create({
       id_user: iduser.userId,
       total: iduser.total
     });
-    // Tạo danh sách chi tiết đơn hàng mới
     const orderDetailsList = orderDetails.map(orderDetail => ({
       order_id: order.id,
       id_product: orderDetail.productId,
@@ -24,8 +40,6 @@ const createOrder = async (req, res) => {
       price: orderDetail.price,
       id_color: orderDetail.colorId,
     }));
-
-    // Lưu danh sách chi tiết đơn hàng mới vào cơ sở dữ liệu
     await OrderDetails.bulkCreate(orderDetailsList);
 
     res.status(200).json({
@@ -38,6 +52,51 @@ const createOrder = async (req, res) => {
     });
   }
 };
+const cancelOrder = async (req, res) => {
+  const orderDetailId = req.params.orderDetailId;
+  try {
+    // Lấy thông tin chi tiết đơn hàng
+    const orderDetail = await OrderDetails.findOne({
+      where: {
+        id: orderDetailId
+      },
+      include: [
+        { model: Color, as: 'color' }
+      ]
+    });
+
+    // Cập nhật trạng thái của đơn hàng thành 'Đã hủy đơn'
+    await OrderDetails.update(
+      { status: 'Đã hủy đơn' },
+      { where: { id: orderDetailId } }
+    );
+
+    // Tăng lại số lượng trong bảng sizes
+    await Sizes.update(
+      {
+        quantity : 10,
+        by: orderDetail.quantity,
+        where: { id_color: 1}
+      }
+    );
+      console.log(orderDetailId.quantity)
+    res.status(200).json({
+      message: "Hủy đơn hàng thành công"
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      message: "Hủy đơn hàng thất bại"
+    });
+  }
+};
+
+
+
+
+
+
+
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Orders.findAll({
@@ -157,6 +216,7 @@ const updateOrderDetailStatus = async (req, res) => {
 
 module.exports = {
   createOrder,
+  cancelOrder,
   getAllOrders,
   getOrdersByUserId,
   updateOrderDetailStatus,

@@ -40,7 +40,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       status: {
-        type: Sequelize.ENUM('Đã đặt', 'Đang giao', 'Đã giao'),
+        type: Sequelize.ENUM('Đã đặt', 'Đang giao', 'Đã giao','Đã hủy đơn'),
         defaultValue: 'Đã đặt'
       },
       createdAt: {
