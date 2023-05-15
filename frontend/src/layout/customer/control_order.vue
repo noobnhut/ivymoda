@@ -23,9 +23,9 @@
                             <td>{{ order.status }}</td>
                             <td>{{ formatCurrency(order.total) }}</td>
                             <th scope="col">
-                                <a type="button" class="btn" @click="CancelOrder(order.id)">Hủy đơn</a>
+                                <h6 v-if="order.status === 'Đã hủy đơn'" class="cancelled-order">Đã hủy đơn</h6>
+                                <a  v-else type="button" class="btn" @click="CancelOrder(order.id)">Hủy đơn</a>
                             </th>
-
                         </tr>
                     </tbody>
                 </table>
@@ -48,7 +48,8 @@ export default
                 id_product: '',
                 quantity: '',
                 status: '{{ status }}',
-                products: []
+                products: [],
+                isOrderCancelled: false
             }
         },
         components:
@@ -56,7 +57,7 @@ export default
             user_nav
         },
         mounted() {
-            this.getAllOrders()
+            this.getAllOrders();
         },
         methods:
         {
@@ -74,10 +75,11 @@ export default
                 // Sử dụng hộp thoại xác nhận để hỏi người dùng trước khi hủy đơn hàng
                 if (confirm("Bạn có chắc chắn muốn hủy đơn hàng này?")) {
                     // Gửi yêu cầu cập nhật trạng thái đơn hàng đến server
-                    this.$axios.put(`orders/${orderId}`, { status: 'Đã hủy đơn' })
+                    this.$axios.put(`cancelorders/${orderId}`, { status: 'Đã hủy đơn' })
                         .then(response => {
                             this.getAllOrders();
                             // Hiển thị thông báo hoặc cập nhật UI sau khi đơn hàng được hủy
+                            this.isOrderCancelled = true; // Đã hủy
                         })
                         .catch(error => {
                             console.log(error);
@@ -111,3 +113,11 @@ export default
     }
 
 </script>
+
+<style>
+.cancelled-order {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+</style>

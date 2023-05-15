@@ -23,6 +23,13 @@ const registerUser = async (req, res) => {
   } = req.body;
 
   try {
+     // Kiểm tra độ dài và định dạng của question
+  const questionRegex = /^[a-zA-Z0-9]{6}$/;
+  if (!questionRegex.test(question)) {
+    return res.status(400).json({
+      message: 'Question phải có đúng 6 kí tự và có thể là chữ hoặc số'
+    });
+  }
     // Kiểm tra xem email đã được sử dụng chưa
     const existingUser = await User.findOne({
       where: {

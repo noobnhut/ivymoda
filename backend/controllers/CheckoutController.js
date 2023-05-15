@@ -27,7 +27,6 @@ const createOrder = async (req, res) => {
         by: orderDetail.quantity
       });
     }
-
     // Lưu thông tin đơn hàng vào cơ sở dữ liệu
     const order = await Orders.create({
       id_user: iduser.userId,
@@ -53,43 +52,45 @@ const createOrder = async (req, res) => {
   }
 };
 const cancelOrder = async (req, res) => {
-  const orderDetailId = req.params.orderDetailId;
+  const orderDetailId = req.params.id;
+  console.log(orderDetailId);
   try {
     // Lấy thông tin chi tiết đơn hàng
     const orderDetail = await OrderDetails.findOne({
       where: {
         id: orderDetailId
       },
-      include: [
-        { model: Color, as: 'color' }
-      ]
+      include: [Products, Color]
     });
+    if (!orderDetail) {
+      return res.status(404).json({
+        message: "Không tìm thấy chi tiết đơn hàng"
+      });
+    }
 
     // Cập nhật trạng thái của đơn hàng thành 'Đã hủy đơn'
-    await OrderDetails.update(
-      { status: 'Đã hủy đơn' },
-      { where: { id: orderDetailId } }
-    );
-
+    await orderDetail.update({
+      status: 'Đã hủy đơn'
+    });
     // Tăng lại số lượng trong bảng sizes
-    await Sizes.update(
-      {
-        quantity : 10,
-        by: orderDetail.quantity,
-        where: { id_color: 1}
+    await Sizes.increment('quantity', {
+      by: orderDetail.quantity,
+      where: {
+        id_color: orderDetail.Color.id
       }
-    );
-      console.log(orderDetailId.quantity)
+    });
     res.status(200).json({
       message: "Hủy đơn hàng thành công"
     });
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({
-      message: "Hủy đơn hàng thất bại"
+      message: "Hủy đơn hàng thất bại" + error.message
     });
   }
 };
+
+
+
 
 
 
